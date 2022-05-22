@@ -1,12 +1,12 @@
 from flask_sslify import SSLify
 from flask import Flask, make_response, request, redirect, render_template, url_for
 
-app = Flask(__name__)
-sslify = SSLify(app)
+application = Flask(__name__)
+sslify = SSLify(application)
 
-environment = "development"
+environment = "production"
   
-@app.route('/')
+@application.route('/')
 def define_clusters():
     if 'name' in request.args:
         return render_template("index.html", name=request.values["name"])
@@ -15,6 +15,6 @@ def define_clusters():
 
 if __name__ == '__main__':
     if environment == "production":
-        app.run()
+        application.run()
     else:
-        app.run(ssl_context='adhoc', debug=True)
+        application.run(ssl_context='adhoc', debug=True)
