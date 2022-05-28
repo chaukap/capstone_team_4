@@ -21,6 +21,19 @@ def get_schema():
         table : str
         port : str"""
 
+    if 'database' not in request.form.keys():
+        return make_response("Database not specified", 400)
+    if 'username' not in request.form.keys():
+        return make_response("Username not specified", 400)
+    if 'password' not in request.form.keys():
+        return make_response("Password not specified", 400)
+    if 'port' not in request.form.keys():
+        return make_response("Port not specified", 400)
+    if 'table' not in request.form.keys():
+        return make_response("Table not specified", 400)
+    if 'host' not in request.form.keys():
+        return make_response("Host not specified", 400)
+
     result = get_table_schema(request.form['username'], 
         request.form['password'], 
         request.form['host'],
@@ -29,7 +42,6 @@ def get_schema():
         int(request.form['port']))
 
     columns = []
-
     for res in result:
         columns.append(dict(name=res[0], type=res[1]))
 
