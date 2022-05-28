@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  {% for column in columns %}
+     <h2>{{column["name"]}}, {{column["type"]}}</h2>
+  {% endfor %}    
+{% endblock %}

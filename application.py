@@ -28,7 +28,12 @@ def get_schema():
         request.form['table'],
         int(request.form['port']))
 
-    return json.dumps(result)
+    columns = []
+
+    for res in result:
+        columns.append(dict(name=res[0], type=res[1]))
+
+    return render_template("query.html", columns=columns)
 
 @application.route('/', methods=['GET'])
 def index():
