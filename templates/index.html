@@ -4,10 +4,80 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  {% if name %}
-    <h2>Welcome, {{ name }}</h2>
-  {% else %}
-    <h2>Welcome to our web application!</h2>
-    <h2>Try adding "?name=your_name to the end of the url."</h2>   
-  {% endif %}    
+  <form action="/table" method="POST">
+    <div>
+      <label for="username">Username</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" id="username" aria-describedby="a11y-tooltip" 
+        value="{{request.form['username']}}" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter the the username to your database.</span>
+        </span>
+    </div>
+    
+    <div>
+      <label for="password">Password</label>
+      <span class="a11y-input-tooltip">
+        <input type="password" id="password" aria-describedby="a11y-tooltip" 
+        value="{{request.form['password']}}" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter the password to your database.</span>
+      </span>
+    </div>
+    
+    <div>
+      <label for="host">Host</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" id="host" aria-describedby="a11y-tooltip" 
+        value="{{request.form['host']}}" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter your database URI.</span>
+      </span>
+    </div>
+    
+    <div>
+      <label for="database">Database</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" id="database" aria-describedby="a11y-tooltip" 
+        value="{{request.form['database']}}" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter the database name.</span>
+      </span>
+    </div>     
+
+    <div>
+      <label for="table">Table</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" id="table" aria-describedby="a11y-tooltip" 
+        value="{{request.form['table']}}" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter the table name.</span>
+      </span>
+    </div>  
+
+    <div>
+      <label for="port">port</label>
+      <span class="a11y-input-tooltip">
+        <input type="number" id="port" aria-describedby="a11y-tooltip" 
+        value="{{request.form['port']}}" required="required"
+        placeholder="3306"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please enter port number, default is 3306 .</span>
+      </span>
+    </div>      
+    
+    <input type="submit" value="Submit">
+  </form> 
+
+  <!-- Section 1 Start -->
+  <section id="section-1">
+    <div>
+    <h2> Learn More</h2>
+        <p>
+"Releasing differentially private datasets requires a deep understanding of differential privacy. Our goal is to 
+assisting non-technical users with creating differentially private datasets using their private data. "
+      </p>
+
+  </section>
+<!-- Section 1 end -->
 {% endblock %}
