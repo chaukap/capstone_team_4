@@ -8,7 +8,7 @@
     <div>
       <label for="username">Username</label>
       <span class="a11y-input-tooltip">
-        <input type="text" id="username" aria-describedby="a11y-tooltip" 
+        <input type="text" name="username" id="username" aria-describedby="a11y-tooltip" 
         value="{{request.form['username']}}" required="required"/>
         <span role="tooltip" id="a11y-tooltip">
           Please enter the the username to your database.</span>
@@ -18,7 +18,7 @@
     <div>
       <label for="password">Password</label>
       <span class="a11y-input-tooltip">
-        <input type="password" id="password" aria-describedby="a11y-tooltip" 
+        <input type="password" name="password" id="password" aria-describedby="a11y-tooltip" 
         value="{{request.form['password']}}" required="required"/>
         <span role="tooltip" id="a11y-tooltip">
           Please enter the password to your database.</span>
@@ -28,7 +28,7 @@
     <div>
       <label for="host">Host</label>
       <span class="a11y-input-tooltip">
-        <input type="text" id="host" aria-describedby="a11y-tooltip" 
+        <input type="text" name="host" id="host" aria-describedby="a11y-tooltip" 
         value="{{request.form['host']}}" required="required"/>
         <span role="tooltip" id="a11y-tooltip">
           Please enter your database URI.</span>
@@ -38,7 +38,7 @@
     <div>
       <label for="database">Database</label>
       <span class="a11y-input-tooltip">
-        <input type="text" id="database" aria-describedby="a11y-tooltip" 
+        <input type="text" name="database" id="database" aria-describedby="a11y-tooltip" 
         value="{{request.form['database']}}" required="required"/>
         <span role="tooltip" id="a11y-tooltip">
           Please enter the database name.</span>
@@ -48,7 +48,7 @@
     <div>
       <label for="table">Table</label>
       <span class="a11y-input-tooltip">
-        <input type="text" id="table" aria-describedby="a11y-tooltip" 
+        <input type="text" name="table" id="table" aria-describedby="a11y-tooltip" 
         value="{{request.form['table']}}" required="required"/>
         <span role="tooltip" id="a11y-tooltip">
           Please enter the table name.</span>
@@ -58,7 +58,7 @@
     <div>
       <label for="port">port</label>
       <span class="a11y-input-tooltip">
-        <input type="number" id="port" aria-describedby="a11y-tooltip" 
+        <input type="number" name="port" id="port" aria-describedby="a11y-tooltip" 
         value="{{request.form['port']}}" required="required"
         placeholder="3306"/>
         <span role="tooltip" id="a11y-tooltip">
