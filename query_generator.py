@@ -1,6 +1,6 @@
 
 class query_generator:
-    def generate_count_query(self, table, identifier_column, grouping_column, count_column):
+    def generate_count_query(table, identifier_column, grouping_column, count_column):
         """Generate an SQL query that returns the count of one column grouped by another.
 
            Parameters

@@ -1,12 +1,39 @@
 from flask_sslify import SSLify
 from flask import Flask, make_response, request, redirect, render_template, url_for
-from mariadb_client import get_table_schema
-import json
+from mariadb_client import mariadb_client
+from differential_privacy_engine import differential_privacy_engine
+from helper_functions import check_form_fields
 
 application = Flask(__name__)
 sslify = SSLify(application)
 
 environment = "producion"
+
+@application.route('/query', methods=['POST'])
+def query():
+    success, missing_field = check_form_fields([
+        'database', 'username', 'password', 'port',
+        'table', 'host', 'query_type', 'epsilon',
+        'identifier', 'grouping', 'count'
+    ], request.form)
+
+    if not success:
+        return make_response(f"{missing_field} not specified", 400)
+    
+    dp_engine = differential_privacy_engine(request.form['username'], 
+        request.form['password'], 
+        request.form['host'],
+        request.form['database'],
+        int(request.form['port']))
+    
+    if request.form['query_type'] == 'count':
+        return str(dp_engine.count(
+            request.form['table'],
+            request.form['identifier'],
+            request.form['grouping'],
+            request.form['count'],
+            int(request.form['epsilon'])
+        ))
   
 @application.route('/table', methods=['POST'])
 def get_schema():
@@ -20,25 +47,20 @@ def get_schema():
         table : str
         port : str"""
 
-    if 'database' not in request.form.keys():
-        return make_response("Database not specified", 400)
-    if 'username' not in request.form.keys():
-        return make_response("Username not specified", 400)
-    if 'password' not in request.form.keys():
-        return make_response("Password not specified", 400)
-    if 'port' not in request.form.keys():
-        return make_response("Port not specified", 400)
-    if 'table' not in request.form.keys():
-        return make_response("Table not specified", 400)
-    if 'host' not in request.form.keys():
-        return make_response("Host not specified", 400)
+    success, missing_field = check_form_fields([
+        'database', 'username', 'password', 'port',
+        'table', 'host'
+    ], request.form)
 
-    result = get_table_schema(request.form['username'], 
+    if not success:
+        return make_response(f"{missing_field} not specified", 400)
+
+    client = mariadb_client(request.form['username'], 
         request.form['password'], 
         request.form['host'],
         request.form['database'],
-        request.form['table'],
         int(request.form['port']))
+    result = client.get_table_schema(request.form['table'])
 
     columns = []
     for res in result:
@@ -48,10 +70,7 @@ def get_schema():
 
 @application.route('/', methods=['GET'])
 def index():
-    if 'name' in request.args:
-        return render_template("index.html", name=request.values["name"])
-    else:
-        return render_template("index.html")
+    return render_template("index.html")
 
 if __name__ == '__main__':
     if environment == "production":
