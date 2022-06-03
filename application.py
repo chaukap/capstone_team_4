@@ -4,12 +4,12 @@ from mariadb_client import mariadb_client
 from differential_privacy_engine import differential_privacy_engine
 from helper_functions import check_form_fields
 
-application = Flask(__name__)
-sslify = SSLify(application)
+app = Flask(__name__)
+sslify = SSLify(app)
 
 environment = "producion"
 
-@application.route('/query', methods=['POST'])
+@app.route('/query', methods=['POST'])
 def query():
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
@@ -37,7 +37,7 @@ def query():
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
   
-@application.route('/table', methods=['POST'])
+@app.route('/table', methods=['POST'])
 def get_schema():
     """Get the schema for a database table.
         Form Fields (Required)
@@ -77,12 +77,12 @@ def get_schema():
         port=request.form['port'],
         table=request.form['table'])
 
-@application.route('/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
 
 if __name__ == '__main__':
     if environment == "production":
-        application.run()
+        app.run()
     else:
-        application.run(ssl_context='adhoc', debug=True)
+        app.run(ssl_context='adhoc', debug=True)
