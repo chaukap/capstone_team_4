@@ -3,6 +3,7 @@ from flask import Flask, make_response, request, redirect, render_template, url_
 from mariadb_client import mariadb_client
 from differential_privacy_engine import differential_privacy_engine
 from helper_functions import check_form_fields
+from database_repository import database_repository
 
 app = Flask(__name__)
 sslify = SSLify(app)
