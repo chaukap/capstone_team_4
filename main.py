@@ -36,9 +36,7 @@ def query():
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
-
-    return make_response(f"Unknown query type.", 400)
-
+  
 @app.route('/table', methods=['POST'])
 def get_schema():
     """Get the schema for a database table.
@@ -78,30 +76,6 @@ def get_schema():
         database=request.form['database'],
         port=request.form['port'],
         table=request.form['table'])
-
-@app.route("/example", methods=['POST'])
-def example():
-    username = 'demonstration'
-    password = 'demo'
-    host = 'capstone-team-4-dev.cpbxzomz7uyl.us-east-2.rds.amazonaws.com'
-    database = 'sys'
-    port = 3306
-    table = 'Arrests'
-
-    client = mariadb_client(request.form['username'], 
-        request.form['password'], 
-        request.form['host'],
-        request.form['database'],
-        int(request.form['port']))
-    result = client.get_table_schema(request.form['table'])
-
-    columns = []
-    for res in result:
-        columns.append(dict(name=res[0], type=res[1]))
-
-    return render_template("query.html",
-        columns=columns, username=username, password=password,
-        host=host, database=database, port=port, table=table)
 
 @app.route('/', methods=['GET'])
 def index():
