@@ -5,13 +5,14 @@
     {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="jba4DMEd3fh72z21nkL9s3LwmlgEVm41wHFOhwkew9Q" />
     <title>{% block title %}{% endblock %} | Simplify Differential Privacy</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
     {% endblock %}
 </head>
 
 <body>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <div id="header">
         {% block header %}
             <img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" />
