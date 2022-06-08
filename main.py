@@ -15,7 +15,7 @@ def query():
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
         'table', 'host', 'query_type', 'epsilon',
-        'identifier', 'grouping', 'statistic'
+        'grouping', 'statistic'
     ], request.form)
 
     if not success:
@@ -30,13 +30,24 @@ def query():
     if request.form['query_type'] == 'laplace_count':
         values = dp_engine.count(
             request.form['table'],
-            request.form['identifier'],
-            request.form['grouping'],
             request.form['statistic'],
-            int(request.form['epsilon']))
+            int(request.form['epsilon']),
+            grouping_column = request.form['grouping'])
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
+    elif request.form['query_type'] == 'laplace_sum':
+        values = dp_engine.sum(
+            request.form['table'],
+            request.form['statistic'],
+            int(request.form['epsilon']),
+            20,
+            40,
+            grouping_column = request.form['grouping'])
+        response = make_response(values.to_csv())
+        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
+        return response
+
   
 @app.route('/table', methods=['POST'])
 def get_schema():
