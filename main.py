@@ -1,3 +1,4 @@
+from ast import arg
 from msilib.schema import ReserveCost
 from flask_sslify import SSLify
 from flask import Flask, make_response, request, redirect, render_template, url_for
@@ -10,16 +11,24 @@ from functools import wraps
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import plotly.graph_objects as go
+from plotly.figure_factory import create_distplot
+import plotly.figure_factory as ff
+import plotly
+import json
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 sslify = SSLify(app)
-repo = database_repository()
 
 f = open("keys.json")
 keys = json.load(f)
 f.close()
 GOOGLE_CLIENT_ID = keys["google_oauth"]["client_id"]
 ENVIRONMENT = keys["environment"]
+
+repo = database_repository()
 
 def authenticate(func):
     @wraps(func)
@@ -44,16 +53,22 @@ def identify(func):
     def inner(*args, **kws):
         jwt = request.cookies.get("gauth")
         if jwt == None:
+            print("jwt not found")
             return func(None, *args, **kws)
         try:
             idinfo = id_token.verify_oauth2_token(jwt, requests.Request(), GOOGLE_CLIENT_ID)
             userid = idinfo['sub']
             user = repo.get_user(userid)
             if user == None:
+                print("user not found")
                 return func(None, *args, **kws)
-        except ValueError:
-            return redirect("https://www.youtube.com/watch?v=ZzWqfJFxC0w", code=302)
+        except:
+            response = make_response(redirect("/", 302))
+            print("deleting cookie")
+            response.set_cookie("gauth", '', expires=0)
+            return response
         
+        print(idinfo['email'])
         return func(idinfo['email'], *args, **kws)
     return inner  
 
@@ -63,7 +78,7 @@ def query(user_email):
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
         'table', 'host', 'query_type', 'epsilon',
-        'identifier', 'grouping', 'statistic'
+        'grouping', 'statistic'
     ], request.form)
 
     if not success:
@@ -76,16 +91,35 @@ def query(user_email):
         int(request.form['port']))
     
     if request.form['query_type'] == 'laplace_count':
-        values = dp_engine.count(
+        values, values_ndp  = dp_engine.count(
             request.form['table'],
-            request.form['identifier'],
-            request.form['grouping'],
             request.form['statistic'],
-            int(request.form['epsilon']))
+            int(request.form['epsilon']),
+            grouping_column = request.form['grouping'])
+        response = make_response(values.to_csv())
+        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
+        #return response
+        #visualization
+        variables =[values["count"], values_ndp["count"]]
+        labels = ["Original","DP"]
+        fig = ff.create_distplot(variables, labels, show_hist=False, show_rug=False)
+        fig.update_layout(width=1000, height=500)
+        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template("results.html", values=values, plot_json=plot_json)
+
+    elif request.form['query_type'] == 'laplace_sum':
+        values = dp_engine.sum(
+            request.form['table'],
+            request.form['statistic'],
+            int(request.form['epsilon']),
+            20,
+            40,
+            grouping_column = request.form['grouping'])
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
-
+  
 @app.route('/table', methods=['POST'])
 @authenticate
 def get_schema(user_email):

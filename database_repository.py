@@ -57,7 +57,6 @@ class database_repository:
         query = f"INSERT INTO Users (Email, GoogleId) VALUES ('{email}', '{str(google_id)}')"
         cur.execute(query)
         cur.close()
-        print(query)
         return
     
     def insert_database(self, user_id, database_name, 

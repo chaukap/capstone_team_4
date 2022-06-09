@@ -6,18 +6,6 @@
 {% block content %}
 <form action="/query" method="POST">
   <div>
-    <label for="identifier">Identifier</label>
-    <select name="identifier" id="identifier" aria-describedby="a11y-tooltip" value="" required="required">
-      {% for column in columns %}
-      <option value="{{column['name']}}">{{column['name']}}</option>
-      {% endfor %}
-    </select>
-    <span role="tooltip" id="a11y-tooltip">
-      Which column uniquely identifies individuals?
-    </span>
-  </div>
-
-  <div>
     <label for="grouping">Grouping Column</label>
     <select name="grouping" id="grouping" aria-describedby="a11y-tooltip" value="" required="required">
       {% for column in columns %}
@@ -33,6 +21,7 @@
     <label for="query_type">Statistic</label>
     <select name="query_type" id="query_type" aria-describedby="a11y-tooltip" value="" required="required">
       <option value="laplace_count">Count</option>
+      <option value="laplace_sum">Sum</option>
     </select>
     <span role="tooltip" id="a11y-tooltip">
       What statistic would you like
@@ -40,7 +29,7 @@
   </div>
 
   <div>
-    <label for="statistic">Grouping Column</label>
+    <label for="statistic">Of</label>
     <select name="statistic" id="statistic" aria-describedby="a11y-tooltip" value="" required="required">
       {% for column in columns %}
       <option value="{{column['name']}}">{{column['name']}}</option>
