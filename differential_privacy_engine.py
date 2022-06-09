@@ -39,7 +39,7 @@ class differential_privacy_engine:
         result["count"] = result.apply(
             lambda t: round(t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0]), 
             axis=1)
-        return result, result_npd
+        return result, result_ndp
 
     def sum(self, table, sum_column, epsilon, lower_bound, upper_bound, grouping_column = None):
         sql_query = query_generator.generate_sum_query(
