@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+    <form action="/databases/add" method="GET">
+        <input type="submit" value="Add a database">
+    </form>
+{% endblock %}

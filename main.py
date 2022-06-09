@@ -175,8 +175,8 @@ def add_database(user_email):
 @identify
 def index(user_email):
     if user_email != None:
-        return render_template("index.html", user_email = user_email)
-    return render_template("index.html")
+        return render_template("home.html", user_email = user_email)
+    return render_template("home.html")
 
 @app.route("/login", methods=['POST'])
 def login():
