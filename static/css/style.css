@@ -137,3 +137,12 @@ section {
 #section-1 {
   background: rgba(255, 255, 255, 0.6);
 }
+
+/*Graph----------**/
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 250px;
+  padding-left: 250px;
+}
