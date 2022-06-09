@@ -167,9 +167,12 @@ def get_schema(user_email):
 @app.route("/databases/add", methods=['GET'])
 @authenticate
 def add_database(user_email):
-    if user_email != None:
-        return render_template("add_database.html", user_email = user_email)
-    return render_template("add_databse.html")
+    return render_template("add_database.html", user_email = user_email)
+
+@app.route("/databases", methods=['GET'])
+@authenticate
+def view_databases(user_email):
+    return render_template("view_databases.html", user_email = user_email, databases=[])
 
 @app.route('/', methods=['GET'])
 @identify
