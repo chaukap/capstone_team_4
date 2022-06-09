@@ -9,7 +9,7 @@ class differential_privacy_engine:
             username, password, host, database, port)
         return
 
-    def laplaceMechanismClamped(self, true_value, epsilon, u, l):
+    def __laplaceMechanismClamped(self, true_value, epsilon, u, l):
         range = abs(u - l)
         noise = np.random.laplace(0, 2 * range / epsilon, 1)[0]
         if noise >= u :
@@ -46,7 +46,7 @@ class differential_privacy_engine:
         else:
             result.columns = [grouping_column, f"sum_{sum_column}"]
         result[f"sum_{sum_column}"] = result.apply(
-            lambda t: int(self.laplaceMechanismClamped(float(t[1]), epsilon, upper_bound, lower_bound)), 
+            lambda t: int(self.__laplaceMechanismClamped(float(t[1]), epsilon, upper_bound, lower_bound)), 
             axis=1)
         return result
         
