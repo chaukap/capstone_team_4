@@ -33,7 +33,13 @@ class differential_privacy_engine:
         result[f"count_{count_column}"] = result.apply(
             lambda t: round(t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0]), 
             axis=1)
-        return result
+        result_ndp = result
+        result_ndp.columns = [grouping_column, count_column, "count"]
+        result.columns = [grouping_column, count_column, "count"]
+        result["count"] = result.apply(
+            lambda t: round(t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0]), 
+            axis=1)
+        return result, result_npd
 
     def sum(self, table, sum_column, epsilon, lower_bound, upper_bound, grouping_column = None):
         sql_query = query_generator.generate_sum_query(

@@ -4,6 +4,13 @@ from mariadb_client import mariadb_client
 from differential_privacy_engine import differential_privacy_engine
 from helper_functions import check_form_fields
 from database_repository import database_repository
+import plotly.graph_objects as go
+from plotly.figure_factory import create_distplot
+import plotly.figure_factory as ff
+import plotly
+import json
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 sslify = SSLify(app)
@@ -28,14 +35,23 @@ def query():
         int(request.form['port']))
     
     if request.form['query_type'] == 'laplace_count':
-        values = dp_engine.count(
+        values, values_ndp  = dp_engine.count(
             request.form['table'],
             request.form['statistic'],
             int(request.form['epsilon']),
             grouping_column = request.form['grouping'])
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
-        return response
+        #return response
+        #visualization
+        variables =[values["count"], values_ndp["count"]]
+        labels = ["Original","DP"]
+        fig = ff.create_distplot(variables, labels, show_hist=False, show_rug=False)
+        fig.update_layout(width=1000, height=500)
+        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template("results.html", values=values, plot_json=plot_json)
+
     elif request.form['query_type'] == 'laplace_sum':
         values = dp_engine.sum(
             request.form['table'],
