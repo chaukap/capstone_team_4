@@ -106,7 +106,9 @@ def query(user_email):
         fig.update_layout(width=1000, height=500)
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        return render_template("results.html", values=values, plot_json=plot_json)
+        return render_template("results.html", 
+            values=values, plot_json=plot_json, 
+            user_email=user_email)
 
     elif request.form['query_type'] == 'laplace_sum':
         values = dp_engine.sum(
@@ -161,6 +163,13 @@ def get_schema(user_email):
         port=request.form['port'],
         table=request.form['table'],
         user_email = user_email)
+
+@app.route("/databases/add", methods=['GET'])
+@authenticate
+def add_database(user_email):
+    if user_email != None:
+        return render_template("add_database.html", user_email = user_email)
+    return render_template("add_databse.html")
 
 @app.route('/', methods=['GET'])
 @identify
