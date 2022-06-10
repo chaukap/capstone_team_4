@@ -45,7 +45,7 @@ def authenticate(func):
         except ValueError:
             return redirect("https://www.youtube.com/watch?v=ZzWqfJFxC0w", code=302)
         
-        return func(idinfo['email'], *args, **kws)
+        return func(user, *args, **kws)
     return inner
 
 def identify(func):
@@ -60,7 +60,6 @@ def identify(func):
             userid = idinfo['sub']
             user = repo.get_user(userid)
             if user == None:
-                print("user not found")
                 return func(None, *args, **kws)
         except:
             response = make_response(redirect("/", 302))
@@ -68,13 +67,12 @@ def identify(func):
             response.set_cookie("gauth", '', expires=0)
             return response
         
-        print(idinfo['email'])
-        return func(idinfo['email'], *args, **kws)
+        return func(user, *args, **kws)
     return inner  
 
 @app.route('/query', methods=['POST'])
 @authenticate
-def query(user_email):
+def query(user):
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
         'table', 'host', 'query_type', 'epsilon',
@@ -108,7 +106,7 @@ def query(user_email):
 
         return render_template("results.html", 
             values=values, plot_json=plot_json, 
-            user_email=user_email)
+            user_email=user.email)
 
     elif request.form['query_type'] == 'laplace_sum':
         values = dp_engine.sum(
@@ -122,9 +120,9 @@ def query(user_email):
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
   
-@app.route('/table', methods=['POST'])
+@app.route('/databases/add', methods=['POST'])
 @authenticate
-def get_schema(user_email):
+def post_database(user):
     """Get the schema for a database table.
         Form Fields (Required)
         ----------
@@ -137,49 +135,71 @@ def get_schema(user_email):
 
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
-        'table', 'host'
+        'table', 'host', 'display_name', 'description'
     ], request.form)
 
     if not success:
         return make_response(f"{missing_field} not specified", 400)
 
-    client = mariadb_client(request.form['username'], 
-        request.form['password'], 
-        request.form['host'],
+    repo.insert_database(
+        user.id, 
         request.form['database'],
-        int(request.form['port']))
-    result = client.get_table_schema(request.form['table'])
+        request.form['host'], 
+        request.form['username'],
+        request.form['password'],
+        request.form['table'],
+        int(request.form['port']),
+        request.form['display_name'],
+        request.form['description']
+        )
+
+    return redirect("/", 302)
+
+@app.route("/databases/add", methods=['GET'])
+@authenticate
+def add_database(user):
+    return render_template("add_database.html", user_email = user.email)
+
+@app.route("/query/create")
+@authenticate
+def create_query(user):
+    database_id = request.args.get("database_id")
+    if database_id == None:
+        return make_response("No database specified", 404)
+
+    database = repo.get_database(database_id)
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+    
+    client = mariadb_client(database.username, 
+        database.password, 
+        database.host,
+        database.database,
+        database.port)
+    result = client.get_table_schema(database.table)
 
     columns = []
     for res in result:
         columns.append(dict(name=res[0], type=res[1]))
 
     return render_template("query.html",
-        columns=columns, 
-        username=request.form['username'], 
-        password=request.form['password'],
-        host=request.form['host'],
-        database=request.form['database'],
-        port=request.form['port'],
-        table=request.form['table'],
-        user_email = user_email)
-
-@app.route("/databases/add", methods=['GET'])
-@authenticate
-def add_database(user_email):
-    return render_template("add_database.html", user_email = user_email)
-
-@app.route("/databases", methods=['GET'])
-@authenticate
-def view_databases(user_email):
-    return render_template("view_databases.html", user_email = user_email, databases=[])
+        columns=columns,
+        username=database.username,
+        password=database.password,
+        host=database.host,
+        database=database.database,
+        port=database.port,
+        table=database.table,
+        user_email = user.email)
 
 @app.route('/', methods=['GET'])
 @identify
-def index(user_email):
-    if user_email != None:
-        return render_template("home.html", user_email = user_email)
-    return render_template("home.html")
+def index(user):
+    if user == None:
+        return render_template("home.html")
+    
+    databases = repo.get_user_databases(user.id)
+    return render_template("home.html", user_email = user.email, databases=databases)
 
 @app.route("/login", methods=['POST'])
 def login():

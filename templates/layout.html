@@ -17,7 +17,7 @@
     <div id="header">
         {% block header %}
         <img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" />
-        <div>
+        <div class="google-login">
             {% if user_email %}
             <h4>{{ user_email }}</h4>
             {% else %}
@@ -30,9 +30,9 @@
                 <div class="g_id_signin" data-type="standard"></div>
             {% endif %}
         </div>
-        <h1><small>Simple Differential Privacy</small></h1>
         {% endblock %}
     </div>
+    <h1><small>Simple Differential Privacy</small></h1>
     <div id="content">
         {% block content %}{% endblock %}
     </div>

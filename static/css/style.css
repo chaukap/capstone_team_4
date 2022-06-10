@@ -18,6 +18,28 @@ form {
   position: relative;
 }
 
+#header {
+  display: flex;
+}
+
+#header img {
+  height: 4em;
+}
+
+.google-login {
+  position: absolute;
+  right: 10px;
+  height: 4em;
+}
+
+.g_id_signin {
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  position: absolute;
+  right: 0;
+}
+
 input[type=text] {
   width: 100%;
   max-width: 100%;
@@ -145,4 +167,48 @@ section {
   justify-content: center;
   padding-right: 250px;
   padding-left: 250px;
+}
+
+.client-database-wrapper {
+  max-width: 40em;
+  margin: auto;
+  text-align: center;
+}
+
+.client-database {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem;
+  margin: 8px -2px 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 2px solid rgba(101, 5, 204, 0.7);
+  font-size: 1rem;
+  min-height: 49px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: rgba(101, 5, 204, 0.7);
+  cursor: pointer;
+}
+
+.client-database-link {
+  text-decoration: none;
+}
+
+.client-database-name {
+  font-weight: bold;
+  font-size: large;
+}
+
+.client-database-description {
+  font-weight: lighter;
+  font-style: italic;
+}
+
+.divider {
+  width: 3px;
+  height: 25px;
+  padding: 0px 0px;
+  margin: -7px 5px;
+  background-color: rgba(101, 5, 204, 0.7);
+  display: inline-block;
 }
