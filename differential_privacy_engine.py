@@ -19,27 +19,31 @@ class differential_privacy_engine:
                 noise = l
         return true_value + noise
 
-
     def count(self, table, count_column, epsilon, grouping_column = None):
         sql_query = query_generator.generate_count_query(
             table, count_column, grouping_column)
         result = pd.DataFrame(
             self.client.execute_query(sql_query["query"])
         )
+        noisy_result = result.copy(deep=True)
         if grouping_column == None:
-            result.columns = [f"count_{count_column}"]
+            noisy_result.columns = [f"count_{count_column}"]
+            noisy_result[f"count_{count_column}"] = result.apply(
+                lambda t: t[1] + np.random.laplace(0, 2.0/epsilon, 1)[0],
+                axis=1)
         else:
-            result.columns = [grouping_column, count_column, f"count_{count_column}"]
-        result[f"count_{count_column}"] = result.apply(
-            lambda t: round(t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0]), 
-            axis=1)
-        result_ndp = result
-        result_ndp.columns = [grouping_column, count_column, "count"]
+            noisy_result.columns = [
+                grouping_column, 
+                count_column, 
+                f"count_{count_column}"
+            ]
+            noisy_result[f"count_{count_column}"] = result.apply(
+                lambda t: t[2] + np.random.laplace(0, 2.0/epsilon, 1)[0], 
+                axis=1)
+
         result.columns = [grouping_column, count_column, "count"]
-        result["count"] = result.apply(
-            lambda t: round(t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0]), 
-            axis=1)
-        return result, result_ndp
+        noisy_result.columns = [grouping_column, count_column, "count"]
+        return noisy_result, result
 
     def sum(self, table, sum_column, epsilon, lower_bound, upper_bound, grouping_column = None):
         sql_query = query_generator.generate_sum_query(
