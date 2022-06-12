@@ -9,7 +9,7 @@
 </form>
 {% if databases %}
 {% for database in databases %}
-<a href="/query/create?database_id={{database.id}}" class="client-database-link">
+<a href="/queries?database_id={{database.id}}" class="client-database-link">
     <div class="client-database-wrapper">
         <div class="client-database">
             <span class="client-database-name">

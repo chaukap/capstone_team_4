@@ -1,7 +1,9 @@
+from tokenize import group
 import mariadb
 import json
 from models.user import user
 from models.database import database
+from models.database_query import database_query
 
 class database_repository:
     def __init__(self) -> None:
@@ -66,6 +68,20 @@ class database_repository:
         result = [n for n in cur]
         return result
 
+    def get_database_query(self, query_id):
+        cur = self.connection.cursor()
+        cur.execute(f"SELECT * FROM ClientDatabaseQueries WHERE Id = {str(query_id)}")
+        result = [database_query(n) for n in cur]
+        cur.close()
+        return result[0]
+
+    def get_database_queries(self, database_id):
+        cur = self.connection.cursor()
+        cur.execute(f"SELECT * FROM ClientDatabaseQueries WHERE DatabaseId = {str(database_id)}")
+        result = [database_query(n) for n in cur]
+        cur.close()
+        return result
+
     def insert_user(self, google_id, email):
         cur = self.connection.cursor()
         query = f"INSERT INTO Users (Email, GoogleId) VALUES ('{email}', '{str(google_id)}')"
@@ -96,6 +112,18 @@ class database_repository:
 	            (DatabaseId, Name, MaxBound, MinBound)
             VALUES 
 	            ({database_id}, '{name}', {max_bound}, {min_bound});
+            """)
+        self.connection.commit()
+        return
+
+    def insert_database_query(self, database_id, statistic, 
+        query_type, grouping_column, epsilon, upper_bound = 0, lower_bound = 0):
+        cur = self.connection.cursor()
+        cur.execute(f"""
+            INSERT INTO ClientDatabaseQueries 	
+	            (DatabaseId, Statistic, QueryType, GroupingColumn, Epsilon, UpperBound, LowerBound)
+            VALUES 
+	            ({str(database_id)}, '{statistic}', '{query_type}', '{grouping_column}', {str(epsilon)}, {str(upper_bound)}, {str(lower_bound)});
             """)
         self.connection.commit()
         return

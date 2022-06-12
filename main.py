@@ -7,6 +7,7 @@ from helper_functions import check_form_fields
 from database_repository import database_repository
 import json
 from functools import wraps
+from helpers.graphics import epsilon_slider
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -73,51 +74,159 @@ def identify(func):
 @authenticate
 def query(user):
     success, missing_field = check_form_fields([
-        'database', 'username', 'password', 'port',
-        'table', 'host', 'query_type', 'epsilon',
-        'grouping', 'statistic'
+        'database_id', 'query_type', 'epsilon',
+        'grouping_column', 'statistic'
     ], request.form)
 
     if not success:
         return make_response(f"{missing_field} not specified", 400)
-    
-    dp_engine = differential_privacy_engine(request.form['username'], 
-        request.form['password'], 
-        request.form['host'],
-        request.form['database'],
-        int(request.form['port']))
-    
-    if request.form['query_type'] == 'laplace_count':
+
+    database = repo.get_database(int(request.form['database_id']))
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+
+    if request.form['query_type'] == 'laplace_sum':
+        success, missing_field = check_form_fields([
+            'upper_bound', 'lower_bound'
+        ], request.form)
+
+        if not success:
+            return make_response(f"{missing_field} not specified", 400)
+
+    repo.insert_database_query(
+        database_id=database.id,
+        statistic=request.form['statistic'],
+        query_type=request.form['query_type'],
+        grouping_column=request.form['grouping_column'],
+        epsilon=request.form['epsilon'],
+        upper_bound=int(request.form['upper_bound']) if request.form['query_type'] == 'laplace_sum' else 0,
+        lower_bound=int(request.form['lower_bound']) if request.form['query_type'] == 'laplace_sum' else 0
+        )
+
+    return redirect(f"/queries?database_id={database.id}", 302)
+
+@app.route('/query/result', methods=['GET'])
+@authenticate
+def download_results(user):
+    query_id = request.args.get("query_id")
+    if query_id == None:
+        return make_response("No query specified", 404)
+
+    query = repo.get_database_query(query_id)
+    if query == None:
+        return make_response("Query not found", 404)
+
+    database = repo.get_database(query.database_id)
+    if database == None or database.user_id != user.id:
+        return make_response("Query not found", 404)
+
+    dp_engine = differential_privacy_engine(database.username, 
+        database.password, 
+        database.host,
+        database.database,
+        int(database.port))
+
+    if query.query_type == 'laplace_count':
         values, values_ndp  = dp_engine.count(
-            request.form['table'],
-            request.form['statistic'],
-            int(request.form['epsilon']),
-            grouping_column = request.form['grouping'])
-        response = make_response(values.to_csv())
-        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
-        #return response
-        #visualization
-        variables =[values["count"], values_ndp["count"]]
-        labels = ["Original","DP"]
-        fig = ff.create_distplot(variables, labels, show_hist=False, show_rug=False)
-        fig.update_layout(width=1000, height=500)
-        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
-        return render_template("results.html", 
-            values=values, plot_json=plot_json, 
-            user_email=user.email)
-
-    elif request.form['query_type'] == 'laplace_sum':
-        values = dp_engine.sum(
-            request.form['table'],
-            request.form['statistic'],
-            int(request.form['epsilon']),
-            20,
-            40,
-            grouping_column = request.form['grouping'])
+            database.table,
+            query.statistic,
+            query.epsilon,
+            grouping_column = query.grouping_column)
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
+
+    if query.query_type == 'laplace_sum':
+        values, values_ndp  = dp_engine.sum(
+            table=database.table,
+            sum_column=query.statistic,
+            epsilon=query.epsilon,
+            lower_bound=query.lower_bound,
+            upper_bound=query.upper_bound,
+            grouping_column = query.grouping_column)
+        response = make_response(values.to_csv())
+        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
+        return response
+
+@app.route('/queries', methods=['GET'])
+@authenticate
+def get_queries(user):
+    database_id = request.args.get("database_id")
+    if database_id == None:
+        return make_response("No database specified", 404)
+
+    database = repo.get_database(database_id)
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+
+    queries = repo.get_database_queries(database.id)
+
+    return render_template("queries.html", 
+        database_id=database_id,
+        queries=queries, user_email=user.email)
+
+@app.route('/query/epsilon', methods=['POST'])
+@authenticate
+def select_epsilon(user):
+    success, missing_field = check_form_fields([
+        'database_id', 'query_type',
+        'grouping_column', 'statistic'
+    ], request.form)
+
+    if not success:
+        return make_response(f"{missing_field} not specified", 400)
+
+    database = repo.get_database(int(request.form['database_id']))
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+    
+    dp_engine = differential_privacy_engine(database.username, 
+        database.password, 
+        database.host,
+        database.database,
+        int(database.port))
+    
+    if request.form['query_type'] == 'laplace_count':
+        values, values_ndp  = dp_engine.count(
+            table=database.table,
+            count_column=request.form['statistic'],
+            epsilon=0.5,
+            grouping_column=request.form['grouping_column'])
+
+        fig = epsilon_slider()
+        fig.update_layout(width=1000, height=500)
+        
+        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template("epsilon_selection.html", 
+            values=values, plot_json=plot_json, 
+            database_id=database.id,
+            grouping_column=request.form['grouping_column'],
+            statistic=request.form['statistic'],
+            query_type=request.form['query_type'],
+            user_email=user.email)
+
+    elif request.form['query_type'] == 'laplace_sum':
+        values, values_ndp  = dp_engine.sum(
+            table=database.table,
+            sum_column=request.form['statistic'],
+            epsilon=0.5,
+            lower_bound=1,
+            upper_bound=2,
+            grouping_column=request.form['grouping_column'])
+
+        fig = epsilon_slider()
+        fig.update_layout(width=1000, height=500)
+        
+        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template("epsilon_selection.html", 
+            values=values, plot_json=plot_json, 
+            database_id=database.id,
+            grouping_column=request.form['grouping_column'],
+            statistic=request.form['statistic'],
+            query_type=request.form['query_type'],
+            user_email=user.email)
   
 @app.route('/databases/add', methods=['POST'])
 @authenticate
@@ -183,12 +292,7 @@ def create_query(user):
 
     return render_template("query.html",
         columns=columns,
-        username=database.username,
-        password=database.password,
-        host=database.host,
-        database=database.database,
-        port=database.port,
-        table=database.table,
+        database_id=database_id,
         user_email = user.email)
 
 @app.route('/', methods=['GET'])

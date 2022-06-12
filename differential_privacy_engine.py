@@ -29,7 +29,7 @@ class differential_privacy_engine:
         if grouping_column == None:
             noisy_result.columns = [f"count_{count_column}"]
             noisy_result[f"count_{count_column}"] = result.apply(
-                lambda t: t[1] + np.random.laplace(0, 2.0/epsilon, 1)[0],
+                lambda t: t[1] + np.random.laplace(0, 2.0/float(epsilon), 1)[0],
                 axis=1)
         else:
             noisy_result.columns = [
@@ -48,15 +48,16 @@ class differential_privacy_engine:
     def sum(self, table, sum_column, epsilon, lower_bound, upper_bound, grouping_column = None):
         sql_query = query_generator.generate_sum_query(
             table, sum_column, grouping_column)
-        result = pd.DataFrame(
+        noisy_result = pd.DataFrame(
             self.client.execute_query(sql_query["query"])
         )
         if grouping_column == None:
-            result.columns = [f"sum_{sum_column}"]
+            noisy_result.columns = [f"sum_{sum_column}"]
         else:
-            result.columns = [grouping_column, f"sum_{sum_column}"]
-        result[f"sum_{sum_column}"] = result.apply(
+            noisy_result.columns = [grouping_column, f"sum_{sum_column}"]
+
+        noisy_result[f"sum_{sum_column}"] = noisy_result.apply(
             lambda t: int(self.__laplaceMechanismClamped(float(t[1]), epsilon, upper_bound, lower_bound)), 
             axis=1)
-        return result
+        return noisy_result, 0
         

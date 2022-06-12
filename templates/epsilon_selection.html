@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container" id="chart1"></div>
+<form action="/query" method="POST">
+    <div>
+        <label for="epsilon">Epsilon</label>
+        <span class="a11y-input-tooltip">
+            <input type="number" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip" value="4"
+                required="required" />
+            <span role="tooltip" id="a11y-tooltip">
+                The higher the value, the less private your dataset.
+            </span>
+        </span>
+    </div>
+
+    {% if query_type == 'laplace_sum' %}
+    <div>
+        <label for="upper_bound">Upper Bound</label>
+        <span class="a11y-input-tooltip">
+            <input type="number" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value=""
+                required="required" />
+            <span role="tooltip" id="a11y-tooltip">
+                What's the highest value that you think could ever be in this dataset?
+            </span>
+        </span>
+    </div>
+    <div>
+        <label for="lower_bound">Lower Bound</label>
+        <span class="a11y-input-tooltip">
+            <input type="number" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value=""
+                required="required" />
+            <span role="tooltip" id="a11y-tooltip">
+                What's the lowest value that you think could ever be in this dataset?
+            </span>
+        </span>
+    </div>
+    {% endif %}
+
+    <div hidden>
+        <label for="database_id">Database Id</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="database_id" id="database_id" aria-describedby="a11y-tooltip"
+                value="{{database_id}}" required="required" />
+    </div>
+
+    <div hidden>
+        <label for="statistic">Statistic</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="statistic" id="statistic" aria-describedby="a11y-tooltip" value="{{statistic}}"
+                required="required" />
+    </div>
+
+    <div hidden>
+        <label for="query_type">Query Type</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="query_type" id="query_type" aria-describedby="a11y-tooltip" value="{{query_type}}"
+                required="required" />
+    </div>
+
+    <div hidden>
+        <label for="grouping_column">Grouping Column</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="grouping_column" id="grouping_column" aria-describedby="a11y-tooltip"
+                value="{{grouping_column}}" />
+    </div>
+
+    <input type="submit" value="Submit">
+</form>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    graph1={{ plot_json | safe }};
+    Plotly.plot("chart1", graph1, {})
+</script>
+
+{% endblock %}

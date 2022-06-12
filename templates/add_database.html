@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Add a Database{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
@@ -80,10 +80,10 @@
       <label for="port">port</label>
       <span class="a11y-input-tooltip">
         <input type="number" name="port" id="port" aria-describedby="a11y-tooltip" 
-        value="{{request.form['port']}}" required="required"
+        value="3306" required="required"
         placeholder="3306"/>
         <span role="tooltip" id="a11y-tooltip">
-          Please enter port number, default is 3306 .</span>
+          Please enter port number, default is 3306.</span>
       </span>
     </div>      
     
@@ -98,7 +98,6 @@
 "Releasing differentially private datasets requires a deep understanding of differential privacy. Our goal is to 
 assisting non-technical users with creating differentially private datasets using their private data. "
       </p>
-
   </section>
 <!-- Section 1 end -->
 {% endblock %}
