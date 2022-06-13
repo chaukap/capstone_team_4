@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<form action="/databases/add" method="GET">
+    <input type="submit" value="Add a database">
+</form>
+{% if databases %}
+{% for database in databases %}
+<a href="/query/create?database_id={{database.id}}" class="client-database-link">
+    <div class="client-database-wrapper">
+        <div class="client-database">
+            <span class="client-database-name">
+                {{ database.name }}
+            </span>
+            <span class="divider"></span>
+            <span class="client-database-table">
+                {{ database.table }}
+            </span>
+            <span class="divider"></span>
+            <span class="client-database-description">
+                {{ database.description }}
+            </span>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endif %}
+{% endblock %}

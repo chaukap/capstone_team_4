@@ -4,7 +4,28 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <form action="/table" method="POST">
+  <form action="/databases/add" method="POST">
+    <div>
+      <label for="display_name">Display Name</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" name="display_name" id="display_name" aria-describedby="a11y-tooltip" 
+        value="" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please give your database a public name</span>
+        </span>
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <span class="a11y-input-tooltip">
+        <input type="text" name="description" id="description" aria-describedby="a11y-tooltip" 
+        value="" required="required"/>
+        <span role="tooltip" id="a11y-tooltip">
+          Please give your database description
+        </span>
+        </span>
+    </div>
+
     <div>
       <label for="username">Username</label>
       <span class="a11y-input-tooltip">

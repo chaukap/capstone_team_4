@@ -6,19 +6,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="jba4DMEd3fh72z21nkL9s3LwmlgEVm41wHFOhwkew9Q" />
+    <meta name="google-signin-client_id"
+        content="1080040075230-6o17df6tp9t2f2tgoms209lr186qf4vs.apps.googleusercontent.com">
     <title>{% block title %}{% endblock %} | Simplify Differential Privacy</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% endblock %}
 </head>
 
 <body>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <div id="header">
         {% block header %}
-            <img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" />
-            <h1><small>Welcome to Differentially Private Database</small></h1>
+        <img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" />
+        <div class="google-login">
+            {% if user_email %}
+            <h4>{{ user_email }}</h4>
+            {% else %}
+                <script src="https://accounts.google.com/gsi/client" async defer></script>
+                <div id="g_id_onload" 
+                    data-client_id="1080040075230-6o17df6tp9t2f2tgoms209lr186qf4vs.apps.googleusercontent.com"
+                    data-ux_mode="redirect"
+                    data-login_uri="https://localhost:5000/login">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+            {% endif %}
+        </div>
         {% endblock %}
     </div>
+    <h1><small>Simple Differential Privacy</small></h1>
     <div id="content">
         {% block content %}{% endblock %}
     </div>
