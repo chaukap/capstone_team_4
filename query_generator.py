@@ -1,4 +1,7 @@
 
+from ast import AsyncFunctionDef
+
+
 class query_generator:
     def generate_count_query(table, count_column, grouping_column = None):
         """Generate an SQL query that returns the count of one column grouped by another.
@@ -12,10 +15,8 @@ class query_generator:
            
            Returns
            ----------
-           A dict with two entries:
-           query: A string containing the SQL query that will satisfy the requirements.
-           multiple_contributors: A string containing an SQL query that will identify
-               users that contributed more than once to the results. """
+           A dict:
+           query: A string containing the SQL query that will satisfy the requirements."""
         if grouping_column == None:
             return {
                 "query": f"""
@@ -45,4 +46,30 @@ class query_generator:
                 """
             }
 
+        return query
+
+
+    def generate_average_query(table, average_column, grouping_column = None):
+        if grouping_column == None:
+            query = {
+                "query": f"""
+                    SELECT COUNT({average_column}), 
+                        SUM({average_column}) ,
+                        MIN({average_column}),
+                        MAX({average_column})
+                    FROM {table} 
+                """
+            }
+        else:
+            query = {
+                "query": f"""
+                    SELECT {grouping_column}, 
+                        COUNT({average_column}), 
+                        SUM({average_column}),
+                        MIN({average_column}),
+                        MAX({average_column})
+                    FROM {table} 
+                    GROUP BY {grouping_column}
+                """
+            }
         return query

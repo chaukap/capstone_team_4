@@ -1,4 +1,5 @@
 from ast import arg
+from unittest import result
 from flask_sslify import SSLify
 from flask import Flask, make_response, request, redirect, render_template, url_for
 from mariadb_client import mariadb_client
@@ -100,8 +101,8 @@ def query(user):
         query_type=request.form['query_type'],
         grouping_column=request.form['grouping_column'],
         epsilon=request.form['epsilon'],
-        upper_bound=int(request.form['upper_bound']) if request.form['query_type'] == 'laplace_sum' else 0,
-        lower_bound=int(request.form['lower_bound']) if request.form['query_type'] == 'laplace_sum' else 0
+        upper_bound=float(request.form['upper_bound']) if 'upper_bound' in request.form.keys() else 0,
+        lower_bound=float(request.form['lower_bound']) if 'lower_bound' in request.form.keys() else 0
         )
 
     return redirect(f"/queries?database_id={database.id}", 302)
@@ -149,6 +150,21 @@ def download_results(user):
         response = make_response(values.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
+    
+    if query.query_type == 'laplace_average':
+        noisy_result, result  = dp_engine.average(
+            table=database.table,
+            average_column=query.statistic,
+            epsilon=query.epsilon,
+            lower_bound=query.lower_bound,
+            upper_bound=query.upper_bound,
+            grouping_column = query.grouping_column)
+        response = make_response(noisy_result.to_csv())
+        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
+        return response
+
+    return make_response("Unknown query type", 400)
+
 
 @app.route('/queries', methods=['GET'])
 @authenticate
@@ -221,7 +237,6 @@ def select_epsilon(user):
 
         fig = epsilon_slider()
         fig.update_layout(width=1000, height=500)
-        
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         return render_template("epsilon_selection.html", 
@@ -231,6 +246,29 @@ def select_epsilon(user):
             statistic=request.form['statistic'],
             query_type=request.form['query_type'],
             user_email=user.email)
+
+    elif request.form['query_type'] == 'laplace_average':
+        noisy_result, result  = dp_engine.average(
+            table=database.table,
+            average_column=request.form['statistic'],
+            epsilon=0.5,
+            lower_bound=1,
+            upper_bound=2,
+            grouping_column=request.form['grouping_column'])
+        
+        fig = epsilon_slider()
+        fig.update_layout(width=1000, height=500)
+        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template("epsilon_selection.html", 
+            values=result, plot_json=plot_json, 
+            database_id=database.id,
+            grouping_column=request.form['grouping_column'],
+            statistic=request.form['statistic'],
+            query_type=request.form['query_type'],
+            user_email=user.email)
+
+    return make_response("Unknown query type", 400)
   
 @app.route('/databases/add', methods=['POST'])
 @authenticate

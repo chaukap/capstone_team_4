@@ -17,7 +17,7 @@
         </span>
     </div>
 
-    {% if query_type == 'laplace_sum' %}
+    {% if query_type == 'laplace_sum' or query_type == 'laplace_average' %}
     <div>
         <label for="upper_bound">Upper Bound</label>
         <span class="a11y-input-tooltip">
