@@ -28,8 +28,6 @@ f.close()
 GOOGLE_CLIENT_ID = keys["google_oauth"]["client_id"]
 ENVIRONMENT = keys["environment"]
 
-repo = database_repository()
-
 def authenticate(func):
     @wraps(func)
     def inner(*args, **kws):
@@ -37,6 +35,7 @@ def authenticate(func):
         if jwt == None:
             return redirect("/", 302)
         try:
+            repo = database_repository()
             idinfo = id_token.verify_oauth2_token(jwt, requests.Request(), GOOGLE_CLIENT_ID)
             userid = idinfo['sub']
             user = repo.get_user(userid)
@@ -56,6 +55,7 @@ def identify(func):
             print("jwt not found")
             return func(None, *args, **kws)
         try:
+            repo = database_repository()
             idinfo = id_token.verify_oauth2_token(jwt, requests.Request(), GOOGLE_CLIENT_ID)
             userid = idinfo['sub']
             user = repo.get_user(userid)
@@ -81,6 +81,7 @@ def query(user):
     if not success:
         return make_response(f"{missing_field} not specified", 400)
 
+    repo = database_repository()
     database = repo.get_database(int(request.form['database_id']))
     if database == None or database.user_id != user.id:
         return make_response("Database not found", 404)
@@ -112,6 +113,7 @@ def download_results(user):
     if query_id == None:
         return make_response("No query specified", 404)
 
+    repo = database_repository()
     query = repo.get_database_query(query_id)
     if query == None:
         return make_response("Query not found", 404)
@@ -155,6 +157,7 @@ def get_queries(user):
     if database_id == None:
         return make_response("No database specified", 404)
 
+    repo = database_repository()
     database = repo.get_database(database_id)
     if database == None or database.user_id != user.id:
         return make_response("Database not found", 404)
@@ -176,6 +179,7 @@ def select_epsilon(user):
     if not success:
         return make_response(f"{missing_field} not specified", 400)
 
+    repo = database_repository()
     database = repo.get_database(int(request.form['database_id']))
     if database == None or database.user_id != user.id:
         return make_response("Database not found", 404)
@@ -231,16 +235,6 @@ def select_epsilon(user):
 @app.route('/databases/add', methods=['POST'])
 @authenticate
 def post_database(user):
-    """Get the schema for a database table.
-        Form Fields (Required)
-        ----------
-        username : str,
-        password : str,
-        host : str,
-        database : str,
-        table : str
-        port : str"""
-
     success, missing_field = check_form_fields([
         'database', 'username', 'password', 'port',
         'table', 'host', 'display_name', 'description'
@@ -249,6 +243,7 @@ def post_database(user):
     if not success:
         return make_response(f"{missing_field} not specified", 400)
 
+    repo = database_repository()
     repo.insert_database(
         user.id, 
         request.form['database'],
@@ -275,6 +270,7 @@ def create_query(user):
     if database_id == None:
         return make_response("No database specified", 404)
 
+    repo = database_repository()
     database = repo.get_database(database_id)
     if database == None or database.user_id != user.id:
         return make_response("Database not found", 404)
@@ -301,6 +297,7 @@ def index(user):
     if user == None:
         return render_template("home.html")
     
+    repo = database_repository()
     databases = repo.get_user_databases(user.id)
     return render_template("home.html", user_email = user.email, databases=databases)
 
@@ -318,6 +315,7 @@ def login():
         return redirect("https://www.youtube.com/watch?v=ZzWqfJFxC0w", code=302)
 
     try:
+        repo = database_repository()
         idinfo = id_token.verify_oauth2_token(data['credential'], requests.Request(), GOOGLE_CLIENT_ID)
         userid = idinfo['sub']
         user = repo.get_user(userid)
