@@ -213,7 +213,7 @@ def select_epsilon(user):
             epsilon=0.5,
             grouping_column=request.form['grouping_column'])
 
-        fig = epsilon_slider()
+        fig = epsilon_slider(values_ndp)
         fig.update_layout(width=1000, height=500)
         
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
