@@ -1,22 +1,28 @@
 import plotly.graph_objects as go
 import numpy as np
 
-def epsilon_slider():
+def epsilon_slider(data):
+    # Get true values from random
+    data = data.sample(n = 5)
+    last_column = (data.iloc[: , -1]).values
+    true_value1, true_value2, true_value3, true_value4, true_value5 = [last_column[i] for i in (0, 1, 2, 3, 4)]
     # Create figure
     fig = go.Figure()
 
     # Add traces, one for each slider step
-    for step in np.arange(0, 5, 0.1):
+    steps = []
+    for epsilon in np.logspace(float(0.1), 5):
         fig.add_trace(
             go.Scatter(
                 visible=False,
                 line=dict(color="#00CED1", width=6),
-                name="𝜈 = " + str(step),
-                x=np.arange(0, 10, 0.01),
-                y=np.sin(step * np.arange(0, 10, 0.01))))
+                name="epsilon = " + str(epsilon),
+                x=np.logspace(float(true_value1 - (true_value1/2)), float(true_value1 + (true_value1/2))),
+                y=np.exp(-abs(np.logspace(float(true_value1 - (true_value1/2)), 
+                float(true_value1 + (true_value1/2)))-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
     # Make 10th trace visible
-    fig.data[10].visible = True
+    fig.data[1].visible = True
 
     # Create and add slider
     steps = []
@@ -24,20 +30,21 @@ def epsilon_slider():
         step = dict(
             method="update",
             args=[{"visible": [False] * len(fig.data)},
-                {"title": "Slider switched to step: " + str(i)}],  # layout attribute
+                {"title": "Slider switched to Epsilon: " + str(i)}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)
 
     sliders = [dict(
-        active=10,
-        currentvalue={"prefix": "Frequency: "},
-        pad={"t": 50},
+        active=1,
+        currentvalue={"prefix": "Epsilon: "},
+        pad={"t": 1},
         steps=steps
     )]
 
     fig.update_layout(
         sliders=sliders
     )
+    fig.add_vline(true_value1)
 
     return fig
