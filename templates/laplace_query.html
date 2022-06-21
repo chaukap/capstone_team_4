@@ -4,27 +4,7 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<form action="/query/epsilon" method="POST">
-  <div class="container">
-    <input type="checkbox" id="toggle-checkbox" class="toggle-checkbox">
-    <label for="toggle-checkbox" class="toggle-wrapper">
-      <div class="toggle-thumb">
-      </div>
-  
-      <div class="toggle-container">
-        <div class="toggle-laplace">
-          <div class="exponential-mechanism"></div>
-        </div>
-  
-        <div class="toggle-exponential">
-          <div class="laplace-mechanism"></div>
-        </div>  
-      </div>
-    </label>
-    <p class="laplace-text">Laplace Noise</p>
-    <p class="exponential-text">Exponential Mechanism</p>
-  </div>
-    
+<form action="/query/laplace/epsilon" method="POST">
   <div>
     <label for="grouping_column">Grouping Column</label>
     <select name="grouping_column" id="grouping_column" aria-describedby="a11y-tooltip" value="" required="required">

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Query Generator{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<a href="/query/laplace?database_id={{database_id}}" class="mechanism-link">
+    <div class="mechanism-wrapper default">
+        <div class="mechanism">
+            <span class="mechanism-name">
+                Laplacian
+            </span>
+            <span class="laplace-distribution"></span>
+        </div>
+    </div>
+</a>
+<a href="/query/exponential?database_id={{database_id}}" class="mechanism-link">
+    <div class="mechanism-wrapper default">
+        <div class="mechanism">
+            <span class="mechanism-name">
+                Exponential
+            </span>
+            <span class="exponential-mechanism"></span>
+        </div>
+    </div>
+</a>
+{% endblock %}

@@ -110,3 +110,22 @@ class differential_privacy_engine:
             axis=1)
         
         return noisy_result, result
+
+    def exponential(self, table, column, scoring_function, sensitivity, epsilon):
+        sql_query = query_generator.generate_generic_query(
+            table, column)
+        column = pd.Series(
+            self.client.execute_query(sql_query["query"])
+        )
+
+        unique_values = column.unique()
+        scores = [scoring_function(column, unique_value) for unique_value in unique_values]
+        probabilities = [np.exp(epsilon * score / (2 * sensitivity)) for score in scores]
+        probabilities = probabilities / np.linalg.norm(probabilities, ord=1)
+
+        probability_distribution = pd.DataFrame({
+            'values': unique_values, 
+            'probabilities': probabilities
+            })
+
+        return np.random.choice(unique_values, 1, p=probabilities)[0], probability_distribution

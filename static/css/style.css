@@ -196,10 +196,6 @@ section {
   cursor: pointer;
 }
 
-.client-database-link {
-  text-decoration: none;
-}
-
 .client-database-name {
   font-weight: bold;
   font-size: large;
@@ -219,175 +215,52 @@ section {
   display: inline-block;
 }
 
-
-
-
-:root {
-  --thumb-color:#FFCC33;
-  --toggle-h:3em;
-  --toggle-w:6em;
-  --thumb-size:3.5em;
+.laplace-distribution {
+  background-image: url(../images/laplace_mechanism.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 4.5em;
+  width: 6.5em;
+  margin-bottom: -1em;
 }
 
-* {
-  transition: 1s all ease-in-out;
+.exponential-mechanism {
+  background-image: url(../images/exponential_mechanism.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 4.5em;
+  width: 6.5em;
+  margin-bottom: -1em;
 }
 
-.container {
-  width: inherit;
-  height: 7.5em;
-  position: relative;
-  will-change: color;
-}
-.container .laplace-text {
-  left: 0;
-}
-.container .exponential-text {
-  letter-spacing: 0.1rem;
-  left: -100rem;
-  opacity: 0;
-}
-.container P {
-  color: #000;
-  font-size: 1.7rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: calc(var(--toggle-h));
-  right: 0;
-  bottom: 0;
-  left: 0;
+.mechanism-wrapper {
+  max-width: 40em;
   margin: auto;
-  text-shadow: 0.1rem 0.1rem 0.1rem white;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.container P a {
-  margin-left: 0.5rem;
-  text-shadow: 0rem 0rem 0.2rem rgba(0, 0, 0, 0.5);
-}
-@media (max-width: 849px) {
-  .container {
-    --toggle-h: 10rem;
-    --toggle-w: 25rem;
-    --thumb-size: 11rem;
-  }
-  .container .toggle-thumb {
-    width: 11rem;
-    width: var(--thumb-size);
-    height: 11rem;
-    height: var(--thumb-size);
-  }
+  text-align: center;
 }
 
-.toggle-wrapper {
-  position: absolute;
-  width: 50rem;
-  width: var(--toggle-w, 50rem);
-  height: 20rem;
-  height: var(--toggle-h, 20rem);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  border-radius: 20rem;
-  border-radius: var(--toggle-h, 20rem);
-  display: flex;
-  align-items: center;
+.mechanism {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem;
+  margin: 8px -2px 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 2px solid rgba(101, 5, 204);
+  font-size: 1rem;
+  min-height: 49px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: rgba(101, 5, 204);
   cursor: pointer;
 }
-.toggle-container {
-  position: absolute;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  border-radius: 20rem;
-  border-radius: var(--toggle-h, 20rem);
-}
-.toggle-thumb {
-  width: 22rem;
-  width: var(--thumb-size);
-  height: 22rem;
-  height: var(--thumb-size);
-  border-radius: 50%;
-  position: absolute;
-  z-index: 10;
-  background: #e1e1e1;
-  left: -0.6rem;
-  transform: rotate(-270deg);
-}
-.toggle-exponential, .toggle-laplace {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  border-radius: 20rem;
-  border-radius: var(--toggle-h, 20rem);
-  overflow: hidden;
-}
-.toggle-exponential {
-  left: 0;
-  opacity: 1;
-  background: linear-gradient(to bottom, #e1e1e1 0%, #c2c2c2 100%);
-}
-.toggle-exponential .laplace-mechanism {
-  width: 3em;
-  height: 3.1em;
-  background-image: url(../images/laplace_mechanism.png);
-  background-size: contain;
-  position: absolute;
-  right: 5%;
-  bottom: -20%;
-  z-index: 10;
-  background-repeat: no-repeat;
-}
-.toggle-laplace {
-  left: calc(calc(100% - calc(var(--thumb-size) - 0.6rem)) * -1);
-  background: linear-gradient(to bottom, #e1e1e1 0%, #c2c2c2 100%);
-  opacity: 0;
-}
-.toggle-laplace .exponential-mechanism {
-  width: 2.4em;
-  height: 2.4em;
-  background-image: url(../images/exponential_mechanism.png);
-  background-size: contain;
-  position: absolute;
-  left: 11%;
-  bottom: 10%;
-  z-index: 10;
-  transform: rotate(-360deg);
-  background-repeat: no-repeat;
-}
-.toggle-checkbox:checked + .toggle-wrapper .toggle-thumb {
-  transform: rotate(0);
-  left: calc(100% - calc(22rem - 0.6rem));
-  left: calc(100% - calc(var(--thumb-size) - 0.6rem));
-  background-color: #c2c2c2;
-}
-.toggle-checkbox:checked + .toggle-wrapper .toggle-exponential {
-  left: calc(100% - calc(var(--thumb-size) - 0.6rem));
-  opacity: 0;
-}
-.toggle-checkbox:checked + .toggle-wrapper .toggle-exponential .laplace-mechanism {
-  bottom: -100%;
-}
-.toggle-checkbox:checked + .toggle-wrapper .toggle-laplace {
-  left: 0;
-  opacity: 1;
-}
-.toggle-checkbox:checked ~ .laplace-text {
-  left: 100rem;
-  opacity: 0;
-  overflow: hidden;
-}
-.toggle-checkbox:checked ~ .exponential-text {
-  left: 0;
-  opacity: 1;
+
+.mechanism-name {
+  font-weight: bold;
+  font-size: 4em;
 }
 
-.toggle-checkbox {
-  visibility: hidden;
+a {
+  text-decoration: none;
 }
