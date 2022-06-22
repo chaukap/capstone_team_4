@@ -2,6 +2,7 @@ from query_generator import query_generator
 from mariadb_client import mariadb_client
 import numpy as np
 import pandas as pd
+from typing import Callable, Any
 
 class differential_privacy_engine:
     def __init__(self, username, password, host, database, port=3306):
@@ -129,3 +130,32 @@ class differential_privacy_engine:
             })
 
         return np.random.choice(unique_values, 1, p=probabilities)[0], probability_distribution
+
+    def exponential_options(self,
+            table: str, column: str, scoring_function: Callable[[pd.Series, Any], float], 
+            epsilons: list, sensitivity: float=None):
+
+        sql_query = query_generator.generate_generic_query(
+            table, column)
+        column = pd.Series(
+            self.client.execute_query(sql_query["query"])
+        )
+
+        unique_values = column.unique()
+        scores = [scoring_function(column, unique_value) for unique_value in unique_values]
+
+        if sensitivity is None:
+            sensitivity = max(scores) - min(scores)
+
+        probability_distribution = pd.DataFrame()
+        for epsilon in epsilons:
+            probabilities = [np.exp(epsilon * score / (2 * sensitivity)) for score in scores]
+            probabilities = probabilities / np.linalg.norm(probabilities, ord=1)
+
+            probability_distribution = probability_distribution.append(pd.DataFrame({
+                'Value': unique_values, 
+                'Probability': probabilities,
+                'Epsilon': np.repeat(epsilon, len(unique_values))
+                }))
+
+        return probability_distribution

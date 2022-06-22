@@ -8,10 +8,11 @@ from helpers.helper_functions import check_form_fields
 from database_repository import database_repository
 import json
 from functools import wraps
-from helpers.graphics import epsilon_slider
+from helpers.graphics import epsilon_slider, exponential_epsilon_slider
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import plotly.io
 import plotly.graph_objects as go
 from plotly.figure_factory import create_distplot
 import plotly.figure_factory as ff
@@ -290,13 +291,25 @@ def select_exponential_epsilon(user):
         database.database,
         int(database.port))
 
-    fig = epsilon_slider()
-    fig.update_layout(width=1000, height=500)
-        
-    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    scoring_function = None
+    if request.form['query_type'] == 'exponential_max':
+        scoring_function = lambda c, u: sum(u > c)
+    elif request.form['query_type'] == 'exponential_min':
+        scoring_function = lambda c, u: sum(u < c)
+    elif request.form['query_type'] == 'exponential_most_common':
+        scoring_function = lambda c, u: sum(u == c)
+
+    distributions = dp_engine.exponential_options(
+        database.table, 
+        request.form['statistic'],
+        scoring_function=scoring_function,
+        epsilons=np.arange(0.1, 4.1, 0.1))
+
+    fig = exponential_epsilon_slider(distributions)
+    fig = fig.update_layout(width=1000, height=500)
 
     return render_template("exponential_epsilon_selection.html", 
-        values=result, plot_json=plot_json, 
+        values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
         database_id=database.id,
         statistic=request.form['statistic'],
         query_type=request.form['query_type'],

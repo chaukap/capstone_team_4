@@ -4,7 +4,7 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<div class="container" id="chart1"></div>
+<div class="container">{{plot | safe}}</div>
 <form action="/query" method="POST">
     <div>
         <label for="epsilon">Epsilon</label>
@@ -40,11 +40,5 @@
 
     <input type="submit" value="Submit">
 </form>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-    graph1={{ plot_json | safe }};
-    Plotly.plot("chart1", graph1, {})
-</script>
 
 {% endblock %}

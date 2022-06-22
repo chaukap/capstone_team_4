@@ -1,5 +1,6 @@
 import plotly.graph_objects as go
 import numpy as np
+import pandas as pd
 
 def epsilon_slider(data):
     # Get true values from random
@@ -46,5 +47,39 @@ def epsilon_slider(data):
         sliders=sliders
     )
     fig.add_vline(true_value1)
+
+    return fig
+
+def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+
+    probabilities.groupby("Epsilon").apply(
+        lambda r: fig.add_trace(
+                go.Bar(x=[p[0] for p in r.Value], y=r.Probability, visible=False)
+            )
+    )
+    fig.data[0].visible = True
+
+    # Create and add slider
+    steps = []
+    for i in range(len(fig.data)):
+        step = dict(
+            method="update",
+            args=[{"visible": [False] * len(fig.data)},
+                {"title": "Slider switched to Epsilon: " + str(i)}],  # layout attribute
+        )
+        step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+        steps.append(step)
+
+    sliders = [dict(
+        active=0,
+        currentvalue={"prefix": "Epsilon: "},
+        pad={"t": 1},
+        steps=steps
+    )]
+
+    fig.update_layout(
+        sliders=sliders
+    )
 
     return fig
