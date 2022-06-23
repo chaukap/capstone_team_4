@@ -73,3 +73,10 @@ class query_generator:
                 """
             }
         return query
+
+    def generate_generic_query(table, column):
+        return {
+            "query": f"""
+                SELECT {column} from {table};
+            """
+            }

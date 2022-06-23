@@ -4,25 +4,13 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<form action="/query/epsilon" method="POST">
-  <div>
-    <label for="grouping_column">Grouping Column</label>
-    <select name="grouping_column" id="grouping_column" aria-describedby="a11y-tooltip" value="" required="required">
-      {% for column in columns %}
-      <option value="{{column['name']}}">{{column['name']}}</option>
-      {% endfor %}
-    </select>
-    <span role="tooltip" id="a11y-tooltip">
-      Which column would you like to group by?
-    </span>
-  </div>
-
+<form action="/query/exponential/epsilon" method="POST">
   <div>
     <label for="query_type">Statistic</label>
     <select name="query_type" id="query_type" aria-describedby="a11y-tooltip" value="" required="required">
-      <option value="laplace_count">Count</option>
-      <option value="laplace_sum">Sum</option>
-      <option value="laplace_average">Average</option>
+      <option value="exponential_max">Maximum</option>
+      <option value="exponential_min">Minimum</option>
+      <option value="exponential_most_common">Most Common</option>
     </select>
     <span role="tooltip" id="a11y-tooltip">
       What statistic would you like
@@ -30,7 +18,7 @@
   </div>
 
   <div>
-    <label for="statistic">Of</label>
+    <label for="statistic">Of which column?</label>
     <select name="statistic" id="statistic" aria-describedby="a11y-tooltip" value="" required="required">
       {% for column in columns %}
       <option value="{{column['name']}}">{{column['name']}}</option>

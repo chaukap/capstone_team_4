@@ -117,7 +117,7 @@ class database_repository:
         return
 
     def insert_database_query(self, database_id, statistic, 
-        query_type, grouping_column, epsilon, upper_bound = 0, lower_bound = 0):
+        query_type, epsilon, grouping_column = "", upper_bound = 0, lower_bound = 0):
         cur = self.connection.cursor()
         cur.execute(f"""
             INSERT INTO ClientDatabaseQueries 	

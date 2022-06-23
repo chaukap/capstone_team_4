@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">{{plot | safe}}</div>
+<form action="/query" method="POST">
+    <div>
+        <label for="epsilon">Epsilon</label>
+        <span class="a11y-input-tooltip">
+            <input type="number" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip" value="4"
+                required="required" />
+            <span role="tooltip" id="a11y-tooltip">
+                The higher the value, the less private your dataset.
+            </span>
+        </span>
+    </div>
+
+    <div hidden>
+        <label for="database_id">Database Id</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="database_id" id="database_id" aria-describedby="a11y-tooltip"
+                value="{{database_id}}" required="required" />
+    </div>
+
+    <div hidden>
+        <label for="statistic">Statistic</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="statistic" id="statistic" aria-describedby="a11y-tooltip" value="{{statistic}}"
+                required="required" />
+    </div>
+
+    <div hidden>
+        <label for="query_type">Query Type</label>
+        <span class="a11y-input-tooltip">
+            <input type="text" name="query_type" id="query_type" aria-describedby="a11y-tooltip" value="{{query_type}}"
+                required="required" />
+    </div>
+
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
