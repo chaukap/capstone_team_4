@@ -55,10 +55,12 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
 
     probabilities.groupby("Epsilon").apply(
         lambda r: fig.add_trace(
-                go.Bar(x=[p[0] for p in r.Value], y=r.Probability, visible=False)
+                go.Bar(x=[p[0] for p in r.Value], y=r.Probability,visible=False)
             )
     )
     fig.data[0].visible = True
+
+    epsilons = probabilities.Epsilon.unique()
 
     # Create and add slider
     steps = []
@@ -66,20 +68,36 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
         step = dict(
             method="update",
             args=[{"visible": [False] * len(fig.data)},
-                {"title": "Slider switched to Epsilon: " + str(i)}],  # layout attribute
+                {"title": "Epsilon = " + str(round(epsilons[i], 2))}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)
 
     sliders = [dict(
         active=0,
-        currentvalue={"prefix": "Epsilon: "},
-        pad={"t": 1},
+        currentvalue={"visible": False},
+        pad={"t": 20},
         steps=steps
     )]
 
     fig.update_layout(
         sliders=sliders
+    )
+    fig.update_layout(
+        title='Probability distribution',
+        xaxis_tickfont_size=14,
+        # bargap=0.15,
+        # bargroupgap=0.1,
+        yaxis=dict(
+            title= dict(
+                text='Probability',
+                font=dict(
+                    family='Montserrat'
+                )
+            ),
+            titlefont_size=20,
+            tickfont_size=14,
+        )
     )
 
     return fig
