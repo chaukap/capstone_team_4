@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container">{{plot | safe}}</div>
 <form action="/query" method="POST">
-    <div>
+    <div hidden>
         <label for="epsilon">Epsilon</label>
         <span class="a11y-input-tooltip">
             <input type="number" step="0.01" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip" value="4"
@@ -45,8 +45,7 @@
     $(function (){
         $(".slider-container").click(function() {
             text = $(".gtitle").html().replace("Epsilon = ", '');
-            $("input#epsilon").val(parseFloat(text) + "");
-            console.log(parseFloat(text) + "")
+            $("input#epsilon").attr("value", parseFloat(text) + "");
         });
     });
 </script>
