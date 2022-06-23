@@ -2,35 +2,37 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 
-def epsilon_slider(data):
+def epsilon_slider(df):
     # Get true values from random
-    data = data.sample(n = 5)
-    last_column = (data.iloc[: , -1]).values
+    df = df.sample(n = 5)
+    last_column = (df.iloc[: , -1]).values
     true_value1, true_value2, true_value3, true_value4, true_value5 = [last_column[i] for i in (0, 1, 2, 3, 4)]
     # Create figure
-    fig = go.Figure()
+    print(df)
 
     # Add traces, one for each slider step
-    steps = []
-    for epsilon in np.logspace(float(0.1), 5):
-        fig.add_trace(
-            go.Scatter(
-                visible=False,
-                line=dict(color="#00CED1", width=6),
-                name="epsilon = " + str(epsilon),
-                x=np.logspace(float(true_value1 - (true_value1/2)), float(true_value1 + (true_value1/2))),
-                y=np.exp(-abs(np.logspace(float(true_value1 - (true_value1/2)), 
-                float(true_value1 + (true_value1/2)))-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
+    start = float(true_value1 - (true_value1*2))
+    stop = float(true_value1 + (true_value1*2))
+    trace_list1 =[]
+    for epsilon in np.arange(0.1, 4.1, 0.1):
+        #fig.add_trace(
+        trace_list1.append(go.Scatter(
+            visible=False,
+            line=dict(color="#00CED1", width=6),
+            showlegend=True,
+            name="epsilon = " + str(round(epsilon, 3)),
+            x=np.arange(start, stop, 0.2),
+            y=np.exp(-abs(np.arange(start, stop, 0.2)-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
-    # Make 10th trace visible
-    fig.data[1].visible = True
-
+    fig = go.Figure(data=trace_list1)
+    # Default
+    fig.data[5].visible = True
     # Create and add slider
     steps = []
-    for i in range(len(fig.data)):
+    for i in range(len(np.arange(0.1, 4.1, 0.1))):
         step = dict(
-            method="update",
-            args=[{"visible": [False] * len(fig.data)},
+            method="restyle",
+            args=[{"visible": [False] * len(np.arange(0.1, 4.1, 0.1))},
                 {"title": "Slider switched to Epsilon: " + str(i)}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
@@ -39,7 +41,7 @@ def epsilon_slider(data):
     sliders = [dict(
         active=1,
         currentvalue={"prefix": "Epsilon: "},
-        pad={"t": 1},
+        pad={"t": 10},
         steps=steps
     )]
 
