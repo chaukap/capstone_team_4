@@ -163,6 +163,29 @@ def download_results(user):
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
 
+    if query.query_type.startswith("exponential"):
+        scoring_function = None
+        if query.query_type == 'exponential_max':
+            scoring_function = lambda c, u: sum(u > c)
+        elif query.query_type == 'exponential_min':
+            scoring_function = lambda c, u: sum(u < c)
+        elif query.query_type == 'exponential_most_common':
+            scoring_function = lambda c, u: sum(u == c)
+        elif query.query_type == 'exponential_least_common':
+            scoring_function = lambda c, u: sum(u != c)
+        else:
+            return make_response("Unknown query type", 400)
+        
+        noisy_result, _ = dp_engine.exponential(
+            database.table, 
+            query.statistic, 
+            scoring_function,
+            query.epsilon)
+
+        response = make_response(noisy_result.to_csv())
+        response.headers['Content-Disposition'] = "attachment; filename=results.csv"
+        return response
+
     return make_response("Unknown query type", 400)
 
 @app.route('/queries', methods=['GET'])
@@ -298,6 +321,10 @@ def select_exponential_epsilon(user):
         scoring_function = lambda c, u: sum(u < c)
     elif request.form['query_type'] == 'exponential_most_common':
         scoring_function = lambda c, u: sum(u == c)
+    elif request.form['query_type'] == 'exponential_least_common':
+        scoring_function = lambda c, u: sum(u != c)
+    else:
+        return(make_response("Unknown query type", 404))
 
     distributions = dp_engine.exponential_options(
         database.table, 

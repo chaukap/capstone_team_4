@@ -4,6 +4,15 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
+{% if not user_email %}
+<div class="client-database-wrapper default">
+    <div class="client-database">
+        <span class="client-database-name">
+            Sign in to get started!
+        </span>
+    </div>
+</div>
+{% else %}
 <form action="/databases/add" method="GET">
     <input type="submit" value="Add a database">
 </form>
@@ -27,5 +36,6 @@
     </div>
 </a>
 {% endfor %}
+{% endif %}
 {% endif %}
 {% endblock %}
