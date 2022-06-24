@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<a href="/query/mechanism?database_id={{database_id}}" class="client-database-link">
+    <div class="client-database-wrapper default">
+        <div class="client-database">
+            <span class="client-database-name">
+                Create a new query
+            </span>
+        </div>
+    </div>
+</a>
+{% if queries %}
+{% for query in queries %}
+<a href="/query/result?query_id={{query.id}}" class="client-database-link">
+    <div class="client-database-wrapper">
+        <div class="client-database">
+            <span class="client-database-name">
+                {{query.query_type}} of {{ query.statistic }} grouped by {{ query.grouping_column }}
+            </span>
+            <span class="divider"></span>
+            <span class="client-database-table">
+                Epsilon = {{ query.epsilon }}
+            </span>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endif %}
+{% endblock %}

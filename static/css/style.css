@@ -6,9 +6,11 @@ body {
 
 h1 {
   text-align: center;
+  margin-bottom: 0em;
 }
 
-form {
+form,
+a input[type="submit"] {
   max-width: 40em;
   margin: auto;
 }
@@ -47,7 +49,7 @@ input[type=text] {
   margin: 8px -2px 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  border: 2px solid rgba(101, 5, 204, 0.7);
+  border: 2px solid rgba(101, 5, 204);
   font-size: 1rem;
   min-height: 49px;
 }
@@ -67,7 +69,7 @@ input[type=password] {
   margin: 8px -2px 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  border: 2px solid rgba(101, 5, 204, 0.7);
+  border: 2px solid rgba(101, 5, 204);
   font-size: 1rem;
   min-height: 49px;
 }
@@ -86,7 +88,7 @@ input[type=number] {
   margin: 8px -2px 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  border: 2px solid rgba(101, 5, 204, 0.7);
+  border: 2px solid rgba(101, 5, 204);
   font-size: 1rem;
   min-height: 49px;
 }
@@ -106,10 +108,9 @@ input[type=submit] {
   margin: 8px -2px 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  /*border: 2px solid rgba(101, 5, 204, 0.7);*/
   font-size: 1rem;
   min-height: 49px;
-  background-color: rgba(101, 5, 204, 0.7);
+  background-color: rgba(101, 5, 204);
   color: white;
   cursor: pointer;
 }
@@ -140,7 +141,7 @@ select {
   width: 100%;
   padding: 16px 20px;
   border-radius: 4px;
-  border-color: rgba(101, 5, 204, 0.7);
+  border-color: rgba(101, 5, 204);
   background-color: #fff;
 }
 
@@ -175,6 +176,11 @@ section {
   text-align: center;
 }
 
+.client-database-wrapper.default .client-database {
+  background-color: rgb(101, 5, 204);
+  color: white;
+}
+
 .client-database {
   width: 100%;
   max-width: 100%;
@@ -182,16 +188,12 @@ section {
   margin: 8px -2px 20px;
   box-sizing: border-box;
   border-radius: 4px;
-  border: 2px solid rgba(101, 5, 204, 0.7);
+  border: 2px solid rgba(101, 5, 204);
   font-size: 1rem;
   min-height: 49px;
   background-color: rgba(255, 255, 255, 0.6);
-  color: rgba(101, 5, 204, 0.7);
+  color: rgba(101, 5, 204);
   cursor: pointer;
-}
-
-.client-database-link {
-  text-decoration: none;
 }
 
 .client-database-name {
@@ -209,6 +211,56 @@ section {
   height: 25px;
   padding: 0px 0px;
   margin: -7px 5px;
-  background-color: rgba(101, 5, 204, 0.7);
+  background-color: rgba(101, 5, 204);
   display: inline-block;
+}
+
+.laplace-distribution {
+  background-image: url(../images/laplace_mechanism.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 4.5em;
+  width: 6.5em;
+  margin-bottom: -1em;
+}
+
+.exponential-mechanism {
+  background-image: url(../images/exponential_mechanism.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  height: 4.5em;
+  width: 6.5em;
+  margin-bottom: -1em;
+}
+
+.mechanism-wrapper {
+  max-width: 40em;
+  margin: auto;
+  text-align: center;
+}
+
+.mechanism {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem;
+  margin: 8px -2px 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 2px solid rgba(101, 5, 204);
+  font-size: 1rem;
+  min-height: 49px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: rgba(101, 5, 204);
+  cursor: pointer;
+}
+
+.mechanism-name {
+  font-weight: bold;
+  font-size: 4em;
+}
+
+a {
+  text-decoration: none;
 }
