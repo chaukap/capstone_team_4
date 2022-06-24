@@ -97,7 +97,7 @@ def exponential(col, R, u, sensitivity, epsilon):
     
     # Normalize the probabilties so they sum to 1
     probabilities = probabilities / np.linalg.norm(probabilities, ord=1)
-
+    #print(probabilities)
     # Choose an element from all unique elements based on the probabilities
     return np.random.choice(R, 1, p=probabilities)[0]
 
