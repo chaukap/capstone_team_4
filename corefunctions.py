@@ -79,7 +79,7 @@ def exponential(column, scoring_function, sensitivity, epsilon):
     scores = [scoring_function(column, unique_value) for unique_value in unique_values]
     probabilities = [np.exp(epsilon * score / (2 * sensitivity)) for score in scores]
     probabilities = probabilities / np.linalg.norm(probabilities, ord=1)
-
+    #print(probabilities)
     # Choose an element from all unique elements based on the probabilities
     return np.random.choice(unique_values, 1, p=probabilities)[0], probabilities, unique_values
 
