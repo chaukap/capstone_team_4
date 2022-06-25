@@ -6,7 +6,7 @@ def epsilon_slider(df):
     # Get true values from random
     df = df.sample(n = 5)
     last_column = (df.iloc[: , -1]).values
-    true_value1, true_value2, true_value3, true_value4, true_value5 = [last_column[i] for i in (0, 1, 2, 3, 4)]
+    true_value1, true_value2, true_value3, true_value4, true_value5 = [float(last_column[i]) for i in (0, 1, 2, 3, 4)]
     # Create figure
     print(df)
 

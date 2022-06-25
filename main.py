@@ -44,7 +44,9 @@ def authenticate(func):
             if user == None:
                 return make_response(redirect("/", 302))
         except ValueError:
-            return redirect("https://www.youtube.com/watch?v=ZzWqfJFxC0w", code=302)
+            response = make_response(redirect("/", 302))
+            response.set_cookie("gauth", '', expires=0)
+            return response
         
         return func(user, *args, **kws)
     return inner
@@ -65,7 +67,6 @@ def identify(func):
                 return func(None, *args, **kws)
         except:
             response = make_response(redirect("/", 302))
-            print("deleting cookie")
             response.set_cookie("gauth", '', expires=0)
             return response
         
@@ -257,7 +258,7 @@ def select_laplace_epsilon(user):
             upper_bound=2,
             grouping_column=request.form['grouping_column'])
 
-        fig = epsilon_slider()
+        fig = epsilon_slider(values_ndp)
         fig.update_layout(width=1000, height=500)
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -278,7 +279,7 @@ def select_laplace_epsilon(user):
             upper_bound=2,
             grouping_column=request.form['grouping_column'])
         
-        fig = epsilon_slider()
+        fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -477,12 +478,24 @@ def login():
         user = repo.get_user(userid)
         if user == None:
             repo.insert_user(userid, idinfo['email'])
+            user = repo.get_user(userid)
+            repo.insert_database(
+                user.id,
+                "sys",
+                "capstone-team-4-dev.cpbxzomz7uyl.us-east-2.rds.amazonaws.com",
+                "admin",
+                "testpassword",
+                "BaldingBears",
+                3306,
+                "Balding Bears",
+                "An example database to get started!"
+            )
 
         response = make_response(redirect("/", 302))
         response.set_cookie("gauth", data['credential'])
         return response
     except ValueError:
-        return redirect("https://www.youtube.com/watch?v=ZzWqfJFxC0w", code=302)
+        return redirect("/", code=302)
 
 if __name__ == '__main__':
     if ENVIRONMENT == "production":
