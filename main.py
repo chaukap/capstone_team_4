@@ -230,19 +230,18 @@ def select_laplace_epsilon(user):
         int(database.port))
     
     if request.form['query_type'] == 'laplace_count':
-        values, values_ndp  = dp_engine.count(
+        noisy_result, result  = dp_engine.count(
             table=database.table,
             count_column=request.form['statistic'],
             epsilon=0.5,
             grouping_column=request.form['grouping_column'])
 
-        fig = epsilon_slider(values_ndp)
+        fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
-        
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         return render_template("laplace_epsilon_selection.html", 
-            values=values, plot_json=plot_json, 
+            values=result, plot_json=plot_json, 
             database_id=database.id,
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
@@ -250,7 +249,7 @@ def select_laplace_epsilon(user):
             user_email=user.email)
 
     elif request.form['query_type'] == 'laplace_sum':
-        values, values_ndp  = dp_engine.sum(
+        noisy_result, result  = dp_engine.sum(
             table=database.table,
             sum_column=request.form['statistic'],
             epsilon=0.5,
@@ -258,12 +257,12 @@ def select_laplace_epsilon(user):
             upper_bound=2,
             grouping_column=request.form['grouping_column'])
 
-        fig = epsilon_slider(values_ndp)
+        fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
         plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         return render_template("laplace_epsilon_selection.html", 
-            values=values, plot_json=plot_json, 
+            values=result, plot_json=plot_json, 
             database_id=database.id,
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],

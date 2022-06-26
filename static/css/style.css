@@ -9,6 +9,11 @@ h1 {
   margin-bottom: 0em;
 }
 
+p {
+  text-align: center;
+  margin-bottom: 0em;
+}
+
 form,
 a input[type="submit"] {
   max-width: 40em;
@@ -236,7 +241,7 @@ section {
 }
 
 .mechanism-wrapper {
-  max-width: 40em;
+  max-width: 30em;
   margin: auto;
   text-align: center;
 }
@@ -257,10 +262,45 @@ section {
 }
 
 .mechanism-name {
-  font-weight: bold;
-  font-size: 4em;
+  font-size: 3.5em;
 }
 
 a {
   text-decoration: none;
+}
+
+/*Nav bar----------**/
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  text-align: center;
+  padding: 22px 25px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: rgba(101, 5, 204);
+  color: white;
+}
+
+.active {
+  background-color: rgba(101, 5, 204);
+}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
 }
