@@ -57,7 +57,13 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
 
     probabilities.groupby("Epsilon").apply(
         lambda r: fig.add_trace(
-                go.Bar(x=[p[0] for p in r.Value], y=r.Probability,visible=False)
+                go.Bar(x=[q[0] for q in r.Value], y=r.Probability,visible=False, 
+                    marker=dict(
+                        color = [f"rgb({str((1-t) * 101)}, {str((1-t) * 5)}, {str((1-t) * 204)})" for t in r.Probability]
+                    ),
+                    hovertext = r.apply(lambda t: f"{t.Value[0]}: {round(t.Probability*100, 2)}%", axis=1),
+                    hoverinfo = "text"
+                )
             )
     )
     fig.data[0].visible = True
@@ -70,7 +76,7 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
         step = dict(
             method="update",
             args=[{"visible": [False] * len(fig.data)},
-                {"title": "Epsilon = " + str(round(epsilons[i], 2))}],  # layout attribute
+                {"title": "Epsilon: " + str(round(epsilons[i], 2))}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)
@@ -86,10 +92,8 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
         sliders=sliders
     )
     fig.update_layout(
-        title='Probability distribution',
+        title='Epsilon: 0.1',
         xaxis_tickfont_size=14,
-        # bargap=0.15,
-        # bargroupgap=0.1,
         yaxis=dict(
             title= dict(
                 text='Probability',
@@ -101,5 +105,4 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
             tickfont_size=14,
         )
     )
-
     return fig
