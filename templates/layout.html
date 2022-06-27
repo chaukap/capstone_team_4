@@ -17,7 +17,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <div id="header">
         {% block header %}
-        <img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" />
+        <a href="https://ec2-3-135-231-175.us-east-2.compute.amazonaws.com/" ><img src="https://i.ibb.co/TgL5YsJ/Screenshot-1.png" alt="logo" /></a>
+        <!--This is a comment. Comments are not displayed in the browser-->
+        <ul>
+            <li><a href="https://ec2-3-135-231-175.us-east-2.compute.amazonaws.com/">Home</a></li>
+            <li><a href="https://ec2-3-135-231-175.us-east-2.compute.amazonaws.com/">Learn</a></li>
+          </ul>
+        <!--This is a comment. Comments are not displayed in the browser-->
+        
         <div class="google-login">
             {% if user_email %}
             <h4>{{ user_email }}</h4>
@@ -33,7 +40,7 @@
         </div>
         {% endblock %}
     </div>
-    <h1><small>Simple Differential Privacy</small></h1>
+    <h1><large>Simple Differential Privacy</large></h1>
     <div id="content">
         {% block content %}{% endblock %}
     </div>

@@ -8,7 +8,7 @@ def epsilon_slider(df):
     last_column = (df.iloc[: , -1]).values
     true_value1, true_value2, true_value3, true_value4, true_value5 = [float(last_column[i]) for i in (0, 1, 2, 3, 4)]
     # Create figure
-    print(df)
+    #print(df)
 
     # Add traces, one for each slider step
     start = float(true_value1 - (true_value1*2))
@@ -20,7 +20,7 @@ def epsilon_slider(df):
             visible=False,
             line=dict(color="#00CED1", width=6),
             showlegend=True,
-            name="epsilon = " + str(round(epsilon, 3)),
+            name="Epsilon = " + str(round(epsilon, 3)),
             x=np.arange(start, stop, 0.2),
             y=np.exp(-abs(np.arange(start, stop, 0.2)-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
@@ -98,7 +98,7 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
             title= dict(
                 text='Probability',
                 font=dict(
-                    family='Montserrat'
+                    family='Montserrat, sans-serif'
                 )
             ),
             titlefont_size=20,
