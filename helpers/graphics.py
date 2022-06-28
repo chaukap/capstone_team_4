@@ -19,36 +19,51 @@ def epsilon_slider(df):
         trace_list1.append(go.Scatter(
             visible=False,
             line=dict(color="#00CED1", width=6),
-            showlegend=True,
-            name="Epsilon = " + str(round(epsilon, 3)),
             x=np.arange(start, stop, 0.2),
             y=np.exp(-abs(np.arange(start, stop, 0.2)-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
     fig = go.Figure(data=trace_list1)
     # Default
-    fig.data[5].visible = True
+    fig.data[0].visible = True
+
+    epsilons=np.arange(0.1, 4.1, 0.1)
     # Create and add slider
     steps = []
-    for i in range(len(np.arange(0.1, 4.1, 0.1))):
+    for i in range(len(epsilons)):
         step = dict(
-            method="restyle",
+            method="update",
             args=[{"visible": [False] * len(np.arange(0.1, 4.1, 0.1))},
-                {"title": "Slider switched to Epsilon: " + str(i)}],  # layout attribute
+                {"title": "Epsilon: " + str(round(epsilons[i], 2))}],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)
 
     sliders = [dict(
-        active=1,
-        currentvalue={"prefix": "Epsilon: "},
-        pad={"t": 10},
+        active=0,
+        currentvalue={"visible": False},
+        pad={"t": 20},
         steps=steps
     )]
+
+    fig.add_vline(true_value1, name="True Value")
 
     fig.update_layout(
         sliders=sliders
     )
-    fig.add_vline(true_value1)
+    fig.update_layout(
+        title='Epsilon: 0.1',
+        xaxis_tickfont_size=14,
+        yaxis=dict(
+            title= dict(
+                text='Probability',
+                font=dict(
+                    family='Montserrat, sans-serif'
+                )
+            ),
+            titlefont_size=20,
+            tickfont_size=14,
+        )
+    )
 
     return fig
 
