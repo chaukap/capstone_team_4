@@ -1,7 +1,7 @@
 from ast import arg
 from unittest import result
 from flask_sslify import SSLify
-from flask import Flask, make_response, request, redirect, render_template, url_for
+from flask import Flask, make_response, request, redirect, render_template, url_for, send_from_directory
 from mariadb_client import mariadb_client
 from differential_privacy_engine import differential_privacy_engine
 from helpers.helper_functions import check_form_fields
@@ -292,7 +292,6 @@ def select_laplace_epsilon(user):
 
     return make_response("Unknown query type", 400)
 
-
 @app.route('/query/exponential/epsilon', methods=['POST'])
 @authenticate
 def select_exponential_epsilon(user):
@@ -418,6 +417,9 @@ def laplace_query(user):
         database_id=database_id,
         user_email=user.email)
 
+@app.route("/learn", methods=["GET"])
+def learn():
+    return send_from_directory("static", "Education.html")
 
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
