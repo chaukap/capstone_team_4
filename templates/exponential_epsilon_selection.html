@@ -45,7 +45,7 @@
 <script>
     $(function (){
         $(".slider-container").click(function() {
-            text = $(".gtitle").html().replace("Epsilon = ", '');
+            text = $(".gtitle").html().replace("Epsilon: ", '');
             $("input#epsilon").attr("value", parseFloat(text) + "");
         });
     });

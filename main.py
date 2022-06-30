@@ -238,10 +238,9 @@ def select_laplace_epsilon(user):
 
         fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
-        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
+        
         return render_template("laplace_epsilon_selection.html", 
-            values=result, plot_json=plot_json, 
+            values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
             database_id=database.id,
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],

@@ -5,12 +5,12 @@
 {% endblock %}
 {% block content %}
 <p>Use the slider to simulate how epsilon will affect your results.<br>The higher the value, the less private your dataset.</p>
-<div class="container" id="chart1"></div>
+<div class="container">{{plot | safe}}</div>
 <form action="/query" method="POST">
-    <div>
+    <div hidden>
         <label for="epsilon">Epsilon</label>
         <span class="a11y-input-tooltip">
-            <input type="number" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip" value="4"
+            <input type="number" step="0.01" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip" value="4"
                 required="required" />
             <span role="tooltip" id="a11y-tooltip">
                 The higher the value, the less private your dataset.
@@ -72,10 +72,13 @@
     <input type="submit" value="Submit">
 </form>
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-    graph1={{ plot_json | safe }};
-    Plotly.plot("chart1", graph1, {})
+    $(function (){
+        $(".slider-container").click(function() {
+            text = $(".gtitle").html().replace("Epsilon = ", '');
+            $("input#epsilon").attr("value", parseFloat(text) + "");
+        });
+    });
 </script>
 
 {% endblock %}
