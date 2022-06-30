@@ -135,7 +135,7 @@ class differential_privacy_engine:
         
         choice = np.random.choice(unique_values, 1, p=probabilities)[0]
         results = pd.DataFrame({
-            'Answer': [val[0] for val in choice]
+            'Answer': choice
         })
 
         return results, probability_distribution
