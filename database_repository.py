@@ -127,3 +127,12 @@ class database_repository:
             """)
         self.connection.commit()
         return
+
+    def delete_database_query(self, query_id):
+        cur = self.connection.cursor()
+        cur.execute(f"""
+            DELETE FROM ClientDatabaseQueries 	
+            WHERE Id = {query_id} 
+            """)
+        self.connection.commit()
+        return

@@ -304,3 +304,26 @@ li a:hover {
   ul.topnav li.right, 
   ul.topnav li {float: none;}
 }
+
+.delete-query {
+  position: absolute;
+  right: 5px;
+  top: -31px;
+  font-size: 25px;
+  background-color: white;
+  visibility: hidden;
+}
+
+.client-database:hover .query-options .delete-query {
+  visibility: visible;
+}
+
+.delete-query:hover {
+  font-size: 30px;
+  top: -34px;
+  right: 2px;
+}
+
+.query-options {
+  position: relative;
+}

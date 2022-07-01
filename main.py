@@ -108,6 +108,25 @@ def query(user):
 
     return redirect(f"/queries?database_id={database.id}", 302)
 
+@app.route('/query', methods=['DELETE'])
+@authenticate
+def delete_query(user):
+    query_id = request.args.get("query_id")
+    if query_id == None:
+        return make_response("No database specified", 404)
+
+    repo = database_repository()
+    query = repo.get_database_query(query_id)
+    database = repo.get_database(query.database_id)
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+    
+    try:
+        repo.delete_database_query(query_id)
+        return make_response("Success", 200)
+    except:
+        return make_response("Error", 500)
+
 @app.route('/query/result', methods=['GET'])
 @authenticate
 def download_results(user):

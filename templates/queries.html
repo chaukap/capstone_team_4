@@ -25,9 +25,32 @@
             <span class="client-database-table">
                 Epsilon = {{ query.epsilon }}
             </span>
+            <div class="query-options">
+                <i class="bi-trash delete-query" data-id="{{ query.id }}"></i>
+            </div>
         </div>
     </div>
 </a>
 {% endfor %}
+<script>
+    $(function() {
+        $(".delete-query").click(function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $.ajax({
+                url: "{{ url_for('delete_query') }}?query_id=" + $(this).data('id'),
+                method: "DELETE",
+                statusCode: {
+                    200: function() {
+                        location.reload();
+                    },
+                    500: function() {
+                        error("Error");
+                    }
+                }
+            });
+        });
+    });
+</script>
 {% endif %}
 {% endblock %}
