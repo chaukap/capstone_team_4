@@ -1,54 +1,61 @@
-{% extends "layout.html" %}
+{% extends "layout_2.html" %}
 {% block title %}Query Generator{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
 {% block content %}
-<p>Create your query.</p>
-<form action="/query/laplace/epsilon" method="POST">
-  <div>
-    <label for="grouping_column">Grouping Column</label>
-    <select name="grouping_column" id="grouping_column" aria-describedby="a11y-tooltip" value="" required="required">
-      {% for column in columns %}
-      <option value="{{column['name']}}">{{column['name']}}</option>
-      {% endfor %}
-    </select>
-    <span role="tooltip" id="a11y-tooltip">
-      Which column would you like to group by?
-    </span>
+<section class="sdp-page-banner" id="laplace">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Create a Query</h1>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div>
-    <label for="query_type">Statistic</label>
-    <select name="query_type" id="query_type" aria-describedby="a11y-tooltip" value="" required="required">
-      <option value="laplace_count">Count</option>
-      <option value="laplace_sum">Sum</option>
-      <option value="laplace_average">Average</option>
-    </select>
-    <span role="tooltip" id="a11y-tooltip">
-      What statistic would you like
-    </span>
-  </div>
+<section>
+  <div class="container sdp-container">
+    <form action="/query/laplace/epsilon" method="POST">
+      <div class="form-group">
+        <label for="grouping_column">Grouping By</label>
+        <select name="grouping_column" id="grouping_column" class="form-control" aria-describedby="a11y-tooltip" value=""
+          required="required">
+          {% for column in columns %}
+          <option value="{{column['name']}}">{{column['name']}}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-  <div>
-    <label for="statistic">Of</label>
-    <select name="statistic" id="statistic" aria-describedby="a11y-tooltip" value="" required="required">
-      {% for column in columns %}
-      <option value="{{column['name']}}">{{column['name']}}</option>
-      {% endfor %}
-    </select>
-    <span role="tooltip" id="a11y-tooltip">
-      Which column would you like to gather statistics for?
-    </span>
-  </div>
+      <div class="form-group">
+        <label for="query_type">Statistic</label>
+        <select name="query_type" id="query_type" class="form-control" aria-describedby="a11y-tooltip" value="" required="required">
+          <option value="laplace_count">Count</option>
+          <option value="laplace_sum">Sum</option>
+          <option value="laplace_average">Average</option>
+        </select>
+      </div>
 
-  <div hidden>
-    <label for="database_id">Database Id</label>
-    <span class="a11y-input-tooltip">
-      <input type="text" name="database_id" id="database_id" aria-describedby="a11y-tooltip" value="{{database_id}}"
-        required="required" />
+      <div class="form-group">
+        <label for="statistic">Of</label>
+        <select name="statistic" id="statistic" class="form-control" aria-describedby="a11y-tooltip" value="" required="required">
+          {% for column in columns %}
+          <option value="{{column['name']}}">{{column['name']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div hidden>
+        <label for="database_id">Database Id</label>
+        <span class="a11y-input-tooltip">
+          <input type="text" name="database_id" id="database_id" aria-describedby="a11y-tooltip" value="{{database_id}}"
+            required="required" />
+      </div>
+      <div class="form-group"><input type="submit" class="sdp-button form-control" value="Submit"></div>
+    </form>
   </div>
-  <input type="submit" value="Submit">
-</form>
+</section>
 
 {% endblock %}

@@ -8,3 +8,9 @@ class database_query:
         self.epsilon = tuple[5]
         self.upper_bound = tuple[6]
         self.lower_bound = tuple[7]
+
+    def to_string(self):
+        if self.grouping_column != "":
+            return f"{self.query_type} of {self.statistic} grouped by {self.grouping_column}"
+        else:
+            return f"{self.query_type} of {self.statistic}"

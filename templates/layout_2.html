@@ -9,7 +9,7 @@
   <meta name="google-site-verification" content="jba4DMEd3fh72z21nkL9s3LwmlgEVm41wHFOhwkew9Q" />
   <meta name="google-signin-client_id"
       content="1080040075230-6o17df6tp9t2f2tgoms209lr186qf4vs.apps.googleusercontent.com">
-  <title>Simplify Differential Privacy</title>
+  <title>{% block title %}{% endblock %} | Simplify Differential Privacy</title>
   <meta name="title" content="Play - Free Open Source HTML Bootstrap Template by UIdeck">
   <meta name="description" content="Play - Free Open Source HTML Bootstrap Template by UIdeck Team">
 
@@ -40,6 +40,7 @@
 </head>
 
 <body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     {% block header %}
     <header class="ud-header">
         <div class="container">
@@ -58,50 +59,11 @@
                 <div class="navbar-collapse">
                   <ul id="nav" class="navbar-nav mx-auto">
                     <li class="nav-item">
-                      <a class="ud-menu-scroll" href="#home">Get Started</a>
+                      <a class="ud-menu-scroll" href="/home">My Databases</a>
                     </li>
     
                     <li class="nav-item">
-                      <a class="ud-menu-scroll" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="ud-menu-scroll" href="#team">Team</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="ud-menu-scroll" href="#contact">Contact</a>
-                    </li>
-                    <li class="nav-item nav-item-has-children">
-                      <a href="javascript:void(0)"> Pages </a>
-                      <ul class="ud-submenu">
-                        <li class="ud-submenu-item">
-                          <a href="about.html" class="ud-submenu-link">
-                            About Page
-                          </a>
-                        </li>
-                        <li class="ud-submenu-item">
-                          <a href="contact.html" class="ud-submenu-link">
-                            Contact Page
-                          </a>
-                        </li>
-                        <li class="ud-submenu-item">
-                          <a href="blog.html" class="ud-submenu-link">
-                            Blog Grid Page
-                          </a>
-                        </li>
-                        <li class="ud-submenu-item">
-                          <a href="blog-details.html" class="ud-submenu-link">
-                            Blog Details Page
-                          </a>
-                        </li>
-                        <li class="ud-submenu-item">
-                          <a href="login.html" class="ud-submenu-link">
-                            Sign In Page
-                          </a>
-                        </li>
-                        <li class="ud-submenu-item">
-                          <a href="404.html" class="ud-submenu-link">404 Page</a>
-                        </li>
-                      </ul>
+                      <a class="ud-menu-scroll" href="/search">Search</a>
                     </li>
                   </ul>
                 </div>
@@ -307,7 +269,6 @@
         <script src="/static/js/bootstrap.bundle.min.js"></script>
         <script src="/static/js/wow.min.js"></script>
         <script src="/static/js/main.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         {% endblock %}
     </div>
 </body>

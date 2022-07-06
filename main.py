@@ -223,7 +223,7 @@ def get_queries(user):
     queries = repo.get_database_queries(database.id)
 
     return render_template("queries.html", 
-        database_id=database_id,
+        database=database,
         queries=queries, user_email=user.email)
 
 @app.route('/query/laplace/epsilon', methods=['POST'])
@@ -468,6 +468,16 @@ def exponential_query(user):
 @app.route('/', methods=['GET'])
 @identify
 def index(user):
+    if user == None:
+        return render_template("index.html")
+    
+    repo = database_repository()
+    databases = repo.get_user_databases(user.id)
+    return render_template("index.html", user_email = user.email, databases=databases)
+
+@app.route('/home', methods=['GET'])
+@identify
+def home(user):
     if user == None:
         return render_template("home.html")
     

@@ -1,0 +1,123 @@
+:root {
+    --font: "Inter", sans-serif;
+    --body-color: #637381;
+    --heading-color: #212b36;
+    --primary-color: rgb(101, 5, 204);
+    --secondary-color: rgb(152, 63, 247);
+    --white: #ffffff;
+}
+
+.delete-item {
+    color: var(--primary-color);
+    font-size: xx-large;
+    visibility: hidden;
+    position: absolute;
+    top: 13%;
+    right: 5px;
+}
+
+.deletable:hover .delete-item {
+    visibility: visible;
+}
+
+.sdp-container {
+    min-height: 15em;
+}
+
+.sdp-page-banner {
+    padding-top: 100px;
+    padding-bottom: 30px;
+    background: var(--primary-color);
+    background-image: url("../images/banner/banner-bg.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 10px;
+}
+
+.sdp-button {
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    color: var(--white);
+    border-style: solid;
+    border-color: transparent;
+    padding: 4px 10px;
+    transition-duration: .5s;
+    position: relative;
+}
+
+.sdp-button:hover {
+    background-color: var(--white);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.sdp-button-title {
+    font-size: large;
+    margin-bottom: 3px;
+}
+
+.sdp-button-description {
+    font-style: italic;
+}
+
+.sdp-button a {
+    height: 100%;
+    width: 100%;
+}
+
+.sdp-button.sdp-button-light {
+    font-size: larger;
+    background-color: var(--secondary-color);
+    min-height: 68px;
+    text-align: center;
+}
+
+.sdp-button.sdp-button-light:hover {
+    background-color: var(--white);
+    border-color: var(--secondary-color);
+}
+
+.sdp-button.sdp-button-light a {
+    margin-top: 10px;
+}
+
+.sdp-button.sdp-button-light:hover a {
+    color: var(--secondary-color);
+}
+
+a {
+    color: var(--white);
+}
+
+.sdp-button:hover a {
+    color: var(--primary-color);
+}
+
+.delete-item:hover {
+    color: var(--secondary-color)
+}
+
+.mechanism {
+    position: absolute;
+    top: 13%;
+    right: 5px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 4.5em;
+    width: 6.5em;
+    margin-bottom: -1em;
+}
+
+.exponential-mechanism {
+    background-image: url(../images/exponential_mechanism.png);
+    width: 4.5em;
+}
+
+.laplace-distribution {
+    background-image: url(../images/laplace_mechanism.png);
+}
+
+.mechanism-button {
+    min-height: 6em;
+}
