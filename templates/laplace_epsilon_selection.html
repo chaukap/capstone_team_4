@@ -4,7 +4,7 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<p>Use the slider to simulate how epsilon will affect your results.<br>The higher the value, the less private your dataset.</p>
+<p><br>Use the slider to simulate how epsilon will affect your results.<br>The higher the value, the less private your dataset.<br>Double click to reset the graph.</p>
 <div class="container">{{plot | safe}}</div>
 <form action="/query" method="POST">
     <div hidden>

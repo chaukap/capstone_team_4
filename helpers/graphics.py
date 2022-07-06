@@ -2,17 +2,18 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 
-def epsilon_slider(df):
+def epsilon_slider(data):
     # Get true values from random
-    df = df.sample(n = 5)
+    df=pd.DataFrame(data)
+    df = df.sample(n = 2)
     last_column = (df.iloc[: , -1]).values
-    true_value1, true_value2, true_value3, true_value4, true_value5 = [float(last_column[i]) for i in (0, 1, 2, 3, 4)]
+    #std_df=df.iloc[: , -1].std()
+    true_value1, true_value2 = [float(last_column[i]) for i in (0, 1)]
     # Create figure
-    #print(df)
-
     # Add traces, one for each slider step
-    start = float(true_value1 - (true_value1*2))
-    stop = float(true_value1 + (true_value1*2))
+    start = float(true_value1 - (true_value1*5))
+    stop = float(true_value1 + (true_value1*5))
+
     trace_list1 =[]
     for epsilon in np.arange(0.1, 4.1, 0.1):
         #fig.add_trace(
@@ -46,6 +47,7 @@ def epsilon_slider(df):
     )]
 
     fig.add_vline(true_value1, name="True Value")
+    fig.add_vrect(x0=true_value1-1, x1=true_value1+1, line_width=0, fillcolor="green", opacity=0.2)
 
     fig.update_layout(
         sliders=sliders
@@ -55,7 +57,7 @@ def epsilon_slider(df):
         xaxis_tickfont_size=14,
         yaxis=dict(
             title= dict(
-                text='Probability',
+                text='Probability Density',
                 font=dict(
                     family='Montserrat, sans-serif'
                 )

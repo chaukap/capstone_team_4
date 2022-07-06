@@ -56,18 +56,20 @@ class differential_privacy_engine:
     def sum(self, table, sum_column, epsilon, lower_bound, upper_bound, grouping_column = None):
         sql_query = query_generator.generate_sum_query(
             table, sum_column, grouping_column)
-        noisy_result = pd.DataFrame(
+        result = pd.DataFrame(
             self.client.execute_query(sql_query["query"])
         )
         if grouping_column == None:
-            noisy_result.columns = [f"sum_{sum_column}"]
+            result.columns = [f"sum_{sum_column}"]
         else:
-            noisy_result.columns = [grouping_column, f"sum_{sum_column}"]
+            result.columns = [grouping_column, f"sum_{sum_column}"]
+
+        noisy_result = result.copy(deep=True)
 
         noisy_result[f"sum_{sum_column}"] = noisy_result.apply(
             lambda t: int(self.__laplaceMechanismClamped(float(t[1]), epsilon, upper_bound, lower_bound)), 
             axis=1)
-        return noisy_result, 0
+        return noisy_result, result
         
     def average(self, table, average_column, epsilon, lower_bound, upper_bound, grouping_column=None):
         sql_query = query_generator.generate_average_query(
