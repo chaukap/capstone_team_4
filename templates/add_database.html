@@ -1,103 +1,74 @@
-{% extends "layout.html" %}
+{% extends "layout_2.html" %}
 {% block title %}Add a Database{% endblock %}
 {% block head %}
-  {{ super() }}
+{{ super() }}
 {% endblock %}
 {% block content %}
-  <form action="/databases/add" method="POST">
-    <div>
-      <label for="display_name">Display Name</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="display_name" id="display_name" aria-describedby="a11y-tooltip" 
-        value="" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please give your database a public name</span>
-        </span>
+<section class="sdp-page-banner" id="add-database">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Add a Database Connection</h1>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div>
-      <label for="description">Description</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="description" id="description" aria-describedby="a11y-tooltip" 
-        value="" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please give your database description
-        </span>
-        </span>
-    </div>
+<section>
+  <div class="container sdp-container">
+    <form action="/databases/add" method="POST">
+      <div class="form-group">
+        <label for="display_name">Display Name</label>
+        <input type="text" name="display_name" id="display_name" class="form-control" aria-describedby="a11y-tooltip"
+          value="" required="required" />
+      </div>
 
-    <div>
-      <label for="username">Username</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="username" id="username" aria-describedby="a11y-tooltip" 
-        value="{{request.form['username']}}" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter the username to your database.</span>
-        </span>
-    </div>
-    
-    <div>
-      <label for="password">Password</label>
-      <span class="a11y-input-tooltip">
-        <input type="password" name="password" id="password" aria-describedby="a11y-tooltip" 
-        value="{{request.form['password']}}" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter the password to your database.</span>
-      </span>
-    </div>
-    
-    <div>
-      <label for="host">Host</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="host" id="host" aria-describedby="a11y-tooltip" 
-        value="{{request.form['host']}}" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter your database URI.</span>
-      </span>
-    </div>
-    
-    <div>
-      <label for="database">Database</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="database" id="database" aria-describedby="a11y-tooltip" 
-        value="{{request.form['database']}}" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter the database name.</span>
-      </span>
-    </div>     
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" name="description" id="description" class="form-control" aria-describedby="a11y-tooltip"
+          value="" required="required" />
+      </div>
 
-    <div>
-      <label for="table">Table</label>
-      <span class="a11y-input-tooltip">
-        <input type="text" name="table" id="table" aria-describedby="a11y-tooltip" 
-        value="{{request.form['table']}}" required="required"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter the table name.</span>
-      </span>
-    </div>  
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" class="form-control" aria-describedby="a11y-tooltip"
+          value="{{request.form['username']}}" required="required" />
+      </div>
 
-    <div>
-      <label for="port">port</label>
-      <span class="a11y-input-tooltip">
-        <input type="number" name="port" id="port" aria-describedby="a11y-tooltip" 
-        value="3306" required="required"
-        placeholder="3306"/>
-        <span role="tooltip" id="a11y-tooltip">
-          Please enter port number, default is 3306.</span>
-      </span>
-    </div>      
-    
-    <input type="submit" value="Submit">
-  </form> 
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" aria-describedby="a11y-tooltip"
+          value="{{request.form['password']}}" required="required" />
+      </div>
 
-  <!-- Section 1 Start -->
-  <section id="section-1">
-    <div>
-    <h2> Learn More</h2>
-        <p>
-"Releasing differentially private datasets requires a deep understanding of differential privacy. Our goal is to 
-assisting non-technical users with creating differentially private datasets using their private data. "
-      </p>
-  </section>
-<!-- Section 1 end -->
+      <div class="form-group">
+        <label for="host">Host</label>
+        <input type="text" name="host" id="host" class="form-control" aria-describedby="a11y-tooltip"
+          value="{{request.form['host']}}" required="required" />
+      </div>
+
+      <div class="form-group">
+        <label for="database">Database</label>
+        <input type="text" name="database" id="database" class="form-control" aria-describedby="a11y-tooltip"
+          value="{{request.form['database']}}" required="required" />
+      </div>
+
+      <div class="form-group">
+        <label for="table">Table</label>
+        <input type="text" name="table" id="table" class="form-control" aria-describedby="a11y-tooltip"
+          value="{{request.form['table']}}" required="required" />
+      </div>
+
+      <div class="form-group">
+        <label for="port">port</label>
+        <input type="number" name="port" id="port" class="form-control" aria-describedby="a11y-tooltip" value="3306"
+          required="required" placeholder="3306" />
+      </div>
+
+      <input type="submit" class="sdp-button form-control my-3" value="Submit">
+    </form>
+  </div>
+</section>
 {% endblock %}

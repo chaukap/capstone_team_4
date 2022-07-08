@@ -381,7 +381,7 @@ def post_database(user):
         request.form['description']
         )
 
-    return redirect("/", 302)
+    return redirect("/home", 302)
 
 @app.route("/databases/add", methods=['GET'])
 @authenticate
@@ -464,6 +464,11 @@ def exponential_query(user):
         columns=columns,
         database_id=database_id,
         user_email=user.email)
+
+@app.route("/search", methods=["GET"])
+@authenticate
+def search(user):
+    return render_template("search.html", user_email=user.email)
 
 @app.route('/', methods=['GET'])
 @identify
