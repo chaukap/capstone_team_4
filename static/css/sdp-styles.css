@@ -145,3 +145,8 @@ th {
     text-align: center;
     font-weight: bold;
 }
+
+.bears-background {
+    background-image: url(/static/images/about/bears.png);
+    background-size: 100%;
+}
