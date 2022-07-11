@@ -1,0 +1,57 @@
+{% extends "layout_2.html" %}
+{% block title %}Find Data{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<section class="sdp-page-banner" id="add-database">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Find Data</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container sdp-container">
+    <div class="input-group mb-3">
+        <input type="text" name="search" id="search" class="form-control" placeholder="Search for databases" aria-label="search">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" id="search-button" type="button">
+            <i class="bi-search"></i>
+          </button>
+        </div>
+      </div>
+  </div>
+</section>
+
+<script>
+    $(function() {
+        $("#search").change(function() {
+            getDatabases($(this).val());
+        });
+
+        $("#search-button").click(function() {
+            getDatabases($("#search").val());
+        });
+
+        function getDatabases(search) {
+            $.ajax({
+                url: "/databases/search?query=" + $("#search").val(),
+                statusCode: {
+                    200: function (result) {
+                        console.log(result);
+                    },
+                    500: function (result) {
+                        error("Error");
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

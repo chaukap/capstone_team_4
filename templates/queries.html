@@ -1,50 +1,64 @@
-{% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% extends "layout_2.html" %}
+{% block title %}Queries{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
 {% block content %}
-<a href="/query/mechanism?database_id={{database_id}}" class="client-database-link">
-    <div class="client-database-wrapper default">
-        <div class="client-database">
-            <span class="client-database-name">
-                Create a new query
-            </span>
-        </div>
-    </div>
-</a>
-{% if queries %}
-{% for query in queries %}
-<a href="/query/result?query_id={{query.id}}" class="client-database-link">
-    <div class="client-database-wrapper">
-        <div class="client-database">
-            <span class="client-database-name">
-                {{query.query_type}} of {{ query.statistic }} grouped by {{ query.grouping_column }}
-            </span>
-            <span class="divider"></span>
-            <span class="client-database-table">
-                Epsilon = {{ query.epsilon }}
-            </span>
-            <div class="query-options">
-                <i class="bi-trash delete-query" data-id="{{ query.id }}"></i>
+<section class="sdp-page-banner" id="queries">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-banner-content">
+                    <h1>Queries for {{ database.name }}</h1>
+                </div>
             </div>
         </div>
     </div>
-</a>
-{% endfor %}
+</section>
+
+<section>
+    <div class="container sdp-container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1">
+                <div class="sdp-button sdp-button-light">
+                    <a href="/query/mechanism?database_id={{database.id}}" role="button" rel="nofollow noopener">
+                        Create a Query <i class="bi-plus-square-fill"></i>
+                    </a>
+                </div>
+            </div>
+            {% if queries %}
+            {% for query in queries %}
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1 deletable">
+                <div class="sdp-button">
+                    <a href="/query/result?query_id={{query.id}}" rel="nofollow noopener">
+                        <div class="sdp-button-title">{{ query.to_string() }}</div>
+                        <div class="sdp-button-description">Epsilon: {{ query.epsilon }}</div>
+                        <span class="delete-item" data-id="{{ query.id }}">
+                            <i class="bi-trash"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
 <script>
-    $(function() {
-        $(".delete-query").click(function(e) {
+    $(function () {
+        $(".delete-item").click(function (e) {
+            console.log("click");
             e.stopPropagation();
             e.preventDefault();
             $.ajax({
                 url: "{{ url_for('delete_query') }}?query_id=" + $(this).data('id'),
                 method: "DELETE",
                 statusCode: {
-                    200: function() {
+                    200: function () {
                         location.reload();
                     },
-                    500: function() {
+                    500: function () {
                         error("Error");
                     }
                 }
@@ -52,5 +66,4 @@
         });
     });
 </script>
-{% endif %}
 {% endblock %}

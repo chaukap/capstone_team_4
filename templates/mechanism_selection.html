@@ -1,29 +1,45 @@
-{% extends "layout.html" %}
-{% block title %}Query Generator{% endblock %}
+{% extends "layout_2.html" %}
+{% block title %}Mechanisms{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
 {% block content %}
-<p>Choose a differentially private noise mechanism.</p>
+<section class="sdp-page-banner" id="mechanisms">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-banner-content">
+                    <h1>Privacy Mechanisms</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<a href="/query/laplace?database_id={{database_id}}" class="mechanism-link">
-    <div class="mechanism-wrapper default">
-        <div class="mechanism">
-            <span class="mechanism-name">
-                Laplacian
-            </span>
-            <span class="laplace-distribution"></span>
+<section>
+    <div class="container sdp-container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1">
+                <div class="sdp-button mechanism-button">
+                    <a href="/query/laplace?database_id={{database_id}}" rel="nofollow noopener">
+                        <div class="sdp-button-title">Laplacian</div>
+                        <div class="sdp-button-description">Add random noise</div>
+                        <div class="sdp-button-description">to the results.</div>
+                        <span class="mechanism laplace-distribution"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1">
+                <div class="sdp-button mechanism-button">
+                    <a href="/query/exponential?database_id={{database_id}}" rel="nofollow noopener">
+                        <div class="sdp-button-title">Exponential</div>
+                        <div class="sdp-button-description">Return the true answer</div>
+                        <div class="sdp-button-description"><b>most</b> of the time.</div>
+                        <span class="mechanism exponential-mechanism"></span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</a>
-<a href="/query/exponential?database_id={{database_id}}" class="mechanism-link">
-    <div class="mechanism-wrapper default">
-        <div class="mechanism">
-            <span class="mechanism-name">
-                Exponential
-            </span>
-            <span class="exponential-mechanism"></span>
-        </div>
-    </div>
-</a>
+</section>
 {% endblock %}

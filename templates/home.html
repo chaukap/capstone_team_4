@@ -1,41 +1,55 @@
-{% extends "layout.html" %}
+{% extends "layout_2.html" %}
 {% block title %}Home{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
 {% block content %}
-{% if not user_email %}
-<div class="client-database-wrapper default">
-    <div class="client-database">
-        <span class="client-database-name">
-            Sign in to get started!
-        </span>
-    </div>
-</div>
-{% else %}
-<form action="/databases/add" method="GET">
-    <input type="submit" value="Add a database">
-</form>
-{% if databases %}
-{% for database in databases %}
-<a href="/queries?database_id={{database.id}}" class="client-database-link">
-    <div class="client-database-wrapper">
-        <div class="client-database">
-            <span class="client-database-name">
-                {{ database.name }}
-            </span>
-            <span class="divider"></span>
-            <span class="client-database-table">
-                {{ database.table }}
-            </span>
-            <span class="divider"></span>
-            <span class="client-database-description">
-                {{ database.description }}
-            </span>
+<section class="sdp-page-banner" id="databases">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-banner-content">
+                    <h1>Your Databases</h1>
+                </div>
+            </div>
         </div>
     </div>
-</a>
-{% endfor %}
-{% endif %}
-{% endif %}
+</section>
+
+<section>
+    <div class="container sdp-container">
+        <div class="row">
+            {% if not user_email %}
+            <div class="col-lg-12 sdp-button">
+                <a href="{{ url_for('home') }}" rel="nofollow noopener" class="ud-main-btn ud-white-btn">
+                    Sign in to get started!
+                </a>
+            </div>
+            {% else %}
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1">
+            <div class="sdp-button sdp-button-light">
+            <a href="/databases/add" role="button" rel="nofollow noopener">
+                Add a database <i class="bi-plus-square-fill"></i>
+            </a>
+        </div>
+        </div>
+            {% if databases %}
+            {% for database in databases %}
+            <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1">
+                <div class="sdp-button">
+                    <a href="/queries?database_id={{database.id}}" rel="nofollow noopener">
+                        <div class="sdp-button-title">{{ database.name }}</div>
+                        <div class="sdp-button-description">{{ database.description }}</div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block footer %}
+{{ super() }}
 {% endblock %}

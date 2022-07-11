@@ -223,7 +223,7 @@ def get_queries(user):
     queries = repo.get_database_queries(database.id)
 
     return render_template("queries.html", 
-        database_id=database_id,
+        database=database,
         queries=queries, user_email=user.email)
 
 @app.route('/query/laplace/epsilon', methods=['POST'])
@@ -274,13 +274,12 @@ def select_laplace_epsilon(user):
             lower_bound=1,
             upper_bound=2,
             grouping_column=request.form['grouping_column'])
-
+            
         fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
-        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         return render_template("laplace_epsilon_selection.html", 
-            values=result, plot_json=plot_json, 
+            values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
             database_id=database.id,
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
@@ -298,10 +297,9 @@ def select_laplace_epsilon(user):
         
         fig = epsilon_slider(result)
         fig.update_layout(width=1000, height=500)
-        plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-
+        
         return render_template("laplace_epsilon_selection.html", 
-            values=result, plot_json=plot_json, 
+            values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
             database_id=database.id,
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
@@ -383,7 +381,7 @@ def post_database(user):
         request.form['description']
         )
 
-    return redirect("/", 302)
+    return redirect("/home", 302)
 
 @app.route("/databases/add", methods=['GET'])
 @authenticate
@@ -437,7 +435,7 @@ def laplace_query(user):
 
 @app.route("/learn", methods=["GET"])
 def learn():
-    return send_from_directory("static", "Education.html")
+    return render_template( "education_basic.html")
 
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
@@ -467,9 +465,24 @@ def exponential_query(user):
         database_id=database_id,
         user_email=user.email)
 
+@app.route("/search", methods=["GET"])
+@authenticate
+def search(user):
+    return render_template("search.html", user_email=user.email)
+
 @app.route('/', methods=['GET'])
 @identify
 def index(user):
+    if user == None:
+        return render_template("index.html")
+    
+    repo = database_repository()
+    databases = repo.get_user_databases(user.id)
+    return render_template("index.html", user_email = user.email, databases=databases)
+
+@app.route('/home', methods=['GET'])
+@identify
+def home(user):
     if user == None:
         return render_template("home.html")
     
@@ -515,6 +528,12 @@ def login():
         return response
     except ValueError:
         return redirect("/", code=302)
+
+@app.route("/logout")
+def logout():
+    response = make_response(redirect("/", 302))
+    response.set_cookie("gauth", '', expires=0)
+    return response
 
 if __name__ == '__main__':
     if ENVIRONMENT == "production":
