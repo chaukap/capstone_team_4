@@ -139,6 +139,18 @@ th {
     padding: 2px 4px 0px 3px;
 }
 
+.ud-about-content.sdp-learning {
+    max-width: 700px;
+}
+
+.ud-about-content.sdp-learning p {
+    color: black;
+}
+
+.ud-about-content.sdp-learning table {
+    color: black;
+}
+
 .ud-about-content p.math {
     font-style: italic;
     font-size: x-large;
