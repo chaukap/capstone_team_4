@@ -435,7 +435,7 @@ def laplace_query(user):
 
 @app.route("/learn", methods=["GET"])
 def learn():
-    return send_from_directory("static", "Education.html")
+    return render_template( "education_basic.html")
 
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
@@ -528,6 +528,12 @@ def login():
         return response
     except ValueError:
         return redirect("/", code=302)
+
+@app.route("/logout")
+def logout():
+    response = make_response(redirect("/", 302))
+    response.set_cookie("gauth", '', expires=0)
+    return response
 
 if __name__ == '__main__':
     if ENVIRONMENT == "production":

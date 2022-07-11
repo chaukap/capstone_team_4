@@ -1,0 +1,288 @@
+{% extends "layout_2.html" %}
+{% block title %}Learn{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<section class="sdp-page-banner m-0" id="learn">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Thinking like an attacker</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="ud-about py-3">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content">
+          <span class="tag">A Simple Example</span>
+          <h2>Balding Bears</h2>
+          <p>
+            For this example, let's imagine that you are a bear researcher who have just
+            made a startling discovery- <b>some of our favorite school mascots are going bald!</b>
+            You have no idea what is causing the sudden hair loss but you have a hunch that it
+            has to do with their eating habits. To test your hypothesis, you collect some
+            information about the bears.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>State</th>
+                <th>Salmon Eaten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Avalanche</td>
+                <td>Pennsylvania</td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>Bananas</td>
+                <td>Maine</td>
+                <td>13</td>
+              </tr>
+              <tr>
+                <td>Benny</td>
+                <td>Maryland</td>
+                <td>14</td>
+              </tr>
+              <tr>
+                <td>Boomer</td>
+                <td>Missouri</td>
+                <td>12</td>
+              </tr>
+              <tr>
+                <td>Grizz</td>
+                <td>California</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Kody</td>
+                <td>Washington</td>
+                <td>14</td>
+              </tr>
+              <tr>
+                <td>Monte</td>
+                <td>Montana</td>
+                <td>18</td>
+              </tr>
+              <tr>
+                <td>Nanook</td>
+                <td>Maine</td>
+                <td>17</td>
+              </tr>
+              <tr>
+                <td>Range</td>
+                <td>New Jersey</td>
+                <td>16</td>
+              </tr>
+              <tr>
+                <td>Scott Highlander</td>
+                <td>California</td>
+                <td>12</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            It's not easy to obtain this information. The mascot are worried that if
+            the fact that they are balding goes public it would hurt their reputation.
+            To gain the trust of the bears, you promise to <b>never release their names</b>.
+          </p>
+
+        </div>
+      </div>
+      <div class="ud-about-image">
+        <img src="/static/images/about/about-image.svg" alt="about-image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about-2" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content">
+          <p>
+            After a week spent searching for the cause, nothing about this information stands
+            out to you. Perhaps some other researchers will have better luck. You decide to
+            publish some statistics about this data to let others weigh in. <b>To protect the
+              privacy of the bears you do not release any identifiable information.</b>
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Number of Bears</th>
+                <th>Average Salmon Eaten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10</td>
+                <td>14.4</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            In the mean time, you get a call from a Bay Area number.
+            It's none other than Oski, the beloved Cal mascot. Poor Oski is
+            balding and hopes that your research can save his iconic image.
+            It's a well-known fact that Oski is a world-class salmon catcher
+            which could inspire new hypotheses.
+          </p>
+
+          <p>
+            You learn the following about Oski:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>State</th>
+                <th>Salmon Eaten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Oski</td>
+                <td>California</td>
+                <td>48</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Eager to share your new data, you release the same statistics as before to the public:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Number of Bears</th>
+                <th>Average Salmon Eaten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>11</td>
+                <td>17.5454</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="ud-about-image">
+        <img src="/static/images/about/about-image.svg" alt="about-image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about-3" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content">
+          <h2>Attacking the Data</h2>
+          <p>
+            While your fellow researchers get to work looking for a cause, the press
+            decides to run a story about the balding bears rumor. One reporter with
+            some basic statistics knowlege decides to dig deeper into the information
+            you published.
+          </p>
+
+          <p>
+            They begin by calculating the total salmon eaten by all of the bears in
+            the dataset using the first dataset you published:
+          </p>
+
+          <p class="math">
+            14.4 * 10 = 144
+          </p>
+
+          <p>
+            Next, they do the same calculation using the updated dataset.
+          </p>
+
+          <p class="math">
+            17.5454 * 11 = 192
+          </p>
+
+          <p>
+            They also observe that the size of the two datasets only differ by one bear.
+            That means that the number of salmon eaten by the latest addition to the database must be
+            the difference between the two numbers!
+          </p>
+
+          <p class="math">
+            192 - 144 = 48
+          </p>
+
+          <p>
+            48 salmon is a lot! The reporter can only think of one mascot that could
+            possibly eat that many salmon: Oski.
+          </p>
+
+          <p>
+            Confident that Oski must be in the dataset, the reporter runs a story about
+            poor Oski's hair loss. The masccot is heartbroken! He gave you his information
+            in confidence and now the hole world knows about his affliction.
+          </p>
+        </div>
+      </div>
+      <div class="ud-about-image">
+        <img src="/static/images/about/about-image.svg" alt="about-image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="conclusion" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content">
+          <span class="tag">A Simple Example</span>
+          <h2>The Problem with Anonymized Data</h2>
+
+          <p>
+            As you can see from this example, privacy is more complex than simply
+            removing names from data.
+          </p>
+
+          <p>
+            Armed with a little background knowlege, like the fact that Oski is a
+            prolific salmon catcher, an attacker can make educated guesses about the
+            members of a dataset. These educated guesses can de devastating to individuals
+            that give their information in confidence but are outed anyways.
+          </p>
+
+          <p>
+            <b>Differential Privacy</b> provides a defense from this type of privacy attack.
+            Follow the link to learn more about differential privacy.
+          </p>
+
+          <a href="/learn/differential_privacy" class="ud-main-btn">Learn More</a>
+        </div>
+      </div>
+      <div class="ud-about-image">
+        <img src="/static/images/about/about-image.svg" alt="about-image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

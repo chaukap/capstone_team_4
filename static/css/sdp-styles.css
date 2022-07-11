@@ -121,3 +121,27 @@ a {
 .mechanism-button {
     min-height: 6em;
 }
+
+table {
+    border: solid;
+    background-color: #f3f4fe;
+    margin: 0px;
+    margin-bottom: 40px;
+}
+
+td {
+    border-width: 2px;
+    padding:3px;
+}
+
+th {
+    border-width: 2px;
+    padding: 2px 4px 0px 3px;
+}
+
+.ud-about-content p.math {
+    font-style: italic;
+    font-size: x-large;
+    text-align: center;
+    font-weight: bold;
+}
