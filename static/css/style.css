@@ -327,3 +327,9 @@ li a:hover {
 .query-options {
   position: relative;
 }
+
+img {
+  max-width: 100%;
+  margin: auto;
+  vertical-align: middle;
+}
