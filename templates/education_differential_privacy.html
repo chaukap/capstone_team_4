@@ -1,0 +1,227 @@
+{% extends "layout_2.html" %}
+{% block title %}Learn{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<section class="sdp-page-banner m-0" id="learn">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Thinking like an attacker</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goal" class="ud-about py-3">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <span class="tag">Securing our example</span>
+          <h2>Our Goal</h2>
+          <p>
+            Recall that the average salmon eaten <b>without</b> Oski in the dataset was 14.4. 
+            Adding Oski increased the averate to 17.5454. This was a big increase, and our 
+            attacker (the reporter) noticed.
+          </p>
+
+          <p>
+            Our objective is <b>not</b> to hide information. We want to publish accurate datasets
+            because we want the public to be informed. Instead, our goal is to <b>decrease the confidence</b>
+            of attackers. In the balding bears example, we want to perturb the statistics just enough 
+            that the reporter loses confidence in their assumption that Oski is the reason that 
+            the average number of salmon increased. The less confident the reporter is, the more
+            private the dataset becomes.
+          </p>
+
+          <p>
+            There are a few ways to decrease the reporter's confidence. SDP implements two of the 
+            most popular methods. For this example, we will focus on <b>Laplacian Noise</b>. Laplacian 
+            noise is simply a way of adding "noise" to the dataset. In other words, we'll add 
+            (or subtract) a small random number from the published datasets that prevents the 
+            reporter from beening overly-confident in their guess about Oski. Let's add the noise 
+            and see how our datasets change:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Average Salmon Eaten Without Oski</th>
+                <th>Average Salmon Eaten With Oski</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>14.082</td>
+                <td>16.267</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            As you can see, our results are pretty similar to the true values. So, 
+            why is this more private?
+            The answer lies in the way that we chose our random noise.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="laplace" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>Laplacian Noise</h2>
+          <p>
+            We chose our random noise from a <b>laplace distribution</b> which looks like this:
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/laplace_distribution.png') }}" alt="Laplacian Noise">
+
+          <p>
+            As you can see, the laplace distribution is centered around 0 and and tails off in both directions. 
+            The most likely number from a random draw of the laplace distribution is 0. 
+            With this in mind, let's try adding noise to our data again. This time, instead
+            of a single draw, we'll draw 10 times each.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Draw</th>
+                <th>Average Salmon Eaten with Oski</th>
+                <th>Average Salmon Eaten without Oski</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>18.744</td>
+                <td>14.139</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>17.354</td>
+                <td>13.435</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>20.444</td>
+                <td>16.934</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>17.790</td>
+                <td>12.720</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>16.609</td>
+                <td>14.465</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>15.231</td>
+                <td>17.732</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>15.216</td>
+                <td>14.728</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>13.045</td>
+                <td>13.344</td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>24.090</td>
+                <td>17.137</td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>16.896</td>
+                <td>16.628</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Each row of the table represents one possible dataset that we could have released.
+            As you can see, there is a small chance that the value of the average with Oski will
+            be <b>lower than</b> the value of the draw without Oski. This means that our reporter 
+            can't be too sure that the increase was caused by Oski or just a result of a random
+            number draw.
+          </p>
+
+          <p>
+            Now let's run the experiment 1000 times, and compare the values with Oski in the 
+            dataset to the values without Oski in the dataset.
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/laplace_histogram.png') }}" 
+              alt="Laplacian Noise Experiment">
+
+          <p>
+            With 1,000 draws the pattern becomes obvious. The most likely values are centered around 
+            the <b>true values</b>. That is to say, the <b>most likely outcome</b> is the true value.
+            However, our privacy comes from the intersection of the two distributions. If our reporter 
+            knows that we are using differential privacy they can never be 100% certain that the value 
+            they are seeing is a result of Oski's addition to the database or a result of random noise.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utility" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>A Note on Utility</h2>
+          
+          <p>
+            Of course, adding random noise to data makes it less useful. In our 
+            balding bears example there is a small chance that the random noise 
+            will give the appearance that the average number of salmon eaten 
+            <b>decreases</b> after the addition of Oski.
+          </p>
+
+          <p>
+            Differential privacy is therefore best prescribed to large datasets. 
+            Datasets where we can sacrifice the accuracy of a few datapoints with 
+            the assurance that the <b>average answer tends toward the truth</b>. 
+            <a href="https://www.census.gov/about/policies/privacy/statistical_safeguards.html" target="_blank">
+              The 2020 US census
+            </a> is a perfect example of such a dataset. 
+          </p>
+
+          <p>
+            If you own a medium to large dataset, then differential privacy is the perfect 
+            tool for you. Our tool will allow you to create privatized datasets with a few 
+            clicks, without getting lost in the mathematical details.
+          </p>
+
+          <p>
+            Next, learn about the ways that you can tune differential privacy to meet your 
+            specific needs.
+          </p>
+
+          <a href="/learn/epsilon_selection" class="ud-main-btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

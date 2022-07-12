@@ -158,6 +158,11 @@ th {
     font-weight: bold;
 }
 
+.ud-about-content p a {
+    color: black;
+    text-decoration: underline;
+}
+
 .bears-background {
     background-image: url(/static/images/about/bears.png);
     background-size: 100%;

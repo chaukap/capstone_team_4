@@ -437,6 +437,10 @@ def laplace_query(user):
 def learn():
     return render_template( "education_basic.html")
 
+@app.route("/learn/differential_privacy", methods=["GET"])
+def learn_differential_privacy():
+    return render_template( "education_differential_privacy.html")
+
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
 def exponential_query(user):
