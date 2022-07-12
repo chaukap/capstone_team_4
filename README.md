@@ -18,7 +18,7 @@ cd capstone_team_4
 
 ### 3. Install a Python virtual environment
 
-*3.1. Install and activate a virtual environment by following (these instructions)[https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/]*
+*3.1. Install and activate a virtual environment by following [these instructions](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/)*
 
 ### 4. Place the keys.json file in the capstone_team_4 directory
 
