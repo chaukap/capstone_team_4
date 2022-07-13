@@ -44,6 +44,10 @@
     padding: 4px 10px;
     transition-duration: .5s;
     position: relative;
+    max-width: 40em;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .sdp-button:hover {
