@@ -445,6 +445,10 @@ def learn_differential_privacy():
 def learn_epsilon_selection():
     return render_template( "education_epsilon_selection.html")
 
+@app.route("/learn/sensitivity", methods=["GET"])
+def learn_sensitivity():
+    return render_template("education_sensitivity.html")
+
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
 def exponential_query(user):

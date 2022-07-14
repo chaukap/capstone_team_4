@@ -1,0 +1,207 @@
+{% extends "layout_2.html" %}
+{% block title %}Learn{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<section class="sdp-page-banner m-0" id="learn">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Sensitivity</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goal" class="ud-about py-3">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <span class="tag">The limits of privacy</span>
+          <h2>The practical limits of differential privacy</h2>
+          <p>
+            While learning how to protect Oski from the reporter we made a key assumption
+            that should be addressed. Namely, we assumed that <b>
+              the range of possible values is between 10 and 48
+            </b>. But what would happen if a bear that eats 1,000 salmon joins our dataset?
+          </p>
+
+          <p>
+            Instead of continuing our balding bears example lets pick an example from
+            finance. Let's imagine a dataset that contains the net worth of an individuals.
+            We would like to publish statistics about this dataset without revealing who
+            is in it. Luckily, we've just learned how to use differential privacy to 
+            prevent membership disclosure! This is the differentially private statistic we
+            release: 
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>True Average Net Worth</th>
+                <th>Laplace noise added</th>
+                <th>Publicized Average Net Worth</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr> 
+                <td>$1,450,183</td>
+                <td>-$225,799</td>
+                <td>$1,224,384.21</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Then, an individual joins the dataset with a net worth of $6,000,000. We can 
+            release updated statistics about the dataset using differential privacy.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>True Average Net Worth</th>
+                <th>Laplace noise added</th>
+                <th>Publicized Average Net Worth</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr> 
+                <td>$1,495,230.69</td>
+                <td>$232,565</td>
+                <td>$1,727,795.69</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            If we plot these two values along with the laplace distributions that they
+            were drawn from, we can see how much uncertainty an attacker would have 
+            in guessing who the newest addition is.
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/net_worth.png') }}" alt="Distributions">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="laplace" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>A Sensitivity Problem</h2>
+          <p>
+            Adding an individual with a $6,000,000 net worth was no problem at all. But what
+            if a billionaire, with a net worth of $1,000,000,000 joins the dataset? Here's
+            the new data:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>True Average Net Worth</th>
+                <th>Laplace noise added</th>
+                <th>Publicized Average Net Worth</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr> 
+                <td>$11,284,493.13</td>
+                <td>$-766,090.10</td>
+                <td>$10,518,403.03</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p> That's a massive jump in both the real average new worth <b>and</b>
+          The noisy net worth! Ploting the distributions shows the problem.</p> 
+
+          <img src="{{ url_for('static', filename='images/about/net_worth_2.png') }}" alt="Laplacian Noise">
+
+          <p>
+            We didn't anticipate such a wealthy individual joining the datset. The two
+            distributions don't overlap at all. We therefore can't make any privacy
+            guarantees without adjusting our privacy mechanism.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utility" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>Sensitivity to the Rescue</h2>
+          
+          <p>
+            Before publishing a single number we must understand the range of possible 
+            values. We'll call this range the <b>sensitivity</b>. We can think of the 
+            sensitivity as a defense against the problem we demonstrated above.
+          </p>
+
+          <p>
+            Let's imagine that we had anticipated a billionaire joining the dataset and
+            adjusted our sensitivity accordingly. After consulting with our data scientists,
+            we decide to set the maximum average net worth at $20,000,000. and the
+            minimum average net worth at $1,000,000. Our sensitivity is then
+          </p>
+
+          <p class="math">$20,000,000 - $1,000,000 = $19,000,000</p>
+
+          <p>
+            By adding $19,000,000 as the sensitivity parameter to our differential privacy
+            mechanism we can increase the width of each of the laplace distributions.
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/net_worth_3.png') }}" alt="Laplacian Noise">
+
+          <p>
+            Now the distributions have some overlap. That means that we can redraw
+            from the new distributions and release datasets with a privacy guarantee.
+          </p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utility" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>Conclusion</h2>
+          
+          <p>
+            It is paramount that you think about the potential values of your datasets
+            <b>before you release one</b>. Running into a problem like the one described 
+            above can result in privacy breaches and in the worst case hefty fines.
+          </p>
+
+          <p>
+            Of course, there is a tradeoff. The higher we set the sensitivity the more 
+            potential noise we add to the data. Thinking critically about the potential
+            data in your datasets will ensure that you maximize utility while protecting 
+            individuals.
+          </p>
+          
+          <a href="/learn/probablistic_attacks" class="ud-main-btn">Next Lesson: Advanced Attacks</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
