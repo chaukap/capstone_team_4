@@ -15,17 +15,26 @@ def epsilon_slider(data):
     stop = float(true_value1 + (true_value1*5))
     epsilons=np.arange(0.1, 4.1, 0.1)
     graph_range=np.arange(start, stop)
+    ad_graph_range=np.arange(start*1.5, stop*1.5)
     confidence_intervals = st.t.interval(0.95, len(graph_range)-1, loc=true_value1, scale=st.sem(graph_range))
 
     trace_list1 =[]
+    trace_list2 =[]
     for epsilon in np.arange(0.1, 4.1, 0.1):
         trace_list1.append(go.Scatter(
             visible=False,
-            line=dict(color="#00CED1", width=6),
+            line=dict(color="#6505cc", width=6),
+            name='Original',
             x=graph_range,
             y=np.exp(-abs(graph_range-true_value1)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
+        trace_list2.append(go.Scatter(
+            visible=False,
+            line=dict(color="red", width=6),
+            name='Adjacent',
+            x=ad_graph_range,
+            y=np.exp(-abs(ad_graph_range-(true_value1*2))/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
-    fig = go.Figure(data=trace_list1)
+    fig = go.Figure(data=trace_list1+trace_list2)
     fig.data[0].visible = True
 
     
