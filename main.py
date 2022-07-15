@@ -449,6 +449,14 @@ def learn_epsilon_selection():
 def learn_sensitivity():
     return render_template("education_sensitivity.html")
 
+@app.route("/learn/probablistic_attacks", methods=["GET"])
+def learn_probablistic_attacks():
+    return render_template("education_probablistic_attack.html")
+
+@app.route("/learn/coming_soon", methods=["GET"])
+def learn_coming_soon():
+    return render_template("education_coming_soon.html")
+
 @app.route("/query/exponential", methods=["GET"])
 @authenticate
 def exponential_query(user):

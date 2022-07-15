@@ -1,0 +1,337 @@
+{% extends "layout_2.html" %}
+{% block title %}Learn{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<section class="sdp-page-banner m-0" id="learn">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ud-banner-content">
+          <h1>Attacking Privacy with Probability</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goal" class="ud-about py-3">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <span class="tag">Probability as a weapon</span>
+          <h2>A probablistic setting</h2>
+          <p>
+            Attacks on real datasets are rarely as straight forward as
+            the attack we've demonstrated on Oski. We can rarely assume that
+            a single individual is responsible for a sudden change in a statistic.
+            In other words, Oski is probably not the only voracious eater.
+          </p>
+
+          <p>
+            A real-world attack would be <i>probablistic</i> in nature. That is to
+            say, the attacker would try to put a probability to the likelihood
+            that an individual is in the dataset. These attacks are harder to
+            conceptualize, but we'll walk through an example to make it
+            concrete.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="laplace" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>Back to the bears</h2>
+          <p>
+            Our reporter is going to attack the balding bears data again. This time,
+            rather than assuming that the big eater is Oski, the reporter will use
+            probabilities to guess <i>the likelihood</i> that Oski is present.
+          </p>
+
+          <p>
+            The first thing the reporter does is refer to the ecological literature.
+            Here's what they find:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Average salmon eaten</th>
+                <th>Standard deviation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>14.7</td>
+                <td>2.2</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Next they discover that <b>42</b> universities have bears as mascots.
+          </p>
+
+          <p>
+            They also find an old interview where Oski claims to eat <b>
+              50 salmon in a day
+            </b>. This is a bit of an exageration, but our reporter
+            doesn't know that.
+          </p>
+
+          <p>
+            Our naive bear researcher publishes the mean salmon eaten without 
+            adding laplace noise:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Average Salmon Eaten</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>17.5454</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            To summarize, the reporter has access to the following information,
+            and the following information only:
+
+          <ol>
+            <li>The average salmon eaten by bears in general is <b>14.7</b></li>
+            <li>The standard deviation of the salmon eaten by bears in general is <b>2.2</b></li>
+            <li>There are <b>42</b> universities with bears as mascots</li>
+            <li>Oski claims to eat <b>50</b> salmon</li>
+            <li>The average salmon eaten by the balding bears is <b>17.5454</b></li>
+          </ol>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utility" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>Making guesses and assumptions</h2>
+
+          <p>
+            The first guess our reporter must make is the number of bears in the
+            balding bears dataset. given the alarm of the bear researcher,
+            the reporter guesses that half, <b>21</b>, of the bears are balding. We know
+            that the reporter is off by 10, but overestimating is the safest bet
+            for an attacker.
+          </p>
+
+          <p>
+            The reporter must make an assumption that the distribution of salmon eaten
+            by bears is <b>normal</b>. Normal distributions are very common in nature
+            so this seems like a safe assumption. Assuming that the ecological data
+            comes from a normal distribution allows us to graph it:
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/bears_distribution.png') }}" alt="Laplacian Noise">
+
+          <p>
+            Randomly drawing numbers from this distribution will give us a representitive
+            sample of the total bear population. We can use these random draws to
+            simulate the bears in the balding breas dataset, without needing to
+            know the true values.
+          </p>
+
+          <p>
+            Just to ensure that we're on the right track, lets redraw the distribution
+            and add the mean of the balding bears dataset to it. If the mean of the
+            balding bears dataset is far from the mean, we can assume that there are some
+            outlier bears in the dataset.
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/bears_distribution_2.png') }}" alt="Laplacian Noise">
+
+          <p>
+            That's pretty far to the right! Luckily for the reporter that should make the attack
+            easier.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utility" class="ud-about">
+  <div class="container">
+    <div class="ud-about-wrapper wow fadeInUp bears-background" data-wow-delay=".2s">
+      <div class="ud-about-content-wrapper">
+        <div class="ud-about-content sdp-learning">
+          <h2>An experiment as an attack</h2>
+
+          <p>
+            Now let's get to the attack. First, we need the probability that
+            the mean salmon eaten is greater than 17.5454 for a dataset
+            <i>without</i> Oski. Here are the steps:
+          </p>
+
+          <ol>
+            <li>
+              Draw 21 bears at random from the distribution.
+            </li>
+            <li>
+              Calculate the mean salmon eaten for these 21.
+            </li>
+            <li>
+              Compare this mean to 17.5454.
+            </li>
+            <li>
+              Repeat the experiment 1,000 times.
+            </li>
+            <li>
+              Compute the probability that the mean is greater than or equal to 17.5454.
+            </li>
+          </ol>
+
+          <p>
+            This will yeild the probability that we see a mean of 17.5454 for a
+            dataset <b>given that Oski <i>is not</i> in it</b>.
+          </p>
+
+          <p class="math">
+            P(<b>mean</b> ≥ 17.5454 | No Oski)
+          </p>
+
+          <p>
+            Next, we need the probability that the mean salmon eaten is greater
+            than 17.5454 for a dataset <i>with</i> Oski. Here are the steps:
+          </p>
+
+          <ol>
+            <li>
+              Draw 20 bears at random from the distribution.
+            </li>
+            <li>
+              Add 50 (Oski's value) to the list of random bears.
+            <li>
+              Calculate the mean salmon eaten for these 21.
+            </li>
+            <li>
+              Compare this mean to 17.5454.
+            </li>
+            <li>
+              Repeat the experiment 1,000 times.
+            </li>
+            <li>
+              Compute the probability that the mean is greater than 17.5454.
+            </li>
+          </ol>
+
+          <p>
+            This will yeild the probability that we see a mean of 17.5454 for a
+            dataset <b>given that Oski <i>is</i> in it</b>.
+          </p>
+
+          <p class="math">
+            P(<b>mean</b> ≥ 17.5454 | Oski)
+          </p>
+
+          <p>
+            Here are the results of both experiments:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  P(<b>mean</b> ≥ 17.5454 | No Oski)
+                </th>
+                <th>
+                  P(<b>mean</b> ≥ 17.5454 | Oski)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0.09476</td>
+                <td>0.13728</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            <a href="https://en.wikipedia.org/wiki/Bayesian_inference" target="_blank">Bayesian inference</a>
+            tells us that the ratio between the probability that Oski is in the dataset and
+            the probability that he is not can be calculated using the formula
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/baysian.png') }}" alt="Laplacian Noise">
+
+          <p>
+            The first term on the right hand side is the <i>prior belief</i>, or
+            the belief the reporter had that Oski was in the database
+            before actually seeing the value 17.5454. Let's assume that the
+            reporter had no idea whether Oski was in the dataset or not.
+            That means that our prior is equal to 1.
+          </p>
+
+          <p>
+            Plugging in the two values we got via experiments, we see that
+          </p>
+
+          <img src="{{ url_for('static', filename='images/about/baysian_2.png') }}" alt="Laplacian Noise">
+
+          <img src="{{ url_for('static', filename='images/about/baysian_3.png') }}" class="my-2" alt="Laplacian Noise">
+
+          <p>
+            Let's break down that result. Our value of 1.44871254 is between the 1 and 2. 
+            That means that Oski is more likely to be in the database than not. If our result
+            had been between 0 and 1, Oski would have most likely not been in the database.
+          </p>
+
+          <p>
+            A value of 2 would mean that we are 100% certain that Oski is in the database.
+            While 1.44871254 is quite a ways from 2, it is still a notable value.
+          </p>
+
+          <p>
+            Whether or not our reporter is convinced by the value is up to them. Given the
+            binary nature of their choice, to publish a story or not, I would quess that
+            the risk of being wrong is too great. However, if I were a advertising agent
+            trying to sell anti-balding shampoo I might be willing to expose Oski to 
+            a few extra adds given the likelihood that they are balding. 
+          </p>
+
+          <p>
+            The threat of <b>probablistic</b> attacks is in <b>probablistic</b> decisions.
+            Instead of a database of balding bears, what if I had a database of political 
+            donations? What about a database of gender identities? <a 
+               href="https://hbr.org/2013/04/the-hidden-biases-in-big-data" target="_blank">
+            Algorithms have been shown time and time again to perpetuate biases.
+            </a>
+          </p>
+
+          <p>
+            It is a data owner's responsibility, and in many cases legal obligation, to
+            protect the individuals represented in that data from attackers. That includes 
+            algorithms that would use probabilities to perpetuate biases.
+          </p>
+
+          <a href="/learn/coming_soon" class="ud-main-btn">Next lesson coming soon!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

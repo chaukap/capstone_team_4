@@ -177,3 +177,9 @@ th {
         background-size: 50%;
     }
 }
+
+.sdp-learning ol li {
+    margin-left: 10px;
+    color: black;
+    font-size: large;
+}
