@@ -250,11 +250,17 @@
             </button>
             <div id="collapseThree" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                It is important to understand that differential privacy 
+                mechanisms attempt to provide protection against the 
+                identification of a particular individual’s membership 
+                in a database. The privacy provided is not absolute privacy.  
+                The privacy guarantees afforded by differential privacy 
+                mechanisms are mathematically rigorous.  However, the practical
+                outcomes depend on prior or auxiliary knowledge and the 
+                threat model.  While the degree of privacy is set by the 
+                privacy parameters, the practical implications are use case 
+                and threat model specific. 
+                
               </div>
             </div>
           </div>
@@ -344,15 +350,18 @@
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>What does the epsilon parameter mean and how do I set it for my data?</span>
+              <span>What does the sensitivy parameter mean and how do I set it for my data?</span>
             </button>
             <div id="collapseSix" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                Broadly speaking sensitivity is the degree to which a query’s outcome can change as it is implemented on two “adjacent” databases.  Also broadly speaking an “adjacent” database from a given database, D, is a database D’ that differs by only one record.  The sensitivity of a query is the maximum amount a query can differ when considered over ALL of the possible adjacent databases.
+
+                Setting the sensitivity parameter for a Laplacian Mechanism will vary by query.  
+
+                •	For the COUNT query the sensitivity is always one (or two) as the COUNT in adjacent differs by one record.  Setting the sensitivity to 1 sets the “Unbounded” or “local” sensitivity.  Setting the sensitivity to 2 will set the “Bounded” or global sensitivity.  
+                •	For SUM the sensitivity should be set by the user depending on the extremes that are possible in the data that you may want to protect.  As can be seen in the Jupyter Notebooks Learning Series, protecting the underrepresented requires the database owner to anticipate the range of possible values of the data and.     Set the sensitivity to reflect how an additional data point can increase the SUM.  See Jupyter Notebook: Laplacian_Mechanisms_Protect_Oski.
+                •	For the query AVERAGE,  the sensitivity can set with similar logic to SUM, but the effect of one additional record on the outcome is a lot smaller than with a SUM query. Setting the sensitivity to reflect the difference between the upper and lower limits of the potential record values (as in SUM) is a safe bet but perhaps overly conservative.
+
               </div>
             </div>
           </div>
