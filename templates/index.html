@@ -426,11 +426,9 @@
                 <p>Broadly speaking sensitivity is the degree to which a query’s outcome can change as it is implemented on two “adjacent” databases.  Also broadly speaking an “adjacent” database from a given database, D, is a database D’ that differs by only one record.  The sensitivity of a query is the maximum amount a query can differ when considered over ALL of the possible adjacent databases.</p>
                 <br>
                 <p>Setting the sensitivity parameter for a Laplacian Mechanism will vary by query:</p>
-
                 <li>For the COUNT query the sensitivity is always one (or two) as the COUNT in adjacent differs by one record.  Setting the sensitivity to 1 sets the “Unbounded” or “local” sensitivity.  Setting the sensitivity to 2 will set the “Bounded” or global sensitivity.</li>
                 <li>For SUM the sensitivity should be set by the user depending on the extremes that are possible in the data that you may want to protect.  As can be seen in the Jupyter Notebooks Learning Series, protecting the underrepresented requires the database owner to anticipate the range of possible values of the data and.     Set the sensitivity to reflect how an additional data point can increase the SUM.  See Jupyter Notebook: Laplacian_Mechanisms_Protect_Oski.</li>
                 <li>For the query AVERAGE,  the sensitivity can set with similar logic to SUM, but the effect of one additional record on the outcome is a lot smaller than with a SUM query. Setting the sensitivity to reflect the difference between the upper and lower limits of the potential record values (as in SUM) is a safe bet but perhaps overly conservative.</li>
-
               </div>
             </div>
           </div>
@@ -507,7 +505,6 @@
     </div>
   </div>
 </section>
-
 
 <section id="team" class="ud-team">
   <div class="container">
