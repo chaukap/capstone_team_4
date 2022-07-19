@@ -12,7 +12,7 @@ class differential_privacy_engine:
 
     def __laplaceMechanismClamped(self, true_value, epsilon, u, l):
         range = abs(u - l)
-        noise = np.random.laplace(0, 2 * range / epsilon, 1)[0]
+        noise = np.random.laplace(0, range / epsilon, 1)[0]
         if noise >= u :
             noise = u
         else :
@@ -37,7 +37,7 @@ class differential_privacy_engine:
         if grouping_column == None:
             noisy_result.columns = [f"count_{count_column}"]
             noisy_result[f"count_{count_column}"] = result.apply(
-                lambda t: t[1] + np.random.laplace(0, 2.0/float(epsilon), 1)[0],
+                lambda t: t[1] + np.random.laplace(0, 1.0/float(epsilon), 1)[0],
                 axis=1)
         else:
             noisy_result.columns = [
@@ -46,7 +46,7 @@ class differential_privacy_engine:
                 f"count_{count_column}"
             ]
             noisy_result[f"count_{count_column}"] = result.apply(
-                lambda t: t[2] + np.random.laplace(0, 2.0/epsilon, 1)[0], 
+                lambda t: t[2] + np.random.laplace(0, 1.0/epsilon, 1)[0], 
                 axis=1)
 
         result.columns = [grouping_column, count_column, "count"]
@@ -98,7 +98,7 @@ class differential_privacy_engine:
             lambda t: int(self.__laplaceMechanismClamped(float(t[f"sum_{average_column}"]), epsilon, upper_bound, lower_bound)), 
             axis=1)
         noisy_result[f"count_{average_column}"] = noisy_result.apply(
-            lambda t: t[f"count_{average_column}"] + np.random.laplace(0, 2.0/epsilon, 1)[0], 
+            lambda t: t[f"count_{average_column}"] + np.random.laplace(0, 1.0/epsilon, 1)[0], 
             axis=1)
         noisy_result[f"average_{average_column}"] = noisy_result.apply(
             lambda t: self.__noisy_average(
