@@ -136,3 +136,15 @@ class database_repository:
             """)
         self.connection.commit()
         return
+
+    def lookup_queries(self, query):
+        cur = self.connection.cursor()
+        cur.execute(
+            f"""
+            select * from ClientDatabaseQueries cdq 
+            where LOWER(Statistic) like LOWER("%{query}%") 
+            OR LOWER(GroupingColumn) like LOWER("%{query}%")
+            """)
+        result = [database_query(n) for n in cur]
+        cur.close()
+        return result
