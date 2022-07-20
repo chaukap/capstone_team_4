@@ -254,8 +254,9 @@ def select_laplace_epsilon(user):
             count_column=request.form['statistic'],
             epsilon=0.5,
             grouping_column=request.form['grouping_column'])
+            
 
-        fig = epsilon_slider(result)
+        fig = epsilon_slider(result, 1, 1)
         fig.update_layout(width=1000, height=500)
         
         return render_template("laplace_epsilon_selection.html", 
@@ -271,11 +272,11 @@ def select_laplace_epsilon(user):
             table=database.table,
             sum_column=request.form['statistic'],
             epsilon=0.5,
-            lower_bound=1,
-            upper_bound=2,
+            lower_bound=float(request.form['lower_bound']),
+            upper_bound=float(request.form['upper_bound']),
             grouping_column=request.form['grouping_column'])
             
-        fig = epsilon_slider(result)
+        fig = epsilon_slider(result, float(request.form['upper_bound']), float(request.form['lower_bound']))
         fig.update_layout(width=1000, height=500)
 
         return render_template("laplace_epsilon_selection.html", 
@@ -291,11 +292,11 @@ def select_laplace_epsilon(user):
             table=database.table,
             average_column=request.form['statistic'],
             epsilon=0.5,
-            lower_bound=1,
-            upper_bound=2,
+            lower_bound=float(request.form['lower_bound']),
+            upper_bound=float(request.form['upper_bound']),
             grouping_column=request.form['grouping_column'])
         
-        fig = epsilon_slider(result)
+        fig = epsilon_slider(result, float(request.form['upper_bound']), float(request.form['lower_bound']))
         fig.update_layout(width=1000, height=500)
         
         return render_template("laplace_epsilon_selection.html", 
