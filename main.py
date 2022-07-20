@@ -140,8 +140,12 @@ def download_results(user):
         return make_response("Query not found", 404)
 
     database = repo.get_database(query.database_id)
-    if database == None or database.user_id != user.id:
+    if database == None:
         return make_response("Query not found", 404)
+    elif database.user_id != user.id:
+        if user.epsilon < query.epsilon:
+            return redirect("/epsilon/purchase")
+        repo.update_user_epsilon(user.google_id, user.epsilon - query.epsilon)
 
     dp_engine = differential_privacy_engine(database.username, 
         database.password, 
@@ -224,7 +228,8 @@ def get_queries(user):
 
     return render_template("queries.html", 
         database=database,
-        queries=queries, user_email=user.email)
+        queries=queries, 
+        user = user)
 
 @app.route('/query/laplace/epsilon', methods=['POST'])
 @authenticate
@@ -265,7 +270,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
             query_type=request.form['query_type'],
-            user_email=user.email)
+            user = user)
 
     elif request.form['query_type'] == 'laplace_sum':
         noisy_result, result  = dp_engine.sum(
@@ -285,7 +290,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
             query_type=request.form['query_type'],
-            user_email=user.email)
+            user = user)
 
     elif request.form['query_type'] == 'laplace_average':
         noisy_result, result  = dp_engine.average(
@@ -305,7 +310,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'],
             statistic=request.form['statistic'],
             query_type=request.form['query_type'],
-            user_email=user.email)
+            user = user)
 
     return make_response("Unknown query type", 400)
 
@@ -356,7 +361,7 @@ def select_exponential_epsilon(user):
         database_id=database.id,
         statistic=request.form['statistic'],
         query_type=request.form['query_type'],
-        user_email=user.email)
+        user = user)
   
 @app.route('/databases/add', methods=['POST'])
 @authenticate
@@ -387,7 +392,7 @@ def post_database(user):
 @app.route("/databases/add", methods=['GET'])
 @authenticate
 def add_database(user):
-    return render_template("add_database.html", user_email = user.email)
+    return render_template("add_database.html", user = user)
 
 @app.route("/query/mechanism")
 @authenticate
@@ -403,7 +408,7 @@ def select_mechanism(user):
 
     return render_template(
         "mechanism_selection.html", 
-        user_email = user.email,
+        user = user,
         database_id=database_id)
 
 @app.route("/query/laplace", methods=["GET"])
@@ -432,7 +437,7 @@ def laplace_query(user):
     return render_template("laplace_query.html",
         columns=columns,
         database_id=database_id,
-        user_email=user.email)
+        user = user)
 
 @app.route("/learn", methods=["GET"])
 def learn():
@@ -484,23 +489,39 @@ def exponential_query(user):
     return render_template("exponential_query.html",
         columns=columns,
         database_id=database_id,
-        user_email=user.email)
+        user = user)
 
 @app.route("/search", methods=["GET"])
 @authenticate
 def search(user):
-    return render_template("search.html", user_email=user.email)
+    return render_template("search.html", user = user)
+
+@app.route("/epsilon/purchase", methods=["GET"])
+@authenticate
+def purchase_epsilon(user):
+    return render_template(
+        "buy_epsilon.html", 
+        user = user, 
+        epsilon=user.epsilon)
+
+@app.route("/epsilon/buy", methods=["POST"])
+@authenticate
+def buy_epsilon(user):
+    repo = database_repository() 
+    repo.update_user_epsilon(user.google_id, user.epsilon + float(request.form['epsilon'])) 
+    user = repo.get_user_by_email(user.email)
+
+    return redirect(url_for("search"))
 
 @app.route("/lookup", methods=["GET"])
-#@authenticate
-#def lookup(user):
-def lookup():
+@authenticate
+def lookup(user):
     query = request.args.get("query")
     if query == None:
         query = ""
 
     repo = database_repository()
-    queries = repo.lookup_queries(query)
+    queries = repo.lookup_queries(query, exclude_user = user.google_id)
     results = [
         {
         "id": q.id,
@@ -522,7 +543,7 @@ def index(user):
     
     repo = database_repository()
     databases = repo.get_user_databases(user.id)
-    return render_template("index.html", user_email = user.email, databases=databases)
+    return render_template("index.html", user = user, databases=databases)
 
 @app.route('/home', methods=['GET'])
 @identify
@@ -532,7 +553,7 @@ def home(user):
     
     repo = database_repository()
     databases = repo.get_user_databases(user.id)
-    return render_template("home.html", user_email = user.email, databases=databases)
+    return render_template("home.html", user = user, databases=databases)
 
 @app.route("/login", methods=['POST'])
 def login():

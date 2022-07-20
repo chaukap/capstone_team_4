@@ -33,9 +33,6 @@
   <link rel="stylesheet" href="/static/css/lineicons.css" />
   <link rel="stylesheet" href="/static/css/ud-styles.css" />
   <link rel="stylesheet" href="/static/css/sdp-styles.css" />
-  <!--    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  -->
   {% endblock %}
 </head>
 
@@ -121,9 +118,9 @@
                 </div>
     
                 <div class="navbar-btn d-none d-sm-inline-block">
-                  {% if user_email %}
+                  {% if user %}
                   <a href="{{ url_for('index') }}" class="ud-main-btn ud-login-btn">
-                    {{ user_email }}
+                    {{ user.email }}
                   </a>
                   {% else %}
                   <script src="https://accounts.google.com/gsi/client" async defer></script>

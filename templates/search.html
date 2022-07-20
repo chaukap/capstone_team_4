@@ -58,15 +58,21 @@
                           $('#search-results').html(`
                             ${$('#search-results').html()}
                             <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1 deletable">
-                              <div class="sdp-button">
+                              <div class="sdp-button" data-epsilon="${result[i].epsilon}">
                                 <a href="/query/result?query_id=${result[i].id}" rel="nofollow noopener">
                                   <div class="sdp-button-title">${result[i].description}</div>
                                   <div class="sdp-button-description">Epsilon: ${result[i].epsilon}</div>
                                 </a>
                               </div>
                             </div>
-                          `)
+                          `);
                         }
+
+                        $('.sdp-button').click(function() {
+                          var previousEpsilon = parseFloat($(".ud-login-btn").html().replace("Your epsilon: ", ""));
+                          var cost = $(this).data("epsilon");
+                          $(".ud-login-btn").html(`Your epsilon: ${(previousEpsilon - cost).toFixed(1)}`);
+                        });
                     },
                     500: function (result) {
                         error("Error");

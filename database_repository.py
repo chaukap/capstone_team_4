@@ -88,6 +88,14 @@ class database_repository:
         cur.execute(query)
         self.connection.commit()
         return
+
+    def update_user_epsilon(self, google_id, epsilon):
+        cur = self.connection.cursor()
+        print(f"UPDATE Users SET epsilon = {epsilon} WHERE GoogleId = '{google_id}'")
+        query = f"UPDATE Users SET epsilon = {epsilon} WHERE GoogleId = '{google_id}'"
+        cur.execute(query)
+        self.connection.commit()
+        return
     
     def insert_database(self, user_id, database_name, 
         host, username, password, table_name, port, 
@@ -137,14 +145,25 @@ class database_repository:
         self.connection.commit()
         return
 
-    def lookup_queries(self, query):
+    def lookup_queries(self, query, exclude_user = None):
         cur = self.connection.cursor()
-        cur.execute(
-            f"""
-            select * from ClientDatabaseQueries cdq 
-            where LOWER(Statistic) like LOWER("%{query}%") 
-            OR LOWER(GroupingColumn) like LOWER("%{query}%")
-            """)
+        query_string = ""
+        if exclude_user:
+            query_string = f"""
+                select cdq.* from ClientDatabaseQueries cdq 
+                JOIN ClientDatabases cdb on cdb.Id = cdq.DatabaseId
+                JOIN Users u on u.Id = cdb.UserId
+                where (LOWER(Statistic) like LOWER("%{query}%") 
+                         OR LOWER(GroupingColumn) like LOWER("%{query}%"))
+                      AND NOT u.GoogleId = '{exclude_user}'
+                """
+        else:
+            query_string = f"""
+                select * from ClientDatabaseQueries cdq 
+                where LOWER(Statistic) like LOWER("%{query}%") 
+                OR LOWER(GroupingColumn) like LOWER("%{query}%")
+                """
+        cur.execute(query_string)
         result = [database_query(n) for n in cur]
         cur.close()
         return result

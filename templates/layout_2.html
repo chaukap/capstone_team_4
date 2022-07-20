@@ -69,9 +69,9 @@
                 </div>
     
                 <div class="navbar-btn d-none d-sm-inline-block">
-                  {% if user_email %}
-                  <a href="{{ url_for('index') }}" class="ud-main-btn ud-login-btn">
-                    {{ user_email }}
+                  {% if user %}
+                  <a href="{{ url_for('purchase_epsilon') }}" class="ud-main-btn ud-login-btn">
+                    Your epsilon: {{ user.epsilon }}
                   </a>
                   {% else %}
                   <script src="https://accounts.google.com/gsi/client" async defer></script>
