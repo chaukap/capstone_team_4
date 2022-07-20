@@ -193,11 +193,13 @@
             </button>
             <div id="collapseOne" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                After logging in,
+                <br>
+                Follow the <a href="/home" target="_blank">Get Started</a> link.
+                <br>
+                Click "Add a Database".
+                <br>
+                Fill in the form with your database credentials.
               </div>
             </div>
           </div>
@@ -212,11 +214,31 @@
             </button>
             <div id="collapseTwo" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                The Laplacian Mechanism is focused on numerical answers. It 
+                adds noise directly to the answer itself. What if we want 
+                to return a precise answer (i.e. no added noise), but still 
+                preserve differential privacy? One solution is the exponential 
+                mechanism which allows selecting the “best” element from a 
+                set while preserving differential privacy. The analyst defines 
+                which element is the “best” by specifying a scoring function 
+                that outputs a score for each element in the set, and also 
+                defines the set of things to pick from. The mechanism provides 
+                differential privacy by approximately maximizing the score of 
+                the element it returns - in other words, to satisfy differential 
+                privacy, the exponential mechanism sometimes returns an 
+                element from the set which does not have the highest score.
+                The biggest practical difference between the exponential mechanism 
+                and the Laplace Mechanism mechanisms is that the output of the 
+                exponential mechanism is always a member of the set of possible 
+                answers.  This is extremely useful when selecting an item from a 
+                finite set, when a noisy answer would not make sense. For example, 
+                we might want to pick a date for a big meeting, which uses each participant’s 
+                personal calendar to maximize the number of participants without a conflict, 
+                while providing differential privacy for the calendars. Adding noise 
+                to a date doesn’t make much sense: it might turn a Friday into a 
+                Saturday, and increase the number of conflicts significantly. The 
+                exponential mechanism is perfect for problems like this one: it 
+                selects a date without noise.
               </div>
             </div>
           </div>
@@ -231,24 +253,45 @@
             </button>
             <div id="collapseThree" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                The parameter epsilon is the parameter that sets the degree 
+                of privacy leakage permitted for a particular database.  
+                The higher the value of epsilon, the more privacy leakage, 
+                the less protection for individuals in the database for 
+                identification as members.  The SDP platform allows database 
+                owner to choose epsilon values between .1 and 5 by increments of .1.  
+                <br>
+                Practically speaking an epsilon of value 1 or less provides 
+                a very high degree of privacy and values of 4 or greater 
+                provide little privacy. It is challenging to set the epsilon 
+                parameter because there is not a set of hard and fast rules 
+                that guide this setting of epsilon for all use cases.  
+                <br>
+                Setting the epsilon parameter comes with an important trade-off. 
+                The lower the value (higher privacy) the lower the utility of 
+                the query responses.  Since privacy requires a degree of “error” 
+                in the query response, setting the parameter requires a balancing 
+                of privacy with utility.  This balance will depend on particular 
+                databases, their population, the sensitivity of their data, and 
+                the potential uses of the data.  In short, setting the epsilon 
+                parameter is more if an art than a science.  It may require a 
+                degree of experimentation on the part of the database owner. The 
+                image below displays the general pattern of the privacy - accuracy 
+                trade-off but is by no means 
+                a guaranteed pattern of behavior.
+                <img style="padding: 20px 0px 0px 0px;" src="https://d3i71xaburhd42.cloudfront.net/f5e5abac88e9ec56738ba75d547ed518c4c243cf/4-Figure1-1.png" alt="differential_private_graph">
               </div>
             </div>
           </div>
         </div>
         <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
           <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour">
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
               <span>What degree of privacy does SDP provide?</span>
             </button>
-            <div id="collapseThree" class="accordion-collapse collapse">
+            <div id="collapseFour" class="accordion-collapse collapse">
               <div class="ud-faq-body">
                 It is important to understand that differential privacy 
                 mechanisms attempt to provide protection against the 
@@ -267,71 +310,11 @@
         </div>
         <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
           <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-              <span class="icon flex-shrink-0">
-                <i class="lni lni-chevron-down"></i>
-              </span>
-              <span>How do I prevent attacks on my data?</span>
-            </button>
-            <div id="collapseThree" class="accordion-collapse collapse">
-              <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
-          <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-              <span class="icon flex-shrink-0">
-                <i class="lni lni-chevron-down"></i>
-              </span>
-              <span>Who do I contact to contribute ideas and suggestions?</span>
-            </button>
-            <div id="collapseThree" class="accordion-collapse collapse">
-              <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".1s">
-          <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour">
-              <span class="icon flex-shrink-0">
-                <i class="lni lni-chevron-down"></i>
-              </span>
-              <span>How does SDP work?</span>
-            </button>
-            <div id="collapseFour" class="accordion-collapse collapse">
-              <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".15s">
-          <div class="accordion">
             <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive">
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>How do I set the parameters so that I have the right degree of utility for my 
-                database users?</span>
+              <span>How do I prevent attacks on my data?</span>
             </button>
             <div id="collapseFive" class="accordion-collapse collapse">
               <div class="ud-faq-body">
@@ -350,31 +333,107 @@
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>What does the sensitivy parameter mean and how do I set it for my data?</span>
+              <span>Who do I contact to contribute ideas and suggestions?</span>
             </button>
             <div id="collapseSix" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Broadly speaking sensitivity is the degree to which a query’s outcome can change as it is implemented on two “adjacent” databases.  Also broadly speaking an “adjacent” database from a given database, D, is a database D’ that differs by only one record.  The sensitivity of a query is the maximum amount a query can differ when considered over ALL of the possible adjacent databases.
-
-                Setting the sensitivity parameter for a Laplacian Mechanism will vary by query.  
-
-                •	For the COUNT query the sensitivity is always one (or two) as the COUNT in adjacent differs by one record.  Setting the sensitivity to 1 sets the “Unbounded” or “local” sensitivity.  Setting the sensitivity to 2 will set the “Bounded” or global sensitivity.  
-                •	For SUM the sensitivity should be set by the user depending on the extremes that are possible in the data that you may want to protect.  As can be seen in the Jupyter Notebooks Learning Series, protecting the underrepresented requires the database owner to anticipate the range of possible values of the data and.     Set the sensitivity to reflect how an additional data point can increase the SUM.  See Jupyter Notebook: Laplacian_Mechanisms_Protect_Oski.
-                •	For the query AVERAGE,  the sensitivity can set with similar logic to SUM, but the effect of one additional record on the outcome is a lot smaller than with a SUM query. Setting the sensitivity to reflect the difference between the upper and lower limits of the potential record values (as in SUM) is a safe bet but perhaps overly conservative.
-
+                Feedback on the SDP is welcome and can be contributed by 
+                sending an email to sdpsupport@gmail.com. The SDP welcomes 
+                constructive feedback on the platform. The SDP team is 
+                particularly interested in hearing about additional features 
+                that would be valuable for our database user and owner community. 
+                Our blog will be coming soon!
               </div>
             </div>
           </div>
         </div>
         <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
           <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSeven">
+              <span class="icon flex-shrink-0">
+                <i class="lni lni-chevron-down"></i>
+              </span>
+              <span>Will SDP help me comply with the CPRA?</span>
+            </button>
+            <div id="collapseSeven" class="accordion-collapse collapse">
+              <div class="ud-faq-body">
+                Yes!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".1s">
+          <div class="accordion">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseEight">
+              <span class="icon flex-shrink-0">
+                <i class="lni lni-chevron-down"></i>
+              </span>
+              <span>How does SDP work?</span>
+            </button>
+            <div id="collapseEight" class="accordion-collapse collapse">
+              <div class="ud-faq-body">
+                SDP provides access to databases that have been provided by 
+                database owners. Access to the databases is enabled through 
+                “differentially private queries”. As a user you can query 
+                the database of your choice with numerical aggregation queries 
+                such as COUNT, SUM, AVERAGE. The SDP platform also provides 
+                queries for non-numerical data such as most common, least common, 
+                minimum and maximum.  
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".15s">
+          <div class="accordion">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseNine">
+              <span class="icon flex-shrink-0">
+                <i class="lni lni-chevron-down"></i>
+              </span>
+              <span>How do I set the parameters so that I have the right degree of utility for my 
+                database users?</span>
+            </button>
+            <div id="collapseNine" class="accordion-collapse collapse">
+              <div class="ud-faq-body">
+                Lorem Ipsum is simply dummy text of the printing and
+                typesetting industry. Lorem Ipsum has been the industry's
+                standard dummy text ever since the 1500s, when an unknown
+                printer took a galley of type and scrambled it to make a
+                type specimen book.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
+          <div class="accordion">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTen">
+              <span class="icon flex-shrink-0">
+                <i class="lni lni-chevron-down"></i>
+              </span>
+              <span>What does the sensitivy parameter mean and how do I set it for my data?</span>
+            </button>
+            <div id="collapseTen" class="accordion-collapse collapse">
+              <div class="ud-faq-body">
+                <p>Broadly speaking sensitivity is the degree to which a query’s outcome can change as it is implemented on two “adjacent” databases.  Also broadly speaking an “adjacent” database from a given database, D, is a database D’ that differs by only one record.  The sensitivity of a query is the maximum amount a query can differ when considered over ALL of the possible adjacent databases.</p>
+                <br>
+                <p>Setting the sensitivity parameter for a Laplacian Mechanism will vary by query:</p>
+                <li>For the COUNT query the sensitivity is always one (or two) as the COUNT in adjacent differs by one record.  Setting the sensitivity to 1 sets the “Unbounded” or “local” sensitivity.  Setting the sensitivity to 2 will set the “Bounded” or global sensitivity.</li>
+                <li>For SUM the sensitivity should be set by the user depending on the extremes that are possible in the data that you may want to protect.  As can be seen in the Jupyter Notebooks Learning Series, protecting the underrepresented requires the database owner to anticipate the range of possible values of the data and.     Set the sensitivity to reflect how an additional data point can increase the SUM.  See Jupyter Notebook: Laplacian_Mechanisms_Protect_Oski.</li>
+                <li>For the query AVERAGE,  the sensitivity can set with similar logic to SUM, but the effect of one additional record on the outcome is a lot smaller than with a SUM query. Setting the sensitivity to reflect the difference between the upper and lower limits of the potential record values (as in SUM) is a safe bet but perhaps overly conservative.</li>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
+          <div class="accordion">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapsEleven">
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
               <span>What are the risks associated with using SDP?</span>
             </button>
-            <div id="collapseSix" class="accordion-collapse collapse">
+            <div id="collapsEleven" class="accordion-collapse collapse">
               <div class="ud-faq-body">
                 Lorem Ipsum is simply dummy text of the printing and
                 typesetting industry. Lorem Ipsum has been the industry's
@@ -387,38 +446,49 @@
         </div>
         <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
           <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwelve">
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>How do I get help?</span>
+              <span>How do I get help or report a problem with SDP?</span>
             </button>
-            <div id="collapseSix" class="accordion-collapse collapse">
+            <div id="collapseTwelve" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                Send issues, including bugs and requests for help and support 
+                with the SDP platform to sdpsupport@gmail.com.  
               </div>
             </div>
           </div>
         </div>
         <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
           <div class="accordion">
-            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThirteen">
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>How do I report a problem with SDP?</span>
+              <span>What browsers are supported by SDP?</span>
             </button>
-            <div id="collapseSix" class="accordion-collapse collapse">
+            <div id="collapseThirteen" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                Firefox, Chrome and Safari.  
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ud-single-faq wow fadeInUp" data-wow-delay=".2s">
+          <div class="accordion">
+            <button class="ud-faq-btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFourteen">
+              <span class="icon flex-shrink-0">
+                <i class="lni lni-chevron-down"></i>
+              </span>
+              <span>What features are envisioned for SDP?</span>
+            </button>
+            <div id="collapseFourteen" class="accordion-collapse collapse">
+              <div class="ud-faq-body">
+                Dashboards for users to track their database user’s activity
+                <br>
+                Additional query capability such as VARIANCE, STANDARD DEVIATION, MEDIAN.
+
               </div>
             </div>
           </div>
@@ -427,7 +497,6 @@
     </div>
   </div>
 </section>
-
 
 <section id="team" class="ud-team">
   <div class="container">

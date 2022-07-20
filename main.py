@@ -490,6 +490,29 @@ def exponential_query(user):
 def search(user):
     return render_template("search.html", user_email=user.email)
 
+@app.route("/lookup", methods=["GET"])
+#@authenticate
+#def lookup(user):
+def lookup():
+    query = request.args.get("query")
+    if query == None:
+        query = ""
+
+    repo = database_repository()
+    queries = repo.lookup_queries(query)
+    results = [
+        {
+        "id": q.id,
+        "database_id": q.database_id,
+        "query_type": q.query_type,
+        "statistic": q.statistic,
+        "grouping_column": q.grouping_column,
+        "description" : q.to_string(),
+        "epsilon" : q.epsilon
+        } for q in queries
+    ]
+    return json.dumps(results) 
+
 @app.route('/', methods=['GET'])
 @identify
 def index(user):
