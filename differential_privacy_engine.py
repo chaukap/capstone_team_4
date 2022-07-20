@@ -10,14 +10,9 @@ class differential_privacy_engine:
             username, password, host, database, port)
         return
 
-    def __laplaceMechanismClamped(self, true_value, epsilon, u, l):
-        range = abs(u - l)
-        noise = np.random.laplace(0, range / epsilon, 1)[0]
-        if noise >= u :
-            noise = u
-        else :
-            if noise <= l:
-                noise = l
+    def __laplace_mechanism(self, true_value, epsilon, u, l):
+        sensitivity = max(abs(u), abs(l))
+        noise = np.random.laplace(0, sensitivity / epsilon, 1)[0]
         return true_value + noise
 
     def __noisy_average(self, noisy_sum, noisy_count, true_min, 
@@ -67,7 +62,7 @@ class differential_privacy_engine:
         noisy_result = result.copy(deep=True)
 
         noisy_result[f"sum_{sum_column}"] = noisy_result.apply(
-            lambda t: int(self.__laplaceMechanismClamped(float(t[1]), epsilon, upper_bound, lower_bound)), 
+            lambda t: int(self.__laplace_mechanism(float(t[1]), epsilon, upper_bound, lower_bound)), 
             axis=1)
         return noisy_result, result
         
@@ -95,7 +90,7 @@ class differential_privacy_engine:
         noisy_result = result.copy(deep=True)
 
         noisy_result[f"sum_{average_column}"] = noisy_result.apply(
-            lambda t: int(self.__laplaceMechanismClamped(float(t[f"sum_{average_column}"]), epsilon, upper_bound, lower_bound)), 
+            lambda t: int(self.__laplace_mechanism(float(t[f"sum_{average_column}"]), epsilon, upper_bound, lower_bound)), 
             axis=1)
         noisy_result[f"count_{average_column}"] = noisy_result.apply(
             lambda t: t[f"count_{average_column}"] + np.random.laplace(0, 1.0/epsilon, 1)[0], 
