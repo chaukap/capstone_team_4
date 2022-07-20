@@ -31,7 +31,7 @@ def epsilon_slider(data, u, l):
             line=dict(color="red", width=6),
             name='Worst-Case Value',
             x=ad_graph_range,
-            y=np.exp(-abs(ad_graph_range-(ad_value*2))/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
+            y=np.exp(-abs(ad_graph_range-(ad_value))/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
 
     fig = go.Figure(data=trace_list1+trace_list2)
     fig.data[0].visible = True
