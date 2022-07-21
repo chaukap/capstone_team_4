@@ -104,6 +104,7 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
             method="update",
             args=[{"visible": [False] * len(fig.data)},
                 {"title": "Epsilon: " + str(round(epsilons[i], 2))}],  # layout attribute
+            label=round(epsilons[i],1)
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)

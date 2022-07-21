@@ -145,25 +145,18 @@ class database_repository:
         self.connection.commit()
         return
 
-    def lookup_queries(self, query, exclude_user = None):
+    def lookup_queries(self, query, exclude_user = 'none'):
         cur = self.connection.cursor()
-        query_string = ""
-        if exclude_user:
-            query_string = f"""
-                select cdq.* from ClientDatabaseQueries cdq 
+        query_string = f"""
+                select cdq.*, cdb.PublicName from ClientDatabaseQueries cdq 
                 JOIN ClientDatabases cdb on cdb.Id = cdq.DatabaseId
                 JOIN Users u on u.Id = cdb.UserId
                 where (LOWER(Statistic) like LOWER("%{query}%") 
-                         OR LOWER(GroupingColumn) like LOWER("%{query}%"))
+                         OR LOWER(GroupingColumn) like LOWER("%{query}%")
+                         OR LOWER(cdb.PublicName) like LOWER("%{query}%"))
                       AND NOT u.GoogleId = '{exclude_user}'
                 """
-        else:
-            query_string = f"""
-                select * from ClientDatabaseQueries cdq 
-                where LOWER(Statistic) like LOWER("%{query}%") 
-                OR LOWER(GroupingColumn) like LOWER("%{query}%")
-                """
         cur.execute(query_string)
-        result = [database_query(n) for n in cur]
+        result = [[database_query(n), n[9]] for n in cur]
         cur.close()
         return result

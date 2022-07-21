@@ -522,15 +522,17 @@ def lookup(user):
 
     repo = database_repository()
     queries = repo.lookup_queries(query, exclude_user = user.google_id)
+    print(queries)
     results = [
         {
-        "id": q.id,
-        "database_id": q.database_id,
-        "query_type": q.query_type,
-        "statistic": q.statistic,
-        "grouping_column": q.grouping_column,
-        "description" : q.to_string(),
-        "epsilon" : q.epsilon
+        "id": q[0].id,
+        "database_id": q[0].database_id,
+        "database_name": q[1],
+        "query_type": q[0].query_type,
+        "statistic": q[0].statistic,
+        "grouping_column": q[0].grouping_column,
+        "description" : q[0].to_string(),
+        "epsilon" : q[0].epsilon
         } for q in queries
     ]
     return json.dumps(results) 

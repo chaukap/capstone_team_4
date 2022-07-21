@@ -187,3 +187,8 @@ th {
 .ud-faq-body a {
     color: black;
 }
+
+.sdp-search-result-title {
+    font-weight: bold;
+    font-size: 24px;
+}
