@@ -261,7 +261,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'])
             
 
-        fig = epsilon_slider(result, 1, 1)
+        fig = epsilon_slider(result, 1, 0)
         fig.update_layout(width=1000, height=500)
         
         return render_template("laplace_epsilon_selection.html", 
