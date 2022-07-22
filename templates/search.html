@@ -18,14 +18,10 @@
 
 <section>
   <div class="container">
-    <div class="input-group mb-3">
+    <div class="form-group mb-1">
         <input type="text" name="search" id="search" class="form-control" placeholder="Search for queries" aria-label="search">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" id="search-button" type="button">
-            <i class="bi-search"></i>
-          </button>
-        </div>
-      </div>
+    </div>
+    <input id="search-button" class="sdp-button form-control my-2" style="text-align: center;" value="Search">
   </div>
 </section>
 
@@ -60,6 +56,7 @@
                             <div class="col-lg-6 col-md-6 p-md-1 px-sm-0 py-1 deletable">
                               <div class="sdp-button" data-epsilon="${result[i].epsilon}">
                                 <a href="/query/result?query_id=${result[i].id}" rel="nofollow noopener">
+                                  <div class="sdp-button-title sdp-search-result-title">${result[i].database_name}</div>
                                   <div class="sdp-button-title">${result[i].description}</div>
                                   <div class="sdp-button-description">Epsilon: ${result[i].epsilon}</div>
                                 </a>

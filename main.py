@@ -187,6 +187,7 @@ def download_results(user):
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
 
+    sensitivity = None
     if query.query_type.startswith("exponential"):
         scoring_function = None
         if query.query_type == 'exponential_max':
@@ -195,8 +196,10 @@ def download_results(user):
             scoring_function = lambda c, u: sum(u < c)
         elif query.query_type == 'exponential_most_common':
             scoring_function = lambda c, u: sum(u == c)
+            sensitivity = 1.0
         elif query.query_type == 'exponential_least_common':
             scoring_function = lambda c, u: sum(u != c)
+            sensitivity = 1.0
         else:
             return make_response("Unknown query type", 400)
         
@@ -204,7 +207,8 @@ def download_results(user):
             database.table, 
             query.statistic, 
             scoring_function,
-            query.epsilon)
+            query.epsilon,
+            sensitivity)
 
         response = make_response(noisy_result.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
@@ -336,14 +340,17 @@ def select_exponential_epsilon(user):
         int(database.port))
 
     scoring_function = None
+    sensitivity = None
     if request.form['query_type'] == 'exponential_max':
         scoring_function = lambda c, u: sum(u > c)
     elif request.form['query_type'] == 'exponential_min':
         scoring_function = lambda c, u: sum(u < c)
     elif request.form['query_type'] == 'exponential_most_common':
         scoring_function = lambda c, u: sum(u == c)
+        sensitivity = 1
     elif request.form['query_type'] == 'exponential_least_common':
         scoring_function = lambda c, u: sum(u != c)
+        sensitivity = 1
     else:
         return(make_response("Unknown query type", 404))
 
@@ -351,7 +358,8 @@ def select_exponential_epsilon(user):
         database.table, 
         request.form['statistic'],
         scoring_function=scoring_function,
-        epsilons=np.arange(0.1, 4.1, 0.1))
+        epsilons=np.arange(0.1, 6.1, 0.1),
+        sensitivity=sensitivity)
 
     fig = exponential_epsilon_slider(distributions)
     fig = fig.update_layout(width=1000, height=500)
@@ -522,15 +530,17 @@ def lookup(user):
 
     repo = database_repository()
     queries = repo.lookup_queries(query, exclude_user = user.google_id)
+    print(queries)
     results = [
         {
-        "id": q.id,
-        "database_id": q.database_id,
-        "query_type": q.query_type,
-        "statistic": q.statistic,
-        "grouping_column": q.grouping_column,
-        "description" : q.to_string(),
-        "epsilon" : q.epsilon
+        "id": q[0].id,
+        "database_id": q[0].database_id,
+        "database_name": q[1],
+        "query_type": q[0].query_type,
+        "statistic": q[0].statistic,
+        "grouping_column": q[0].grouping_column,
+        "description" : q[0].to_string(),
+        "epsilon" : q[0].epsilon
         } for q in queries
     ]
     return json.dumps(results) 
