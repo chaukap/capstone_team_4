@@ -5,18 +5,29 @@ import scipy.stats as st
 
 def epsilon_slider(data, u, l):
     # Get true values from random
-    df=pd.DataFrame(data)
-    df = df.sample(n = 2)
-    last_column = (df.iloc[: , -1]).values
-    true_value, true_value2 = [float(last_column[i]) for i in (0, 1)]
+    data=pd.DataFrame(data)
+    df = data.sample(n = 1)
+    true_value = (df.iloc[: , -1]).values[0]
+    u , l = int(u), int(l)
     ad_value = max(abs(u),abs(l))
-    # Create figure
-    # Add traces, one for each slider step
+    if ad_value == true_value:
+        ad_value += 1
+    else: 
+        ad_value = ad_value
+
+    wo_tv_df = data.copy(deep=False).drop(data.index[df.index[0]])
+    
     epsilons=np.arange(0.1, 4.1, 0.1)
     graph_range=np.arange(float(true_value - (true_value*5)), float(true_value + (true_value*5)))
     ad_graph_range=np.arange(float(ad_value - (ad_value*5)), float(ad_value + (ad_value*5)))
-    confidence_intervals = st.t.interval(0.95, len(graph_range)-1, loc=true_value, scale=st.sem(graph_range))
+    confidence_intervals = st.t.interval(0.95, len(graph_range)-1, loc=float(true_value), scale=st.sem(graph_range))
 
+    #calculate sensitivity
+    sens = max(abs(l- wo_tv_df.iloc[: , -1].mean()), abs(u - wo_tv_df.iloc[: , -1].mean()))
+    ad_sens = max(abs(l- data.iloc[: , -1].mean()), abs(u - data.iloc[: , -1].mean()))
+    
+    # Create figure
+    # Add traces, one for each slider step
     trace_list1 =[]
     trace_list2 =[]
     for epsilon in np.arange(0.1, 4.1, 0.1):
@@ -25,13 +36,13 @@ def epsilon_slider(data, u, l):
             line=dict(color="#6505cc", width=6),
             name='Ex. True Value',
             x=graph_range,
-            y=np.exp(-abs(graph_range-true_value)/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
+            y=np.exp(-abs(graph_range-float(true_value))/(sens/float(epsilon)))/(2.*(sens/float(epsilon)))))
         trace_list2.append(go.Scatter(
             visible=False,
             line=dict(color="red", width=6),
             name='Worst-Case Value',
             x=ad_graph_range,
-            y=np.exp(-abs(ad_graph_range-(ad_value))/(2.0/float(epsilon)))/(2.*(2.0/float(epsilon)))))
+            y=np.exp(-abs(ad_graph_range-float(ad_value))/(ad_sens/float(epsilon)))/(2.*(ad_sens/float(epsilon)))))
 
     fig = go.Figure(data=trace_list1+trace_list2)
     fig.data[0].visible = True
