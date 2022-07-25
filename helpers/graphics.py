@@ -84,11 +84,11 @@ def exponential_epsilon_slider(probabilities: pd.DataFrame) -> go.Figure:
 
     probabilities.groupby("Epsilon").apply(
         lambda r: fig.add_trace(
-                go.Bar(x=[q[0] for q in r.Value], y=r.Probability,visible=False, 
+                go.Bar(x=r.Value, y=r.Probability,visible=False, 
                     marker=dict(
                         color = [f"rgb({str((1-t) * 101)}, {str((1-t) * 5)}, {str((1-t) * 204)})" for t in r.Probability]
                     ),
-                    hovertext = r.apply(lambda t: f"{t.Value[0]}: {round(t.Probability*100, 2)}%", axis=1),
+                    hovertext = r.apply(lambda t: f"{t.Value}: {round(t.Probability*100, 2)}%", axis=1),
                     hoverinfo = "text"
                 )
             )
