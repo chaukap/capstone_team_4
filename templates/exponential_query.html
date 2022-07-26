@@ -21,18 +21,26 @@
     <form action="/query/exponential/epsilon" method="POST">
       <div class="form-group">
         <label for="query_type">Statistic</label>
-        <select name="query_type" class="form-control" id="query_type" aria-describedby="a11y-tooltip" value=""
+        <select name="query_type" class="form-control" id="query_type" onChange="check(this);" aria-describedby="a11y-tooltip" value=""
           required="required">
-          <option value="exponential_max">Maximum</option>
-          <option value="exponential_min">Minimum</option>
           <option value="exponential_most_common">Most Common</option>
           <option value="exponential_least_common">Least Common</option>
+          <option value="exponential_max">Maximum</option>
+          <option value="exponential_min">Minimum</option>
         </select>
+        <div id="stat_bounds" style="display:none;">
+          <label for="upper_bound" id="upper-bound-label">What is the highest conceivable value of 
+          <input type="number" class="form-control" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value="" />
+          </label>
+          <label for="lower_bound" id="lower-bound-label">What is the lowest conceivable value of
+          <input type="number" class="form-control" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value="" />
+          </label>
+        </div>
       </div>
 
       <div class="form-group">
         <label for="statistic">Of which column?</label>
-        <select name="statistic" class="form-control" id="statistic" aria-describedby="a11y-tooltip" value=""
+        <select name="statistic" class="form-control" id="statistic" onchange="rename(this);" aria-describedby="a11y-tooltip" value=""
           required="required">
           {% for column in columns %}
           <option value="{{column['name']}}">{{column['name']}}</option>
@@ -52,5 +60,34 @@
     </form>
   </div>
 </section>
+
+<script>
+  function check(elem) {
+      if (elem.value != 'exponential_most_common' && elem.value != 'exponential_least_common') {
+        document.getElementById("stat_bounds").style.display = 'block';
+        $("#upper-bound-label").html(
+          `What is the highest conceivable value of ${$("#statistic").val()}?
+          <input type="number" class="form-control" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value="" />`
+          );
+        $("#lower-bound-label").html(
+          `What is the lowest conceivable value of ${$("#statistic").val()}?
+          <input type="number" class="form-control" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value="" />`
+          );
+      } else {
+        document.getElementById("stat_bounds").style.display = 'none';
+      }
+  }
+
+  function rename(elem) {
+        $("#upper-bound-label").html(
+          `What is the highest conceivable value of ${$("#statistic").val()}?
+          <input type="number" class="form-control" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value="" />`
+          );
+        $("#lower-bound-label").html(
+          `What is the lowest conceivable value of ${$("#statistic").val()}?
+          <input type="number" class="form-control" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value="" />`
+          );
+  }
+</script>
 
 {% endblock %}

@@ -109,18 +109,21 @@ class differential_privacy_engine:
         
         return noisy_result, result
 
-    def exponential(self, table, column, scoring_function, epsilon, sensitivity: float=None):
+    def exponential(self, table, column, scoring_function, epsilon, upper_bound = None, lower_bound = None):
         sql_query = query_generator.generate_generic_query(
             table, column)
         column = pd.Series(
-            self.client.execute_query(sql_query["query"])
+            [n[0] for n in self.client.execute_query(sql_query["query"])]
         )
-
         unique_values = column.unique()
         scores = [scoring_function(column, unique_value) for unique_value in unique_values]
 
-        if sensitivity is None:
-            sensitivity = max(scores) - min(scores)
+        sensitivity = 1.0
+        if upper_bound is not None:
+            column = pd.concat([column, pd.Series([upper_bound, lower_bound])])
+            hypothetical_unique_values = column.unique()
+            hypothetical_scores = [scoring_function(column, unique_value) for unique_value in hypothetical_unique_values]
+            sensitivity = abs(max(hypothetical_scores) - min(hypothetical_scores))
 
         probabilities = [np.exp(epsilon * score / (2 * sensitivity)) for score in scores]
         probabilities = probabilities / np.linalg.norm(probabilities, ord=1)
@@ -132,26 +135,29 @@ class differential_privacy_engine:
         
         choice = np.random.choice(unique_values, 1, p=probabilities)[0]
         results = pd.DataFrame({
-            'Answer': choice
+            'Answer': [choice]
         })
 
         return results, probability_distribution
 
     def exponential_options(self,
             table: str, column: str, scoring_function: Callable[[pd.Series, Any], float], 
-            epsilons: list, sensitivity: float=None):
+            epsilons: list, upper_bound: float = None, lower_bound: float = None):
 
         sql_query = query_generator.generate_generic_query(
             table, column)
         column = pd.Series(
-            self.client.execute_query(sql_query["query"])
+            [n[0] for n in self.client.execute_query(sql_query["query"])]
         )
-
         unique_values = column.unique()
         scores = [scoring_function(column, unique_value) for unique_value in unique_values]
 
-        if sensitivity is None:
-            sensitivity = max(scores) - min(scores)
+        sensitivity = 1.0
+        if upper_bound is not None:
+            column = pd.concat([column, pd.Series([upper_bound, lower_bound])])
+            hypothetical_unique_values = column.unique()
+            hypothetical_scores = [scoring_function(column, unique_value) for unique_value in hypothetical_unique_values]
+            sensitivity = abs(max(hypothetical_scores) - min(hypothetical_scores))
 
         probability_distribution = pd.DataFrame()
         for epsilon in epsilons:

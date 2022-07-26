@@ -102,8 +102,8 @@ def query(user):
         query_type=request.form['query_type'],
         grouping_column=request.form['grouping_column'] if 'grouping_column' in request.form.keys() else "",
         epsilon=request.form['epsilon'],
-        upper_bound=float(request.form['upper_bound']) if 'upper_bound' in request.form.keys() else 0,
-        lower_bound=float(request.form['lower_bound']) if 'lower_bound' in request.form.keys() else 0
+        upper_bound=request.form['upper_bound'] if 'upper_bound' in request.form.keys() else 0,
+        lower_bound=request.form['lower_bound'] if 'lower_bound' in request.form.keys() else 0
         )
 
     return redirect(f"/queries?database_id={database.id}", 302)
@@ -187,19 +187,22 @@ def download_results(user):
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
 
-    sensitivity = None
+    upper_bound = None
+    lower_bound = None
     if query.query_type.startswith("exponential"):
         scoring_function = None
         if query.query_type == 'exponential_max':
             scoring_function = lambda c, u: sum(u > c)
+            upper_bound = query.upper_bound
+            lower_bound = query.lower_bound
         elif query.query_type == 'exponential_min':
             scoring_function = lambda c, u: sum(u < c)
+            upper_bound = query.upper_bound
+            lower_bound = query.lower_bound
         elif query.query_type == 'exponential_most_common':
             scoring_function = lambda c, u: sum(u == c)
-            sensitivity = 1.0
         elif query.query_type == 'exponential_least_common':
             scoring_function = lambda c, u: sum(u != c)
-            sensitivity = 1.0
         else:
             return make_response("Unknown query type", 400)
         
@@ -208,7 +211,9 @@ def download_results(user):
             query.statistic, 
             scoring_function,
             query.epsilon,
-            sensitivity)
+            upper_bound = upper_bound,
+            lower_bound = lower_bound
+            )
 
         response = make_response(noisy_result.to_csv())
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
@@ -340,17 +345,20 @@ def select_exponential_epsilon(user):
         int(database.port))
 
     scoring_function = None
-    sensitivity = None
+    upper_bound = 0
+    lower_bound = 0
     if request.form['query_type'] == 'exponential_max':
         scoring_function = lambda c, u: sum(u > c)
+        upper_bound = float(request.form['upper_bound'])
+        lower_bound = float(request.form['lower_bound'])
     elif request.form['query_type'] == 'exponential_min':
         scoring_function = lambda c, u: sum(u < c)
+        upper_bound = float(request.form['upper_bound'])
+        lower_bound = float(request.form['lower_bound'])
     elif request.form['query_type'] == 'exponential_most_common':
         scoring_function = lambda c, u: sum(u == c)
-        sensitivity = 1
     elif request.form['query_type'] == 'exponential_least_common':
         scoring_function = lambda c, u: sum(u != c)
-        sensitivity = 1
     else:
         return(make_response("Unknown query type", 404))
 
@@ -359,7 +367,8 @@ def select_exponential_epsilon(user):
         request.form['statistic'],
         scoring_function=scoring_function,
         epsilons=np.arange(0.1, 6.1, 0.1),
-        sensitivity=sensitivity)
+        upper_bound=upper_bound,
+        lower_bound=lower_bound)
 
     fig = exponential_epsilon_slider(distributions)
     fig = fig.update_layout(width=1000, height=500)
@@ -369,6 +378,8 @@ def select_exponential_epsilon(user):
         database_id=database.id,
         statistic=request.form['statistic'],
         query_type=request.form['query_type'],
+        upper_bound=upper_bound,
+        lower_bound=lower_bound,
         user = user)
   
 @app.route('/databases/add', methods=['POST'])

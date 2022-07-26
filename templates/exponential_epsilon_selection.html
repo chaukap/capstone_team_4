@@ -64,6 +64,20 @@
                         value="{{query_type}}" required="required" />
             </div>
 
+            <div hidden>
+                <label for="upper_bound">Upper Bound</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip"
+                        value="{{upper_bound}}" required="required" />
+            </div>
+
+            <div hidden>
+                <label for="lower_bound">Lower Bound</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip"
+                        value="{{lower_bound}}" required="required" />
+            </div>
+
             <div class="form-group">
                 <input type="submit" class="sdp-button form-control" value="Create Query">
             </div>
