@@ -27,6 +27,7 @@ def epsilon_slider(data, u, l):
     
     for epsilon in np.arange(0.1, 4.1, 0.1):
         b = float(sens)/float(epsilon)
+        
         trace_list1.append(go.Scatter(
             visible=False,
             line=dict(color="#6505cc", width=6),
