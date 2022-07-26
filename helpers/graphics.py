@@ -8,42 +8,42 @@ def epsilon_slider(data, u, l):
     data=pd.DataFrame(data)
     df = data.sample(n = 1)
     true_value = (df.iloc[: , -1]).values[0]
-    u , l = int(u), int(l)
-    ad_value = max(abs(u),abs(l))
-    if ad_value == true_value:
-        ad_value += 1
-    else: 
-        ad_value = ad_value
-
-    wo_tv_df = data.copy(deep=False).drop(data.index[df.index[0]])
-    
+    sens = abs(max(u,-l))
+    if -l > u:
+        ad_value = float(true_value) - float(sens)
+    else:
+        ad_value = float(true_value) + float(sens)
+    print(ad_value)
     epsilons=np.arange(0.1, 4.1, 0.1)
-    graph_range=np.arange(float(true_value - (true_value*5)), float(true_value + (true_value*5)))
-    ad_graph_range=np.arange(float(ad_value - (ad_value*5)), float(ad_value + (ad_value*5)))
+    graph_range=np.arange(float(true_value - abs(true_value*5)), float(true_value + abs(true_value*5)))
     confidence_intervals = st.t.interval(0.95, len(graph_range)-1, loc=float(true_value), scale=st.sem(graph_range))
-
+    #confience intervals
     #calculate sensitivity
-    sens = max(abs(l- wo_tv_df.iloc[: , -1].mean()), abs(u - wo_tv_df.iloc[: , -1].mean()))
-    ad_sens = max(abs(l- data.iloc[: , -1].mean()), abs(u - data.iloc[: , -1].mean()))
     
     # Create figure
     # Add traces, one for each slider step
     trace_list1 =[]
     trace_list2 =[]
+    
     for epsilon in np.arange(0.1, 4.1, 0.1):
+        b = float(sens)/float(epsilon)
+        
         trace_list1.append(go.Scatter(
             visible=False,
             line=dict(color="#6505cc", width=6),
             name='Ex. True Value',
             x=graph_range,
-            y=np.exp(-abs(graph_range-float(true_value))/(sens/float(epsilon)))/(2.*(sens/float(epsilon)))))
+            y=np.exp(-abs(graph_range-float(true_value))/(b))/(2.*(b))
+            ))
         trace_list2.append(go.Scatter(
             visible=False,
             line=dict(color="red", width=6),
             name='Worst-Case Value',
-            x=ad_graph_range,
-            y=np.exp(-abs(ad_graph_range-float(ad_value))/(ad_sens/float(epsilon)))/(2.*(ad_sens/float(epsilon)))))
-
+            x=graph_range,
+            y=np.exp(-abs(graph_range-float(ad_value))/(b))/(2.*(b))
+            ))
+              
+    trace_list2[0].visible = True   
     fig = go.Figure(data=trace_list1+trace_list2)
     fig.data[0].visible = True
 
@@ -68,14 +68,14 @@ def epsilon_slider(data, u, l):
     )]
 
     fig.add_vline(true_value, name="True Value")
-    fig.add_vrect(x0=confidence_intervals[0], x1=confidence_intervals[1], line_width=0, fillcolor="green", opacity=0.2)
+    #fig.add_vrect(x0=confidence_intervals[0], x1=confidence_intervals[1], line_width=0, fillcolor="green", opacity=0.2)
 
     fig.update_layout(
         sliders=sliders
     )
     fig.update_layout(
         title='Epsilon: 0.1',
-        xaxis_visible=False,
+        xaxis_visible=True,
         yaxis=dict(
             title= dict(
                 text='Probability Density',
