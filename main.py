@@ -272,7 +272,7 @@ def select_laplace_epsilon(user):
             
 
         fig = epsilon_slider(result, 1, 0)
-        fig.update_layout(width=1000, height=500)
+        fig.update_layout(width=1300, height=500)
         
         return render_template("laplace_epsilon_selection.html", 
             values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
@@ -292,7 +292,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'])
             
         fig = epsilon_slider(result, float(request.form['upper_bound']), float(request.form['lower_bound']))
-        fig.update_layout(width=1000, height=500)
+        fig.update_layout(width=1300, height=500)
 
         return render_template("laplace_epsilon_selection.html", 
             values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
@@ -312,7 +312,7 @@ def select_laplace_epsilon(user):
             grouping_column=request.form['grouping_column'])
         
         fig = epsilon_slider(result, float(request.form['upper_bound']), float(request.form['lower_bound']))
-        fig.update_layout(width=1000, height=500)
+        fig.update_layout(width=1300, height=500)
         
         return render_template("laplace_epsilon_selection.html", 
             values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 

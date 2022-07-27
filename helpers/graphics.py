@@ -4,48 +4,73 @@ import pandas as pd
 import scipy.stats as st
 
 def epsilon_slider(data, u, l):
-    # Get true values from random
     data=pd.DataFrame(data)
     df = data.sample(n = 1)
-    true_value = (df.iloc[: , -1]).values[0]
+    true_value = float((df.iloc[: , -1]).values[0])
     sens = abs(max(u,-l))
     if -l > u:
         ad_value = float(true_value) - float(sens)
     else:
         ad_value = float(true_value) + float(sens)
-    print(ad_value)
     epsilons=np.arange(0.1, 4.1, 0.1)
     graph_range=np.arange(float(true_value - abs(true_value*5)), float(true_value + abs(true_value*5)))
-    confidence_intervals = st.t.interval(0.95, len(graph_range)-1, loc=float(true_value), scale=st.sem(graph_range))
-    #confience intervals
-    #calculate sensitivity
-    
+        
     # Create figure
     # Add traces, one for each slider step
-    trace_list1 =[]
-    trace_list2 =[]
-    
+    trace_list1, trace_list2 =[],[] # True Value
+    trace_list3, trace_list4 =[],[] # Hypothetical Value
     for epsilon in np.arange(0.1, 4.1, 0.1):
         b = float(sens)/float(epsilon)
-        
+        true_val_y=np.exp(-abs(graph_range-float(true_value))/(b))/(2.*(b)) # True value Y range
+        ad_val_y=np.exp(-abs(graph_range-float(ad_value))/(b))/(2.*(b))     # Hypothetical value Y range
+        # confidence interval
+        true_val_a = np.array(true_val_y)
+        ad_val_a = np.array(ad_val_y)
+        true_val_x1 = np.percentile(true_val_a, 75)
+        true_val_x2 = np.percentile(true_val_a, 25)
+        ad_val_x1 = np.percentile(ad_val_a, 75)
+        ad_val_x2 = np.percentile(ad_val_a, 25)
+
+        y_max = max(true_val_y)
+        if  min(true_val_y)< min(ad_val_y):
+            y_min = min(true_val_y)
+        else:
+            y_min = min(ad_val_y)
         trace_list1.append(go.Scatter(
             visible=False,
             line=dict(color="#6505cc", width=6),
-            name='Ex. True Value',
+            name='True Value of Selected Group',
             x=graph_range,
-            y=np.exp(-abs(graph_range-float(true_value))/(b))/(2.*(b))
+            y=true_val_y
             ))
-        trace_list2.append(go.Scatter(
+        trace_list2.append(go.Scatter(  # True Value Confidence Interval
             visible=False,
-            line=dict(color="red", width=6),
-            name='Worst-Case Value',
+            name='True Value CI',
+            line=dict(color="#9266c4", width=2),
+            x=[None,true_val_x2,true_val_x2,true_val_x1,true_val_x1,true_val_x2], 
+            y=[None,y_min,y_max,y_max,y_min,y_min], 
+            fill="toself"
+        ))
+        trace_list3.append(go.Scatter(
+            visible=False,
+            line=dict(color="#e91919", width=6),
+            name='Hypothetical Worst-Case Value',
             x=graph_range,
-            y=np.exp(-abs(graph_range-float(ad_value))/(b))/(2.*(b))
+            y=ad_val_y
             ))
-              
-    trace_list2[0].visible = True   
-    fig = go.Figure(data=trace_list1+trace_list2)
-    fig.data[0].visible = True
+        trace_list4.append(go.Scatter(  # Hypothetical Value Confidence Interval
+            visible=False,
+            name='Hypothetical Worst-Case Value CI',
+            line=dict(color="#e36666", width=2),
+            x=[None,ad_val_x2,ad_val_x2,ad_val_x1,ad_val_x1,ad_val_x2], 
+            y=[None,y_min,y_max,y_max,y_min,y_min], 
+            fill="toself"
+        ))
+    trace_list1[0].visible = True          
+    trace_list2[0].visible = True
+    trace_list3[0].visible = True
+    trace_list4[0].visible = True
+    fig = go.Figure(data=trace_list4+trace_list2+trace_list3+trace_list1)
 
     
     # Create and add slider
