@@ -1,0 +1,142 @@
+{% extends "layout_2.html" %}
+{% block title %}Epsilon{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+
+<section class="sdp-page-banner" id="Exponential">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-banner-content">
+                    <h1>Add Some Dummy Values</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container sdp-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-section-title m-auto text-center">
+                    <p>
+                        Augment your dataset with some dummy values. These will
+                        make it difficult for an attacker to learn who <i>isn't</i>
+                        in your dataset.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-section-title m-auto text-center">
+                    <h4 class="my-2">
+                        Here are the unique values currently in your dataset.
+                        Add rows to improve privacy.
+                        </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ud-section-title m-auto text-center">
+
+                <table class="mx-auto">
+                    <thead>
+                        <tr>
+                            <th>Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for value in unique_values %}
+                        <tr class="value original-value">
+                            <td>{{value}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>
+                                <input type="text" id="new-dummy-value" aria-describedby="a11y-tooltip" value="" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <form action="/query/exponential/epsilon" method="POST">
+            <div hidden>
+                <label for="dummy_values">Dummy Values</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="dummy_values" id="dummy_values" aria-describedby="a11y-tooltip"
+                        value=""/>
+            </div>
+
+            <div hidden>
+                <label for="database_id">Database Id</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="database_id" id="database_id" aria-describedby="a11y-tooltip"
+                        value="{{database_id}}" required="required" />
+            </div>
+
+            <div hidden>
+                <label for="statistic">Statistic</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="statistic" id="statistic" aria-describedby="a11y-tooltip"
+                        value="{{statistic}}" required="required" />
+            </div>
+
+            <div hidden>
+                <label for="query_type">Query Type</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="query_type" id="query_type" aria-describedby="a11y-tooltip"
+                        value="{{query_type}}" required="required" />
+            </div>
+
+            <div hidden>
+                <label for="upper_bound">Upper Bound</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip"
+                        value="{{upper_bound}}" required="required" />
+            </div>
+
+            <div hidden>
+                <label for="lower_bound">Lower Bound</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip"
+                        value="{{lower_bound}}" required="required" />
+            </div>
+
+            <div class="form-group my-2">
+                <input type="submit" class="sdp-button form-control" value="Create Query">
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $("#new-dummy-value").change(function () {
+            $(".value").last().after(
+                '<tr class="value">' +
+                '<td class="dummy-value">' +
+                $(this).val() +
+                '</td>' +
+                '</tr>'
+            );
+            if($("#dummy_values").val().length == 0) {
+                $("#dummy_values").val($(this).val());
+            } else {
+                $("#dummy_values").val($("#dummy_values").val() + "," + $(this).val());
+            }
+            $(this).val("");
+        });
+    });
+</script>
+
+{% endblock %}

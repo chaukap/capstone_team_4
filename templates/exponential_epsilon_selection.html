@@ -33,6 +33,13 @@
         <div class="container">{{plot | safe}}</div>
         <form action="/query" method="POST">
             <div hidden>
+                <label for="dummy_values">Dummy Values</label>
+                <span class="a11y-input-tooltip">
+                    <input type="text" name="dummy_values" id="dummy_values" aria-describedby="a11y-tooltip"
+                        value="{{dummy_values}}"/>
+            </div>
+
+            <div hidden>
                 <label for="epsilon">Epsilon</label>
                 <span class="a11y-input-tooltip">
                     <input type="number" step="0.01" name="epsilon" id="epsilon" aria-describedby="a11y-tooltip"
@@ -78,7 +85,7 @@
                         value="{{lower_bound}}" required="required" />
             </div>
 
-            <div class="form-group">
+            <div class="form-group my-2">
                 <input type="submit" class="sdp-button form-control" value="Create Query">
             </div>
         </form>

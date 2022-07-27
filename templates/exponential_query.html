@@ -18,7 +18,7 @@
 
 <section>
   <div class="container sdp-container">
-    <form action="/query/exponential/epsilon" method="POST">
+    <form action="/query/exponential/dummy_values" method="POST">
       <div class="form-group">
         <label for="query_type">Statistic</label>
         <select name="query_type" class="form-control" id="query_type" onChange="check(this);" aria-describedby="a11y-tooltip" value=""
@@ -28,14 +28,6 @@
           <option value="exponential_max">Maximum</option>
           <option value="exponential_min">Minimum</option>
         </select>
-        <div id="stat_bounds" style="display:none;">          
-          <label for="lower_bound" id="lower-bound-label">What is the lowest conceivable value of
-            <input type="number" class="form-control" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value="" />
-            </label>
-          <label for="upper_bound" id="upper-bound-label">What is the highest conceivable value of 
-          <input type="number" class="form-control" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value="" />
-          </label>
-        </div>
       </div>
 
       <div class="form-group">
@@ -46,6 +38,14 @@
           <option value="{{column['name']}}">{{column['name']}}</option>
           {% endfor %}
         </select>
+        <div id="stat_bounds" style="display:none;">
+          <label for="lower_bound" id="lower-bound-label">What is the lowest conceivable value of
+          <input type="number" class="form-control" name="lower_bound" id="lower_bound" aria-describedby="a11y-tooltip" value="" />
+          </label>
+          <label for="upper_bound" id="upper-bound-label">What is the highest conceivable value of 
+          <input type="number" class="form-control" name="upper_bound" id="upper_bound" aria-describedby="a11y-tooltip" value="" />
+          </label>
+        </div>
       </div>
 
       <div hidden>

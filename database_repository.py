@@ -4,6 +4,7 @@ import json
 from models.user import user
 from models.database import database
 from models.database_query import database_query
+from models.dummy_query import dummy_query
 
 class database_repository:
     def __init__(self) -> None:
@@ -125,7 +126,8 @@ class database_repository:
         return
 
     def insert_database_query(self, database_id, statistic, 
-        query_type, epsilon, grouping_column = "", upper_bound = 0, lower_bound = 0):
+        query_type, epsilon, grouping_column = "", 
+        upper_bound = 0, lower_bound = 0):
         cur = self.connection.cursor()
         cur.execute(f"""
             INSERT INTO ClientDatabaseQueries 	
@@ -133,8 +135,9 @@ class database_repository:
             VALUES 
 	            ({str(database_id)}, '{statistic}', '{query_type}', '{grouping_column}', {str(epsilon)}, {str(upper_bound)}, {str(lower_bound)});
             """)
+        id = cur.lastrowid
         self.connection.commit()
-        return
+        return id
 
     def delete_database_query(self, query_id):
         cur = self.connection.cursor()
@@ -160,3 +163,16 @@ class database_repository:
         result = [[database_query(n), n[9]] for n in cur]
         cur.close()
         return result
+
+    def get_dummy_values(self, query_id: int):
+        cur = self.connection.cursor()
+        cur.execute(f"SELECT * FROM DummyValues WHERE QueryId = {str(query_id)}")
+        result = [dummy_query(n) for n in cur]
+        cur.close()
+        return result
+
+    def insert_dummy_value(self, query_id, dummy_value):
+        cur = self.connection.cursor()
+        cur.execute(f"INSERT INTO DummyValues (QueryId, DummyValue) VALUES ({str(query_id)}, '{dummy_value}')")
+        self.connection.commit()
+        return

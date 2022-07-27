@@ -1,7 +1,5 @@
-from ast import arg
-from unittest import result
 from flask_sslify import SSLify
-from flask import Flask, make_response, request, redirect, render_template, url_for, send_from_directory
+from flask import Flask, make_response, request, redirect, render_template, url_for
 from mariadb_client import mariadb_client
 from differential_privacy_engine import differential_privacy_engine
 from helpers.helper_functions import check_form_fields
@@ -12,11 +10,6 @@ from helpers.graphics import epsilon_slider, exponential_epsilon_slider
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
-import plotly.io
-import plotly.graph_objects as go
-from plotly.figure_factory import create_distplot
-import plotly.figure_factory as ff
-import plotly
 import json
 import pandas as pd
 import numpy as np
@@ -96,7 +89,7 @@ def query(user):
         if not success:
             return make_response(f"{missing_field} not specified", 400)
 
-    repo.insert_database_query(
+    id = repo.insert_database_query(
         database_id=database.id,
         statistic=request.form['statistic'],
         query_type=request.form['query_type'],
@@ -106,6 +99,11 @@ def query(user):
         lower_bound=request.form['lower_bound'] if 'lower_bound' in request.form.keys() else 0
         )
 
+    if 'dummy_values' in request.form.keys():
+        if(request.form['dummy_values'].split(',')[0] != ""):
+            for value in request.form['dummy_values'].split(','):
+                repo.insert_dummy_value(id, value)
+            
     return redirect(f"/queries?database_id={database.id}", 302)
 
 @app.route('/query', methods=['DELETE'])
@@ -187,18 +185,21 @@ def download_results(user):
         response.headers['Content-Disposition'] = "attachment; filename=results.csv"
         return response
 
-    upper_bound = None
-    lower_bound = None
     if query.query_type.startswith("exponential"):
         scoring_function = None
+        dummy_values = pd.Series([n.dummy_value for n in repo.get_dummy_values(query.id)])
         if query.query_type == 'exponential_max':
-            scoring_function = lambda c, u: sum(u > c)
-            upper_bound = query.upper_bound
-            lower_bound = query.lower_bound
+            scoring_function = lambda c, u: 1 + int(
+                np.where(
+                    np.sort([float(q) for q in c.unique()]) == float(u)
+                    )[0]
+                )
         elif query.query_type == 'exponential_min':
-            scoring_function = lambda c, u: sum(u < c)
-            upper_bound = query.upper_bound
-            lower_bound = query.lower_bound
+            scoring_function = lambda c, u:  1 + int(
+                np.where(
+                    np.sort([float(q) for q in c.unique()])[::-1] == float(u)
+                    )[0]
+                )
         elif query.query_type == 'exponential_most_common':
             scoring_function = lambda c, u: sum(u == c)
         elif query.query_type == 'exponential_least_common':
@@ -211,8 +212,8 @@ def download_results(user):
             query.statistic, 
             scoring_function,
             query.epsilon,
-            upper_bound = upper_bound,
-            lower_bound = lower_bound
+            sensitivity = 1,
+            dummy_values=dummy_values
             )
 
         response = make_response(noisy_result.to_csv())
@@ -348,11 +349,19 @@ def select_exponential_epsilon(user):
     upper_bound = 0
     lower_bound = 0
     if request.form['query_type'] == 'exponential_max':
-        scoring_function = lambda c, u: sum(u > c)
+        scoring_function = lambda c, u: 1 + int(
+            np.where(
+                np.sort([float(q) for q in c.unique()]) == float(u)
+                )[0]
+            )
         upper_bound = float(request.form['upper_bound'])
         lower_bound = float(request.form['lower_bound'])
     elif request.form['query_type'] == 'exponential_min':
-        scoring_function = lambda c, u: sum(u < c)
+        scoring_function = lambda c, u: 1 + int(
+            np.where(
+                np.sort([float(q) for q in c.unique()])[::-1] == float(u)
+                )[0]
+            )
         upper_bound = float(request.form['upper_bound'])
         lower_bound = float(request.form['lower_bound'])
     elif request.form['query_type'] == 'exponential_most_common':
@@ -362,20 +371,73 @@ def select_exponential_epsilon(user):
     else:
         return(make_response("Unknown query type", 404))
 
+    dummy_values = request.form['dummy_values'].split(',')
+    print(dummy_values)
+    if dummy_values[0] != "":
+        dummy_values = pd.Series(dummy_values)
+    else:
+        dummy_values = None
+
     distributions = dp_engine.exponential_options(
         database.table, 
         request.form['statistic'],
         scoring_function=scoring_function,
         epsilons=np.arange(0.1, 6.1, 0.1),
-        upper_bound=upper_bound,
-        lower_bound=lower_bound)
+        sensitivity = 1,
+        dummy_values = dummy_values
+        )
 
     fig = exponential_epsilon_slider(distributions)
     fig = fig.update_layout(width=1000, height=500)
 
     return render_template("exponential_epsilon_selection.html", 
-        values=result, plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
+        plot=fig.to_html(full_html=False, include_plotlyjs='cdn'), 
         database_id=database.id,
+        statistic=request.form['statistic'],
+        query_type=request.form['query_type'],
+        upper_bound=upper_bound,
+        lower_bound=lower_bound,
+        dummy_values=request.form['dummy_values'],
+        user = user)
+
+
+@app.route('/query/exponential/dummy_values', methods=['POST'])
+@authenticate
+def select_exponential_dummy_values(user):
+    success, missing_field = check_form_fields([
+        'database_id', 'query_type', 'statistic'
+    ], request.form)
+
+    if not success:
+        return make_response(f"{missing_field} not specified", 400)
+
+    repo = database_repository()
+    database = repo.get_database(int(request.form['database_id']))
+    if database == None or database.user_id != user.id:
+        return make_response("Database not found", 404)
+
+    dp_engine = differential_privacy_engine(database.username, 
+        database.password, 
+        database.host,
+        database.database,
+        int(database.port))
+
+    unique_values = dp_engine.unique_values(
+        database.table, 
+        request.form['statistic'])
+
+    upper_bound = 0
+    lower_bound = 0
+    if request.form['query_type'] == 'exponential_max':
+        upper_bound = float(request.form['upper_bound'])
+        lower_bound = float(request.form['lower_bound'])
+    elif request.form['query_type'] == 'exponential_min':
+        upper_bound = float(request.form['upper_bound'])
+        lower_bound = float(request.form['lower_bound'])
+
+    return render_template("exponential_dummy_values.html",
+        database_id=database.id,
+        unique_values=unique_values,
         statistic=request.form['statistic'],
         query_type=request.form['query_type'],
         upper_bound=upper_bound,
