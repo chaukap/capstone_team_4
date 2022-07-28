@@ -1,7 +1,8 @@
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
-import scipy.stats as st
+from numpy import trapz
+from scipy.stats import laplace
 
 def epsilon_slider(data, u, l):
     data=pd.DataFrame(data)
@@ -13,29 +14,21 @@ def epsilon_slider(data, u, l):
     else:
         ad_value = float(true_value) + float(sens)
     epsilons=np.arange(0.1, 4.1, 0.1)
-    graph_range=np.arange(float(true_value - abs(true_value*5)), float(true_value + abs(true_value*5)))
-        
+    graph_range=np.arange(float(true_value - abs(true_value*10)), float(true_value + abs(true_value*10)))
+    
+    def laplaceMechanism(x, epsilon, sensitivity):
+        noisyX =  np.random.laplace(x, sensitivity/epsilon, 1)[0]
+        return noisyX
+
     # Create figure
     # Add traces, one for each slider step
     trace_list1, trace_list2 =[],[] # True Value
     trace_list3, trace_list4 =[],[] # Hypothetical Value
     for epsilon in np.arange(0.1, 4.1, 0.1):
         b = float(sens)/float(epsilon)
-        true_val_y=np.exp(-abs(graph_range-float(true_value))/(b))/(2.*(b)) # True value Y range
+        true_val_y=np.exp(-abs(graph_range-float(true_value))/(b))/(2.*(b)) # True value Y range        
         ad_val_y=np.exp(-abs(graph_range-float(ad_value))/(b))/(2.*(b))     # Hypothetical value Y range
-        # confidence interval
-        true_val_a = np.array(true_val_y)
-        ad_val_a = np.array(ad_val_y)
-        true_val_x1 = np.percentile(true_val_a, 75)
-        true_val_x2 = np.percentile(true_val_a, 25)
-        ad_val_x1 = np.percentile(ad_val_a, 75)
-        ad_val_x2 = np.percentile(ad_val_a, 25)
-
-        y_max = max(true_val_y)
-        if  min(true_val_y)< min(ad_val_y):
-            y_min = min(true_val_y)
-        else:
-            y_min = min(ad_val_y)
+        
         trace_list1.append(go.Scatter(
             visible=False,
             line=dict(color="#6505cc", width=6),
@@ -45,10 +38,10 @@ def epsilon_slider(data, u, l):
             ))
         trace_list2.append(go.Scatter(  # True Value Confidence Interval
             visible=False,
-            name='True Value CI',
+            name=' ',
             line=dict(color="#9266c4", width=2),
-            x=[None,true_val_x2,true_val_x2,true_val_x1,true_val_x1,true_val_x2], 
-            y=[None,y_min,y_max,y_max,y_min,y_min], 
+            x=graph_range,
+            y=true_val_y,
             fill="toself"
         ))
         trace_list3.append(go.Scatter(
@@ -60,17 +53,20 @@ def epsilon_slider(data, u, l):
             ))
         trace_list4.append(go.Scatter(  # Hypothetical Value Confidence Interval
             visible=False,
-            name='Hypothetical Worst-Case Value CI',
+            name=' ',
             line=dict(color="#e36666", width=2),
-            x=[None,ad_val_x2,ad_val_x2,ad_val_x1,ad_val_x1,ad_val_x2], 
-            y=[None,y_min,y_max,y_max,y_min,y_min], 
+            x=graph_range,
+            y=ad_val_y,
             fill="toself"
         ))
+    
     trace_list1[0].visible = True          
     trace_list2[0].visible = True
     trace_list3[0].visible = True
     trace_list4[0].visible = True
     fig = go.Figure(data=trace_list4+trace_list2+trace_list3+trace_list1)
+    for trace in fig['data']: 
+        if(trace['name'] == ' '): trace['showlegend'] = False
 
     
     # Create and add slider
@@ -93,7 +89,7 @@ def epsilon_slider(data, u, l):
     )]
 
     fig.add_vline(true_value, name="True Value")
-    #fig.add_vrect(x0=confidence_intervals[0], x1=confidence_intervals[1], line_width=0, fillcolor="green", opacity=0.2)
+    
 
     fig.update_layout(
         sliders=sliders
