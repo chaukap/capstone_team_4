@@ -14,12 +14,8 @@ def epsilon_slider(data, u, l):
     else:
         ad_value = float(true_value) + float(sens)
     epsilons=np.arange(0.1, 4.1, 0.1)
-    graph_range=np.arange(float(true_value - abs(true_value*10)), float(true_value + abs(true_value*10)))
+    graph_range=np.arange(float(true_value - abs(true_value*20)), float(true_value + abs(true_value*20)))
     
-    def laplaceMechanism(x, epsilon, sensitivity):
-        noisyX =  np.random.laplace(x, sensitivity/epsilon, 1)[0]
-        return noisyX
-
     # Create figure
     # Add traces, one for each slider step
     trace_list1, trace_list2 =[],[] # True Value
@@ -42,7 +38,7 @@ def epsilon_slider(data, u, l):
             line=dict(color="#9266c4", width=2),
             x=graph_range,
             y=true_val_y,
-            fill="toself"
+            fill="tozeroy"
         ))
         trace_list3.append(go.Scatter(
             visible=False,
@@ -57,7 +53,7 @@ def epsilon_slider(data, u, l):
             line=dict(color="#e36666", width=2),
             x=graph_range,
             y=ad_val_y,
-            fill="toself"
+            fill="tozeroy"
         ))
     
     trace_list1[0].visible = True          
