@@ -10,11 +10,11 @@
       <div class="col-lg-12">
         <div class="ud-hero-content wow fadeInUp" data-wow-delay=".2s">
           <h1 class="ud-hero-title">
-            Differential privacy simplified for your database
+            Differential Privacy Simplified for Your Database
           </h1>
           <p class="ud-hero-desc">
-            Our tools enable you to create monetizable datasets while
-            protecting the privacy of your customers.
+            SDP tools enable you to monetize databases while
+            protecting the privacy of individuals.
           </p>
           <ul class="ud-hero-buttons">
             <li>
@@ -49,8 +49,8 @@
           <span>Features</span>
           <h2>How it works</h2>
           <p>
-            Simple Differential Privacy is a marketplace of data insights that also
-            protect individual privacy.
+            Simple Differential Privacy is a marketplace for data insights that
+            protects individual privacy.
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@
           <div class="ud-feature-content">
             <h3 class="ud-feature-title">Upload Database Credentials</h3>
             <p class="ud-feature-desc">
-              SDP never stores your data. We convert it to anonymous datasets.
+              SDP never stores your data. We enable differentially private access to it.
             </p>
             <a href="/learn" class="ud-feature-link">
               Learn More
@@ -80,7 +80,7 @@
           <div class="ud-feature-content">
             <h3 class="ud-feature-title">Tune Privacy Settings</h3>
             <p class="ud-feature-desc">
-              Use our cutting-edge tools to meet your privacy needs.
+              We help you hone the privacy settings needed for your use cases.
             </p>
             <a href="/learn" class="ud-feature-link">
               Learn More
@@ -94,10 +94,9 @@
             <i class="bi-file-bar-graph"></i>
           </div>
           <div class="ud-feature-content">
-            <h3 class="ud-feature-title">Generate Anonymous Datasets</h3>
+            <h3 class="ud-feature-title">Differentially Private Queries</h3>
             <p class="ud-feature-desc">
-              Datasets that can be monetized with minimal risk to individuals
-              in the original data.
+              SMP enables differentially private aggregation queries.
             </p>
             <a href="/learn" class="ud-feature-link">
               Learn More
@@ -131,7 +130,7 @@
       <div class="ud-about-content-wrapper">
         <div class="ud-about-content">
           <span class="tag">About SDP</span>
-          <h2>Privacy made simple and easy.</h2>
+          <h2>Privacy Made Simple</h2>
           <p>
             Every business generates insightful data. Medical data can improve the quality of life for patients. Human
             resource
@@ -140,10 +139,10 @@
           </p>
 
           <p>
-            However, most health and human resource data is amassed in cloud
-            storage and only accessed sparingly for fear of privacy breaches.
+            However, most health and human resource data, for example, has highly restricted
+            access as a means to prevent privacy breaches.
             Our solution empowers data owners to share their valuable information
-            while protecting the customers that trust them.
+            while protecting the individuals that trust them with it.
           </p>
 
           <p>
@@ -173,9 +172,9 @@
       <div class="col-lg-12">
         <div class="ud-section-title text-center mx-auto">
           <span>FAQ</span>
-          <h2>Any Questions? Answered</h2>
+          <h2>Frequently Asked Questions</h2>
           <p>
-            A list of common questions.
+
           </p>
         </div>
       </div>
@@ -199,7 +198,9 @@
                 <br>
                 Click "Add a Database".
                 <br>
-                Fill in the form with your database credentials.
+                Fill in the form with your database credentials. SDP will open a connection
+                to your database.  Your database can be updated continuously.  Your database is
+                never moved, nor copied or stored on our site.
               </div>
             </div>
           </div>
@@ -214,20 +215,24 @@
             </button>
             <div id="collapseTwo" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                The Laplacian Mechanism is focused on numerical answers. It 
-                adds noise directly to the answer itself. What if we want 
-                to return a precise answer (i.e. no added noise), but still 
-                preserve differential privacy? One solution is the exponential 
-                mechanism which allows selecting the “best” element from a 
-                set while preserving differential privacy. The analyst defines 
+                The <b> Laplacian Mechanism </b> focuses on numerical data only. Noise
+                is added noise to the true numerical answer to a query. So the Laplacian
+                Mechanism returns an answer from the dataset with a degree of error in it.
+                The <b>ExponentialMechanism</b> allows queries of non-numerical data.
+                The mechanism always returns a possible answer from the dataset.
+                This query answer is not always the correct answer.
+                The Exponential Mechanism can also be customized with use case
+                specific utility functions. These utlility functions can specify
+                what constitutes the best answer. The analyst defines
                 which element is the “best” by specifying a scoring function 
                 that outputs a score for each element in the set, and also 
                 defines the set of things to pick from. The mechanism provides 
                 differential privacy by approximately maximizing the score of 
                 the element it returns - in other words, to satisfy differential 
                 privacy, the exponential mechanism sometimes returns an 
-                element from the set which does not have the highest score.
-                The biggest practical difference between the exponential mechanism 
+                element from the set which does not have the highest score. <br>
+                <br>
+                The <b>biggest practical difference</b>between the Exponential mechanism
                 and the Laplace Mechanism mechanisms is that the output of the 
                 exponential mechanism is always a member of the set of possible 
                 answers.  This is extremely useful when selecting an item from a 
@@ -267,18 +272,17 @@
                 that guide this setting of epsilon for all use cases.  
                 <br>
                 Setting the epsilon parameter comes with an important trade-off. 
-                The lower the value (higher privacy) the lower the utility of 
+                The lower the value (less privacy leakage, higher privacy)
+                the lower the utility of
                 the query responses.  Since privacy requires a degree of “error” 
                 in the query response, setting the parameter requires a balancing 
                 of privacy with utility.  This balance will depend on particular 
                 databases, their population, the sensitivity of their data, and 
                 the potential uses of the data.  In short, setting the epsilon 
-                parameter is more if an art than a science.  It may require a 
-                degree of experimentation on the part of the database owner. The 
-                image below displays the general pattern of the privacy - accuracy 
-                trade-off but is by no means 
-                a guaranteed pattern of behavior.
-                <img style="padding: 20px 0px 0px 0px;" src="https://d3i71xaburhd42.cloudfront.net/f5e5abac88e9ec56738ba75d547ed518c4c243cf/4-Figure1-1.png" alt="differential_private_graph">
+                parameter is more of an art than a science.  It may require a
+                degree of experimentation on the part of the database owner.
+                For more guidance on setting the epsilon paramter, visit the
+                four part Jupyter notebook series located HERE.
               </div>
             </div>
           </div>
@@ -301,8 +305,8 @@
                 mechanisms are mathematically rigorous.  However, the practical
                 outcomes depend on prior or auxiliary knowledge and the 
                 threat model.  While the degree of privacy is set by the 
-                privacy parameters, the practical implications are use case 
-                and threat model specific. 
+                privacy parameters, the practical implications are specific to your use case
+                and privacy threats.
                 
               </div>
             </div>
@@ -318,11 +322,11 @@
             </button>
             <div id="collapseFive" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                You cannot prevent attacks but can minimize their effectiveness.
+                By setting the right privacy parameters you can vitiate and thwart
+                an attack to the degree you choose. SDP allows data owners to set
+                an epsilon budget.  This budget prevents attackers from repeatedly
+                querying data beyond what data owners believe is safe for individuals.
               </div>
             </div>
           </div>
@@ -357,7 +361,10 @@
             </button>
             <div id="collapseSeven" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Yes!
+                The CCPA now has an enforcement arm, the CRPA.  The regulations can
+                be found here: https://cppa.ca.gov/regulations/.  Differential Privacy techniques
+                will most likely be s significant tool in the evolving landscape of privacy protection
+                mechanisms affirmed by regulatory bodies.  Stay tuned to our blog!
               </div>
             </div>
           </div>
@@ -374,13 +381,14 @@
             </button>
             <div id="collapseEight" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                SDP provides access to databases that have been provided by 
+                SDP provides access for users to databases that have been provided by
                 database owners. Access to the databases is enabled through 
-                “differentially private queries”. As a user you can query 
-                the database of your choice with numerical aggregation queries 
-                such as COUNT, SUM, AVERAGE. The SDP platform also provides 
-                queries for non-numerical data such as most common, least common, 
-                minimum and maximum.  
+                <strong> differentially private queries </strong>. As a user you can query
+                the database with numerical queries such as <b>COUNT, SUM, AVERAGE</b>
+                and non-numerical data for <b> MOST COMMON, LEAST COMMON,
+                MAXIMUM AND MINIMUM </b>.  These <b> aggregation queries </b> enable insights from the data
+                without sharing the individual records.
+
               </div>
             </div>
           </div>
@@ -396,11 +404,17 @@
             </button>
             <div id="collapseNine" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                The trade-off between utility and privacy is maintained by setting
+                two parameters epsilon (privacy leakage parameter) and sensitivity
+                generally referred to as delta (data variability parameter).
+                Setting these parameters is an interactive exercise.  Setting these
+                parameters is specific use case.  The education materials available
+                walk you through examples to help guide the data owner to the right settings.
+                These education materials include the Jupyter Notebook Learning Series located
+                HERE
+                which explain the concepts behind the parameters with interactive examples.
+                Read the material in the Learn section and access the Jupyter notebooks.
+                For additional help send email to sdpsupport@gmail.com. We'll help!
               </div>
             </div>
           </div>
@@ -411,16 +425,20 @@
               <span class="icon flex-shrink-0">
                 <i class="lni lni-chevron-down"></i>
               </span>
-              <span>What does the sensitivy parameter mean and how do I set it for my data?</span>
+              <span>What does the sensitivity parameter mean and how do I set it for my data?</span>
             </button>
             <div id="collapseTen" class="accordion-collapse collapse">
               <div class="ud-faq-body">
                 <p>Broadly speaking sensitivity is the degree to which a query’s outcome can change as it is implemented on two “adjacent” databases.  Also broadly speaking an “adjacent” database from a given database, D, is a database D’ that differs by only one record.  The sensitivity of a query is the maximum amount a query can differ when considered over ALL of the possible adjacent databases.</p>
                 <br>
                 <p>Setting the sensitivity parameter for a Laplacian Mechanism will vary by query:</p>
-                <li>For the COUNT query the sensitivity is always one (or two) as the COUNT in adjacent differs by one record.  Setting the sensitivity to 1 sets the “Unbounded” or “local” sensitivity.  Setting the sensitivity to 2 will set the “Bounded” or global sensitivity.</li>
-                <li>For SUM the sensitivity should be set by the user depending on the extremes that are possible in the data that you may want to protect.  As can be seen in the Jupyter Notebooks Learning Series, protecting the underrepresented requires the database owner to anticipate the range of possible values of the data and.     Set the sensitivity to reflect how an additional data point can increase the SUM.  See Jupyter Notebook: Laplacian_Mechanisms_Protect_Oski.</li>
-                <li>For the query AVERAGE,  the sensitivity can set with similar logic to SUM, but the effect of one additional record on the outcome is a lot smaller than with a SUM query. Setting the sensitivity to reflect the difference between the upper and lower limits of the potential record values (as in SUM) is a safe bet but perhaps overly conservative.</li>
+                <br>
+                <li>For the <b>COUNT</b> query the sensitivity is always one as the count in adjacent differs by one record. </li>
+                <li>For <b>SUM</b>, <b>AVERAGE</b> the sensitivity should be set by the user depending on the extreme values that are possible in the data that needs to be protected. To set the sensitivity
+                  choose the highest possible value that could be anticipated in the database and enter this value as a upper bound in the query generator. Set the lower bound to the
+                  lowest possible value that could be detected in the data.  The query generator will calculate the sensitivity for you.</li>
+                <br>
+                For more guidance on setting the sensitivity parameter see the Jupyter Notebook Learning Series HERE.
               </div>
             </div>
           </div>
@@ -435,11 +453,13 @@
             </button>
             <div id="collapsEleven" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a
-                type specimen book.
+                It is important to remember that differential privacy is not complete privacy.  The risk
+                of exposure of an individual's membership in the database is never absolute.  By allowing
+                useful information to be obtained through our query engine, a degradation in privacy
+                is inevitable.  Perfect privacy can only be achieved with no utility.  Perfect utlility
+                affords no privacy. The considerations in a practical balance need to be carefully considered.
+                SDP can track usage for data owners for behaviors associated with attacks, but some level
+                of risk must be assumed.
               </div>
             </div>
           </div>
@@ -485,9 +505,14 @@
             </button>
             <div id="collapseFourteen" class="accordion-collapse collapse">
               <div class="ud-faq-body">
-                Dashboards for users to track their database user’s activity
-                <br>
-                Additional query capability such as VARIANCE, STANDARD DEVIATION, MEDIAN.
+                The product roadmap for SDP includes user tracking dashboards for data owners
+                to monitor activity in the form of dashboards and the ability for owners to set
+                privacy budgets for individual users.  These improvements will increase an owner's
+                ability to detect attacks. SDP envisions additional query capabilities
+                such as VARIANCE, STANDARD DEVIATION, MEDIAN.  Additional advanced query mechanisms
+                are envisiioned which include clamping, advanced average algorithms,
+                and customizable Exponential scoring functionality.  For greater detail check out
+                our product roadmap page HERE.
 
               </div>
             </div>
@@ -506,7 +531,7 @@
           <span>Our Team</span>
           <h2>Meet The Team</h2>
           <p>
-            A group of privacy oriented data scientists.
+            A group of privacy-passionate data scientists.
           </p>
         </div>
       </div>
@@ -557,7 +582,7 @@
             <img src="/static/images/team/shape-2.svg" alt="shape" class="shape shape-2" />
           </div>
           <div class="ud-team-info">
-            <h5>Lesley Matheson</h5>
+            <h5>Lesley Matheson, PhD</h5>
             <h6>Data Scientist</h6>
           </div>
           <ul class="ud-team-socials">
