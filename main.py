@@ -106,6 +106,11 @@ def query(user):
             
     return redirect(f"/queries?database_id={database.id}", 302)
 
+@app.route('/product_roadmap', methods=['GET'])
+@identify
+def product_roadmap(user):
+    return render_template('roadmap.html', user=user)
+
 @app.route('/query', methods=['DELETE'])
 @authenticate
 def delete_query(user):

@@ -92,6 +92,7 @@ def epsilon_slider(data, u, l):
     )
     fig.update_layout(
         title='Epsilon: 0.1',
+        titlefont_size=28,
         xaxis_visible=True,
         yaxis=dict(
             title= dict(
