@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="ud-banner-content">
-          <h1>Attacking Privacy with Probability</h1>
+          <h1>Attacking Privacy Probabilistically</h1>
         </div>
       </div>
     </div>
@@ -24,17 +24,17 @@
           <span class="tag">Probability as a weapon</span>
           <h2>A probablistic setting</h2>
           <p>
-            Attacks on real datasets are rarely as straight forward as
-            the attack we've demonstrated on Oski. We can rarely assume that
-            a single individual is responsible for a sudden change in a statistic.
+            Attacks on real datasets are rarely as straightforward as
+            the attack previously demonstrated. Rarely can it be assumed that
+            a single individual is responsible for an observable change in a statistic.
             In other words, Oski is probably not the only voracious eater.
           </p>
 
           <p>
-            A real-world attack would be <i>probablistic</i> in nature. That is to
-            say, the attacker would try to put a probability to the likelihood
+            A real-world attack would be <i>probabilistic</i> in nature. That is to
+            say, the attacker would try assign a probability to the likelihood
             that an individual is in the dataset. These attacks are harder to
-            conceptualize, but we'll walk through an example to make it
+            conceptualize, but we'll walk through an example to make it more
             concrete.
           </p>
         </div>
@@ -82,7 +82,7 @@
           <p>
             They also find an old interview where Oski claims to eat <b>
               50 salmon in a day
-            </b>. This is a bit of an exageration, but our reporter
+            </b>. This is a bit of an exaggeration, but our reporter
             doesn't know that.
           </p>
 
@@ -131,7 +131,7 @@
 
           <p>
             The first guess our reporter must make is the number of bears in the
-            balding bears dataset. given the alarm of the bear researcher,
+            balding bears dataset. Given the alarm of the bear researcher,
             the reporter guesses that half, <b>21</b>, of the bears are balding. We know
             that the reporter is off by 10, but overestimating is the safest bet
             for an attacker.
@@ -147,9 +147,9 @@
           <img src="{{ url_for('static', filename='images/about/bears_distribution.png') }}" alt="Laplacian Noise">
 
           <p>
-            Randomly drawing numbers from this distribution will give us a representitive
+            Randomly drawing numbers from this distribution will give us a representative
             sample of the total bear population. We can use these random draws to
-            simulate the bears in the balding breas dataset, without needing to
+            simulate the bears in the balding bears dataset, without a requirement to
             know the true values.
           </p>
 
@@ -204,7 +204,7 @@
           </ol>
 
           <p>
-            This will yeild the probability that we see a mean of 17.5454 for a
+            This will yield the probability that we see a mean of 17.5454 for a
             dataset <b>given that Oski <i>is not</i> in it</b>.
           </p>
 
@@ -238,7 +238,7 @@
           </ol>
 
           <p>
-            This will yeild the probability that we see a mean of 17.5454 for a
+            This will yield the probability that we see a mean of 17.5454 for a
             dataset <b>given that Oski <i>is</i> in it</b>.
           </p>
 
@@ -271,8 +271,8 @@
 
           <p>
             <a href="https://en.wikipedia.org/wiki/Bayesian_inference" target="_blank">Bayesian inference</a>
-            tells us that the ratio between the probability that Oski is in the dataset and
-            the probability that he is not can be calculated using the formula
+            tells us that the "odds" ratio between the probability that Oski is in the dataset and
+            the probability that he is not can be calculated using the formula:
           </p>
 
           <img src="{{ url_for('static', filename='images/about/baysian.png') }}" alt="Laplacian Noise">
@@ -280,13 +280,13 @@
           <p>
             The first term on the right hand side is the <i>prior belief</i>, or
             the belief the reporter had that Oski was in the database
-            before actually seeing the value 17.5454. Let's assume that the
-            reporter had no idea whether Oski was in the dataset or not.
-            That means that our prior is equal to 1.
+            before seeing the value 17.5454. Let's assume that the
+            reporter thought it was equally likely that Oski was in the dataset or not in the dataset.
+            That means that our prior belief (call this the <b> prior odds ratio </b>) is equal to 1.
           </p>
 
           <p>
-            Plugging in the two values we got via experiments, we see that
+            Plugging in the two values we obtained through observed values, we see that
           </p>
 
           <img src="{{ url_for('static', filename='images/about/baysian_2.png') }}" alt="Laplacian Noise">
@@ -300,21 +300,28 @@
           </p>
 
           <p>
-            A value of 2 would mean that we are 100% certain that Oski is in the database.
-            While 1.44871254 is quite a ways from 2, it is still a notable value.
+            How do we interpret this 1.44871254 in terms of an actionable attack?
+            We call this value the <b>posterior odds ratio</b>.
+            If a value of 2 would mean the attacker was convinced enough that Oski was in the database
+            to make his findings public, the attacker will not take action. In this case even though he
+            may be more convinced, he is not convinced enough to go public with his attack.
+
           </p>
 
           <p>
-            Whether or not our reporter is convinced by the value is up to them. Given the
-            binary nature of their choice, to publish a story or not, I would quess that
-            the risk of being wrong is too great. However, if I were a advertising agent
-            trying to sell anti-balding shampoo I might be willing to expose Oski to 
-            a few extra adds given the likelihood that they are balding. 
+            Whether or not our reporter is convinced by the observations is specific to the reporter's
+            utility. Given the binary nature of their choice, to publish a story or not, it may be that
+            the risk of being wrong is too great. However, an advertising agent
+            trying to sell anti-balding shampoo might be willing to serve Oski
+            a few extra ads.
+          </p>
+          <p>For a more detailed exploration of the threat scenario and the mathematics behind it, access the
+            Jupyter Notebook Learning Series, "Think Like an Attacker" located HERE.
           </p>
 
           <p>
-            The threat of <b>probablistic</b> attacks is in <b>probablistic</b> decisions.
-            Instead of a database of balding bears, what if I had a database of political 
+            The threat of <b>probabilistic</b> attacks is in <b>probabilistic</b> decisions.
+            Instead of a database of balding bears, consider a database of political
             donations? What about a database of gender identities? <a 
                href="https://hbr.org/2013/04/the-hidden-biases-in-big-data" target="_blank">
             Algorithms have been shown time and time again to perpetuate biases.
